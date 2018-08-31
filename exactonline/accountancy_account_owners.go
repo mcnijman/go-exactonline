@@ -87,22 +87,3 @@ func (s *AccountancyAccountOwnersService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
-
-/* // Get the AccountOwners enitity, by ID.
-func (s *AccountancyAccountOwnersService) Get(ctx context.Context, division int, id GUID) (*AccountancyAccountOwners, error) {
-	var entities []*AccountancyAccountOwners
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountOwners?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
-
-	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
-		return nil, err
-	}
-
-	if len(entities) != 1 {
-		return nil, fmt.Errorf("Returned %d AccountOwners entities, expected 1", len(entities))
-	}
-
-	return entities[0], nil
-} */

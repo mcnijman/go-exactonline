@@ -7,6 +7,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"go/format"
 	"html/template"
 	"io/ioutil"
@@ -44,7 +45,7 @@ var (
 
 type property struct {
 	Name         string
-	Description  string
+	Description  []string
 	OriginalType string
 	Type         string
 	IsPrimary    bool
@@ -119,7 +120,7 @@ func getEndpointsList() []endpoint {
 		c := s.Children()
 		docs, _ := c.Eq(1).Find("a").Attr("href")
 		endpoints = append(endpoints, endpoint{
-			Name:       c.Eq(1).Find("a").Text(),
+			Name:       strings.Replace(c.Eq(1).Find("a").Text(), "/", "", -1),
 			URL:        c.Eq(2).Text(),
 			Docs:       docs,
 			HasWebhook: strings.Contains(class, "HasWebhook"),
@@ -149,25 +150,60 @@ func getEndpointProperties(endpoint *endpoint) {
 	var properties []property
 	doc.Find(".showget").Each(func(i int, s *goquery.Selection) {
 		name, _ := s.Attr("name")
+		prim, _ := s.Attr("data-key")
 		t, _ := s.Attr("data-type")
+
+		nt := "[]byte"
+		if ntt, ok := typesMapping[strings.TrimPrefix(t, "Edm.")]; ok {
+			nt = ntt
+		}
+
 		desc := strings.TrimSpace(s.Parent().Parent().Children().Eq(5).Text())
 		properties = append(properties, property{
 			Name:         name,
 			OriginalType: t,
-			Type:         typesMapping[strings.TrimPrefix(t, "Edm.")],
-			Description:  desc,
-			IsPrimary:    strings.Contains(desc, "Primary key"),
+			Type:         nt,
+			Description:  strings.Split(desc, "\n"),
+			IsPrimary:    prim == "True", // strings.Contains(desc, "Primary key")
 		})
 	})
 	endpoint.Properties = properties
 }
 
+func printCopyPasteDeclarations(endpoints []endpoint) {
+	fmt.Println("Service declarations")
+	for _, e := range endpoints {
+		fmt.Printf("%s *%s \n", e.EntityName(), e.ServiceName())
+	}
+
+	fmt.Println("")
+	fmt.Println("Service creation")
+	for _, e := range endpoints {
+		fmt.Printf("c.%s = (*%s)(&c.common) \n", e.EntityName(), e.ServiceName())
+	}
+}
+
 func main() {
 	flag.Parse()
 	endpoints := getEndpointsList()
-	for _, e := range endpoints[:2] {
+	var filtered []endpoint
+
+	for _, e := range endpoints {
 		logf("Processing %v...", e.Name)
+
+		// Drop endpoints for now that don't conform to the default
+		if !strings.Contains(e.URL, "/api/v1/") {
+			continue
+		}
+
+		// Drop endpoints that don't support GET requests for now
+		if !strings.Contains(strings.Join(e.Methods, " "), "GET") {
+			continue
+		}
+
 		getEndpointProperties(&e)
+
+		filtered = append(filtered, e)
 
 		s := &templateData{
 			filename: toSnake(e.EntityName()) + ".go",
@@ -184,6 +220,12 @@ func main() {
 		err := sourceTmpl.Execute(&buf, s)
 		dontPanic(err)
 
+		if e.Name == "AccountDocumentsCount" {
+			logf("%+v \n", e.PrimaryProperty())
+			fmt.Print(string(buf.Bytes()))
+			logf("%+v \n", e)
+		}
+
 		clean, err := format.Source(buf.Bytes())
 		dontPanic(err)
 
@@ -191,7 +233,7 @@ func main() {
 		err = ioutil.WriteFile(s.filename, clean, 0644)
 		dontPanic(err)
 
-		t := &templateData{
+		/* t := &templateData{
 			filename: toSnake(e.EntityName()) + "_test.go",
 			Year:     2018,
 			Package:  "exactonline",
@@ -215,8 +257,10 @@ func main() {
 
 		logf("Writing %v...", t.filename)
 		err = ioutil.WriteFile(t.filename, clean2, 0644)
-		dontPanic(err)
+		dontPanic(err) */
 	}
+
+	printCopyPasteDeclarations(filtered)
 }
 
 const source = `
@@ -251,7 +295,10 @@ type {{.ServiceName}} service
 type {{.EntityName}} struct {
 {{- range .Properties -}}
 	{{if .Name}}
-	// {{.Name}}: {{.Description}}
+	// {{.Name}}:
+	{{- range $i, $e := .Description -}}
+	{{if $i}} //{{end}} {{ $e }}
+	{{- end}}
 	{{.Name}} *{{.Type}}  ` + "`" + `json:",omitempty"` + "`" + `
 	{{end -}}
 {{end}}
