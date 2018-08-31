@@ -23,178 +23,178 @@ type ManufacturingShopOrdersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingShopOrders
 type ManufacturingShopOrders struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// CADDrawingURL: URL to CAD Drawing Specified on Manufacturing Bill of Material
-	CADDrawingURL *string `json:",omitempty"`
+	CADDrawingURL *string `json:"CADDrawingURL,omitempty"`
 
 	// Costcenter: The cost center linked to the shop order
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription: Description of Costcenter
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit: The cost unit linked to the shop order
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription: Description of Costunit
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the shop order
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryDate: Date on which the shop order was placed
-	EntryDate *Date `json:",omitempty"`
+	EntryDate *Date `json:"EntryDate,omitempty"`
 
 	// IsBatch: Does the material plan&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the material plan&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsInPlanning: Indicator that Shop order is in planning
-	IsInPlanning *byte `json:",omitempty"`
+	IsInPlanning *byte `json:"IsInPlanning,omitempty"`
 
 	// IsOnHold: Indicator if the Shop order is on hold
-	IsOnHold *byte `json:",omitempty"`
+	IsOnHold *byte `json:"IsOnHold,omitempty"`
 
 	// IsReleased: Indicator that the Shop order has been released to production
-	IsReleased *byte `json:",omitempty"`
+	IsReleased *byte `json:"IsReleased,omitempty"`
 
 	// IsSerial: Does the material plan&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Reference to the item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of the item created by this shop order
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of the item created by this shop order
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: URL of the item created by this shop order
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// ItemVersion: Reference to ItemVersion
-	ItemVersion *GUID `json:",omitempty"`
+	ItemVersion *GUID `json:"ItemVersion,omitempty"`
 
 	// ItemVersionDescription: Description of Item Version
-	ItemVersionDescription *string `json:",omitempty"`
+	ItemVersionDescription *string `json:"ItemVersionDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes - only viewed internally
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PlannedDate: Planned end date of this shop order
-	PlannedDate *Date `json:",omitempty"`
+	PlannedDate *Date `json:"PlannedDate,omitempty"`
 
 	// PlannedQuantity: Planned quantity
-	PlannedQuantity *float64 `json:",omitempty"`
+	PlannedQuantity *float64 `json:"PlannedQuantity,omitempty"`
 
 	// PlannedStartDate: Planned start date of this shop order
-	PlannedStartDate *Date `json:",omitempty"`
+	PlannedStartDate *Date `json:"PlannedStartDate,omitempty"`
 
 	// ProducedQuantity: Produced quantity
-	ProducedQuantity *float64 `json:",omitempty"`
+	ProducedQuantity *float64 `json:"ProducedQuantity,omitempty"`
 
 	// ProductionLeadDays: Production lead days
-	ProductionLeadDays *int `json:",omitempty"`
+	ProductionLeadDays *int `json:"ProductionLeadDays,omitempty"`
 
 	// Project: Reference to Project
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectDescription: Description of Project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// ReadyToShipQuantity: Quantity ready to ship
-	ReadyToShipQuantity *float64 `json:",omitempty"`
+	ReadyToShipQuantity *float64 `json:"ReadyToShipQuantity,omitempty"`
 
 	// SalesOrderLineCount: Number of sales orders linked to this shop order
-	SalesOrderLineCount *int `json:",omitempty"`
+	SalesOrderLineCount *int `json:"SalesOrderLineCount,omitempty"`
 
 	// SalesOrderLines: Collection of Sales order lines
-	SalesOrderLines *[]byte `json:",omitempty"`
+	SalesOrderLines *[]byte `json:"SalesOrderLines,omitempty"`
 
 	// ShopOrderByProductPlanBackflushCount: Number of shop order by-product plans, which are backflushed, for this shop order
-	ShopOrderByProductPlanBackflushCount *int `json:",omitempty"`
+	ShopOrderByProductPlanBackflushCount *int `json:"ShopOrderByProductPlanBackflushCount,omitempty"`
 
 	// ShopOrderByProductPlanCount: Number of shop order by-product plans for this shop order
-	ShopOrderByProductPlanCount *int `json:",omitempty"`
+	ShopOrderByProductPlanCount *int `json:"ShopOrderByProductPlanCount,omitempty"`
 
 	// ShopOrderMain: Shop order main
-	ShopOrderMain *GUID `json:",omitempty"`
+	ShopOrderMain *GUID `json:"ShopOrderMain,omitempty"`
 
 	// ShopOrderMainNumber: Shop order main number
-	ShopOrderMainNumber *int `json:",omitempty"`
+	ShopOrderMainNumber *int `json:"ShopOrderMainNumber,omitempty"`
 
 	// ShopOrderMaterialPlanBackflushCount: Number of shop order material plans, which are backflushed, for this shop order
-	ShopOrderMaterialPlanBackflushCount *int `json:",omitempty"`
+	ShopOrderMaterialPlanBackflushCount *int `json:"ShopOrderMaterialPlanBackflushCount,omitempty"`
 
 	// ShopOrderMaterialPlanCount: Number of shop order material plans for this shop order
-	ShopOrderMaterialPlanCount *int `json:",omitempty"`
+	ShopOrderMaterialPlanCount *int `json:"ShopOrderMaterialPlanCount,omitempty"`
 
 	// ShopOrderMaterialPlans: Collection of Shop order Material plans
-	ShopOrderMaterialPlans *[]byte `json:",omitempty"`
+	ShopOrderMaterialPlans *[]byte `json:"ShopOrderMaterialPlans,omitempty"`
 
 	// ShopOrderNumber: Unique number to indentify the shop order
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// ShopOrderNumberString: Unique number to indentify the shop order (as a string to allow OData filtering, e.g. $filter=substringof(&#39;123&#39;,ShopOrderNumberString) eq true
-	ShopOrderNumberString *string `json:",omitempty"`
+	ShopOrderNumberString *string `json:"ShopOrderNumberString,omitempty"`
 
 	// ShopOrderParent: Shop order parent
-	ShopOrderParent *GUID `json:",omitempty"`
+	ShopOrderParent *GUID `json:"ShopOrderParent,omitempty"`
 
 	// ShopOrderParentNumber: Shop order parent number
-	ShopOrderParentNumber *int `json:",omitempty"`
+	ShopOrderParentNumber *int `json:"ShopOrderParentNumber,omitempty"`
 
 	// ShopOrderRoutingStepPlanCount: Number of shop order routing step plans for this shop order
-	ShopOrderRoutingStepPlanCount *int `json:",omitempty"`
+	ShopOrderRoutingStepPlanCount *int `json:"ShopOrderRoutingStepPlanCount,omitempty"`
 
 	// ShopOrderRoutingStepPlans: Collection of Shop order Routing step plans
-	ShopOrderRoutingStepPlans *[]byte `json:",omitempty"`
+	ShopOrderRoutingStepPlans *[]byte `json:"ShopOrderRoutingStepPlans,omitempty"`
 
 	// Status: Indicates the type of Shop Order: 10 Open, 20 In process, 30 Finished, 40 Completed
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// SubShopOrderCount: The count of material lines of this shop order, which have been linked to a sub order
-	SubShopOrderCount *int `json:",omitempty"`
+	SubShopOrderCount *int `json:"SubShopOrderCount,omitempty"`
 
 	// Type: Overall status of the line: 9040 Regular
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// Unit: Unit of the item created by this shop order
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit description of the unit of the item created by this shop order
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: Reference to the Warehouse associated with the Shop order
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// YourRef: Your reference (of the customer)
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *ManufacturingShopOrders) GetIdentifier() GUID {
@@ -216,3 +216,22 @@ func (s *ManufacturingShopOrdersService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ShopOrders enitity, by ID.
+func (s *ManufacturingShopOrdersService) Get(ctx context.Context, division int, id GUID) (*ManufacturingShopOrders, error) {
+	var entities []*ManufacturingShopOrders
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrders?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ShopOrders entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

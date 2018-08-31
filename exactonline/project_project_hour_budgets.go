@@ -23,49 +23,49 @@ type ProjectProjectHourBudgetsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectHourBudgets
 type ProjectProjectHourBudgets struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Budget: Number of hours
-	Budget *float64 `json:",omitempty"`
+	Budget *float64 `json:"Budget,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division number
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Hour type of budget
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of hour type
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of hour type
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Project: Reference to project
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode: Code of project
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Description of project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
 func (s *ProjectProjectHourBudgets) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *ProjectProjectHourBudgetsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProjectHourBudgets enitity, by ID.
+func (s *ProjectProjectHourBudgetsService) Get(ctx context.Context, division int, id GUID) (*ProjectProjectHourBudgets, error) {
+	var entities []*ProjectProjectHourBudgets
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectHourBudgets?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProjectHourBudgets entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

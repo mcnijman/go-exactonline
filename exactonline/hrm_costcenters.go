@@ -23,40 +23,40 @@ type HRMCostcentersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMCostcenters
 type HRMCostcenters struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Indicates if the cost center is active: 0 = inactive 1 = active
-	Active *bool `json:",omitempty"`
+	Active *bool `json:"Active,omitempty"`
 
 	// Code: Code (user-defined ID)
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description (text)
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: The end date by which the cost center has to be inactive
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
 func (s *HRMCostcenters) GetIdentifier() GUID {
@@ -78,3 +78,22 @@ func (s *HRMCostcentersService) List(ctx context.Context, division int, all bool
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Costcenters enitity, by ID.
+func (s *HRMCostcentersService) Get(ctx context.Context, division int, id GUID) (*HRMCostcenters, error) {
+	var entities []*HRMCostcenters
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costcenters?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Costcenters entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

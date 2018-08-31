@@ -23,34 +23,34 @@ type CRMAccountClassificationNamesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMAccountClassificationNames
 type CRMAccountClassificationNames struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// SequenceNumber: Sequence number
-	SequenceNumber *int `json:",omitempty"`
+	SequenceNumber *int `json:"SequenceNumber,omitempty"`
 }
 
 func (s *CRMAccountClassificationNames) GetIdentifier() GUID {
@@ -72,3 +72,22 @@ func (s *CRMAccountClassificationNamesService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AccountClassificationNames enitity, by ID.
+func (s *CRMAccountClassificationNamesService) Get(ctx context.Context, division int, id GUID) (*CRMAccountClassificationNames, error) {
+	var entities []*CRMAccountClassificationNames
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/AccountClassificationNames?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AccountClassificationNames entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

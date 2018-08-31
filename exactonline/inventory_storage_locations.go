@@ -23,46 +23,46 @@ type InventoryStorageLocationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStorageLocations
 type InventoryStorageLocations struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the storage location
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the storage location
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Main: Indicates if this is the main storage location. There&#39;s always exactly one main storage location per warehouse
-	Main *byte `json:",omitempty"`
+	Main *byte `json:"Main,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Warehouse: Warehouse ID
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Warehouse Code
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryStorageLocations) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *InventoryStorageLocationsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the StorageLocations enitity, by ID.
+func (s *InventoryStorageLocationsService) Get(ctx context.Context, division int, id GUID) (*InventoryStorageLocations, error) {
+	var entities []*InventoryStorageLocations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StorageLocations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d StorageLocations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

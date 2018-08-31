@@ -23,10 +23,10 @@ type SubscriptionSubscriptionLineTypesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionLineTypes
 type SubscriptionSubscriptionLineTypes struct {
 	// ID: Primary key
-	ID *int `json:",omitempty"`
+	ID *int `json:"ID,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 }
 
 func (s *SubscriptionSubscriptionLineTypes) GetIdentifier() int {
@@ -48,3 +48,22 @@ func (s *SubscriptionSubscriptionLineTypesService) List(ctx context.Context, div
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubscriptionLineTypes enitity, by ID.
+func (s *SubscriptionSubscriptionLineTypesService) Get(ctx context.Context, division int, id int) (*SubscriptionSubscriptionLineTypes, error) {
+	var entities []*SubscriptionSubscriptionLineTypes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLineTypes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubscriptionLineTypes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

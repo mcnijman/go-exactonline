@@ -23,10 +23,10 @@ type PayrollEmploymentContractFlexPhasesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmploymentContractFlexPhases
 type PayrollEmploymentContractFlexPhases struct {
 	// ID: Primary key
-	ID *int `json:",omitempty"`
+	ID *int `json:"ID,omitempty"`
 
 	// Description: Flexible employment contract phase description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 }
 
 func (s *PayrollEmploymentContractFlexPhases) GetIdentifier() int {
@@ -48,3 +48,22 @@ func (s *PayrollEmploymentContractFlexPhasesService) List(ctx context.Context, d
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the EmploymentContractFlexPhases enitity, by ID.
+func (s *PayrollEmploymentContractFlexPhasesService) Get(ctx context.Context, division int, id int) (*PayrollEmploymentContractFlexPhases, error) {
+	var entities []*PayrollEmploymentContractFlexPhases
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d EmploymentContractFlexPhases entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

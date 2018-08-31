@@ -23,82 +23,82 @@ type ManufacturingSubOrderReceiptsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingSubOrderReceipts
 type ManufacturingSubOrderReceipts struct {
 	// ShopOrderReceiptStockTransactionId: ShopOrderReceipt.StockTransactionId related to this SubOrderReceipt
-	ShopOrderReceiptStockTransactionId *GUID `json:",omitempty"`
+	ShopOrderReceiptStockTransactionId *GUID `json:"ShopOrderReceiptStockTransactionId,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Creation date of this SubOrderReceipt
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// DraftStockTransactionID: Serial or batch numbers are reserved prior to a POST to SubOrderReceipt. This DraftStockTransactionID represents the group of serial or batch numbers to be used in this transaction.
-	DraftStockTransactionID *GUID `json:",omitempty"`
+	DraftStockTransactionID *GUID `json:"DraftStockTransactionID,omitempty"`
 
 	// HasReversibleQuantity: Indicates if this SubOrderReceipt has a quantity eligible to be reversed via SubOrderReversals
-	HasReversibleQuantity *bool `json:",omitempty"`
+	HasReversibleQuantity *bool `json:"HasReversibleQuantity,omitempty"`
 
 	// IsBatch: Does the SubOrderReceipt&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the SubOrderReceipt&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSerial: Does the SubOrderReceipt&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Item of this SubOrderReceipt
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of this SubOrderReceipt&#39;s item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of this SubOrderReceipt&#39;s item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of shop order item
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// MaterialIssueStockTransactionId: MaterialIssue.StockTransactionId related to this SubOrderReceipt
-	MaterialIssueStockTransactionId *GUID `json:",omitempty"`
+	MaterialIssueStockTransactionId *GUID `json:"MaterialIssueStockTransactionId,omitempty"`
 
 	// ParentShopOrder: Shop order issued to
-	ParentShopOrder *GUID `json:",omitempty"`
+	ParentShopOrder *GUID `json:"ParentShopOrder,omitempty"`
 
 	// ParentShopOrderMaterialPlan: Shop order material plan issued to
-	ParentShopOrderMaterialPlan *GUID `json:",omitempty"`
+	ParentShopOrderMaterialPlan *GUID `json:"ParentShopOrderMaterialPlan,omitempty"`
 
 	// ParentShopOrderNumber: Number of shop order issued to
-	ParentShopOrderNumber *int `json:",omitempty"`
+	ParentShopOrderNumber *int `json:"ParentShopOrderNumber,omitempty"`
 
 	// Quantity: Quantity of this SubOrderReceipt
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// SubShopOrder: Shop order issued from
-	SubShopOrder *GUID `json:",omitempty"`
+	SubShopOrder *GUID `json:"SubShopOrder,omitempty"`
 
 	// SubShopOrderNumber: Number of shop order issued from
-	SubShopOrderNumber *int `json:",omitempty"`
+	SubShopOrderNumber *int `json:"SubShopOrderNumber,omitempty"`
 
 	// TransactionDate: Effective date of this SubOrderReceipt
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of this SubOrderReceipt&#39;s item
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of this SubOrderReceipt&#39;s item
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of warehouse SubOrderReceipt
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse SubOrderReceipt
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse SubOrderReceipt
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingSubOrderReceipts) GetIdentifier() GUID {
@@ -120,3 +120,22 @@ func (s *ManufacturingSubOrderReceiptsService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubOrderReceipts enitity, by ShopOrderReceiptStockTransactionId.
+func (s *ManufacturingSubOrderReceiptsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingSubOrderReceipts, error) {
+	var entities []*ManufacturingSubOrderReceipts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReceipts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubOrderReceipts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

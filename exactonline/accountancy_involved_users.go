@@ -23,76 +23,76 @@ type AccountancyInvolvedUsersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AccountancyInvolvedUsers
 type AccountancyInvolvedUsers struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: ID of the account the user is involved with
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCity: City of the account
-	AccountCity *string `json:",omitempty"`
+	AccountCity *string `json:"AccountCity,omitempty"`
 
 	// AccountCode: Code of the account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountIsSupplier: Supplier flag of the account
-	AccountIsSupplier *bool `json:",omitempty"`
+	AccountIsSupplier *bool `json:"AccountIsSupplier,omitempty"`
 
 	// AccountLogoThumbnailUrl: Logo thumbnail url of the account
-	AccountLogoThumbnailUrl *string `json:",omitempty"`
+	AccountLogoThumbnailUrl *string `json:"AccountLogoThumbnailUrl,omitempty"`
 
 	// AccountName: Name of the account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AccountStatus: Status of the account
-	AccountStatus *string `json:",omitempty"`
+	AccountStatus *string `json:"AccountStatus,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// InvolvedUserRole: ID of the user role
-	InvolvedUserRole *GUID `json:",omitempty"`
+	InvolvedUserRole *GUID `json:"InvolvedUserRole,omitempty"`
 
 	// InvolvedUserRoleDescription: Description of the user role
-	InvolvedUserRoleDescription *string `json:",omitempty"`
+	InvolvedUserRoleDescription *string `json:"InvolvedUserRoleDescription,omitempty"`
 
 	// IsMainContact: Main contact flag of the involved user
-	IsMainContact *bool `json:",omitempty"`
+	IsMainContact *bool `json:"IsMainContact,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PersonEmail: Email of a person
-	PersonEmail *string `json:",omitempty"`
+	PersonEmail *string `json:"PersonEmail,omitempty"`
 
 	// PersonPhone: Phone of a person
-	PersonPhone *string `json:",omitempty"`
+	PersonPhone *string `json:"PersonPhone,omitempty"`
 
 	// PersonPhoneExtension: Phone extension of a person
-	PersonPhoneExtension *string `json:",omitempty"`
+	PersonPhoneExtension *string `json:"PersonPhoneExtension,omitempty"`
 
 	// PersonPictureThumbnailUrl: Picture thumbnail url of a person
-	PersonPictureThumbnailUrl *string `json:",omitempty"`
+	PersonPictureThumbnailUrl *string `json:"PersonPictureThumbnailUrl,omitempty"`
 
 	// User: ID of the involved user
-	User *GUID `json:",omitempty"`
+	User *GUID `json:"User,omitempty"`
 
 	// UserFullName: User name of creator
-	UserFullName *string `json:",omitempty"`
+	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
 func (s *AccountancyInvolvedUsers) GetIdentifier() GUID {
@@ -114,3 +114,22 @@ func (s *AccountancyInvolvedUsersService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the InvolvedUsers enitity, by ID.
+func (s *AccountancyInvolvedUsersService) Get(ctx context.Context, division int, id GUID) (*AccountancyInvolvedUsers, error) {
+	var entities []*AccountancyInvolvedUsers
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/InvolvedUsers?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d InvolvedUsers entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

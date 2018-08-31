@@ -23,85 +23,85 @@ type SalesSalesPriceListDetailsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesSalesPriceListDetails
 type SalesSalesPriceListDetails struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Customer account Id
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName: Customer account name
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// BasePrice: ID of the base price.  If base price = use the standard sales price, it shows null.  If base price = set sales price, it shows ID of the sales price within this volume discount.
-	BasePrice *GUID `json:",omitempty"`
+	BasePrice *GUID `json:"BasePrice,omitempty"`
 
 	// BasePriceAmount: Amount of the base price.  If base price = use the standard sales price, it shows the latest item sales price. If base price = set sales price, it shows the base price which defined in price list.
-	BasePriceAmount *float64 `json:",omitempty"`
+	BasePriceAmount *float64 `json:"BasePriceAmount,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Currency
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Discount: Discount
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: End date
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// EntryMethod: Indicates whether discount or the new price is leading : 1-Discount, 2-New price.  Scenario  1. When entry method is Discount and use base price, Discounted price = (1 - SalesPriceListDetails.Discount) * SalesPriceListDetails.BasePriceAmount  2. When entry method is Discount and use Item&#39;s standard sales price, Discounted price = (1 - SalesPriceListDetails.Discount) * SalesItemPrices.Price  3. When entry method is New price, Discounted price = SalesPriceListDetails.NewPrice
-	EntryMethod *int `json:",omitempty"`
+	EntryMethod *int `json:"EntryMethod,omitempty"`
 
 	// Item: Item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription: Description of the item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemGroup: ItemGroup
-	ItemGroup *GUID `json:",omitempty"`
+	ItemGroup *GUID `json:"ItemGroup,omitempty"`
 
 	// ItemUnit: Default sales unit of the item
-	ItemUnit *string `json:",omitempty"`
+	ItemUnit *string `json:"ItemUnit,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// NewPrice: New price after discount
-	NewPrice *float64 `json:",omitempty"`
+	NewPrice *float64 `json:"NewPrice,omitempty"`
 
 	// NumberOfItemsPerUnit: Number of the item per unit
-	NumberOfItemsPerUnit *float64 `json:",omitempty"`
+	NumberOfItemsPerUnit *float64 `json:"NumberOfItemsPerUnit,omitempty"`
 
 	// PriceListCode: Code of the PriceList
-	PriceListCode *string `json:",omitempty"`
+	PriceListCode *string `json:"PriceListCode,omitempty"`
 
 	// PriceListId: Id of the PriceList
-	PriceListId *GUID `json:",omitempty"`
+	PriceListId *GUID `json:"PriceListId,omitempty"`
 
 	// Quantity: Quantity
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// StartDate: Start date
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Unit: Unit
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 }
 
 func (s *SalesSalesPriceListDetails) GetIdentifier() GUID {
@@ -123,3 +123,22 @@ func (s *SalesSalesPriceListDetailsService) List(ctx context.Context, division i
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SalesPriceListDetails enitity, by ID.
+func (s *SalesSalesPriceListDetailsService) Get(ctx context.Context, division int, id GUID) (*SalesSalesPriceListDetails, error) {
+	var entities []*SalesSalesPriceListDetails
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/SalesPriceListDetails?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SalesPriceListDetails entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

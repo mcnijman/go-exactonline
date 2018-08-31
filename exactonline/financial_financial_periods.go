@@ -23,40 +23,40 @@ type FinancialFinancialPeriodsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialFinancialPeriods
 type FinancialFinancialPeriods struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: The end date of the period
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FinPeriod: The financial period. Usually the period is a month or quarter with period 1 starting on the first of January.
-	FinPeriod *int `json:",omitempty"`
+	FinPeriod *int `json:"FinPeriod,omitempty"`
 
 	// FinYear: The financial year. The financial year and calendar year are not always aligned.
-	FinYear *int `json:",omitempty"`
+	FinYear *int `json:"FinYear,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// StartDate: The start date of a period. A start date should always succeed a previous end date. Except for the first year/period combination
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 }
 
 func (s *FinancialFinancialPeriods) GetIdentifier() GUID {
@@ -78,3 +78,22 @@ func (s *FinancialFinancialPeriodsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the FinancialPeriods enitity, by ID.
+func (s *FinancialFinancialPeriodsService) Get(ctx context.Context, division int, id GUID) (*FinancialFinancialPeriods, error) {
+	var entities []*FinancialFinancialPeriods
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/FinancialPeriods?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d FinancialPeriods entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

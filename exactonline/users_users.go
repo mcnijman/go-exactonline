@@ -23,115 +23,115 @@ type UsersUsersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=UsersUsers
 type UsersUsers struct {
 	// UserID: Primary key
-	UserID *GUID `json:",omitempty"`
+	UserID *GUID `json:"UserID,omitempty"`
 
 	// BirthDate: Birth date
-	BirthDate *Date `json:",omitempty"`
+	BirthDate *Date `json:"BirthDate,omitempty"`
 
 	// BirthName: Birth name
-	BirthName *string `json:",omitempty"`
+	BirthName *string `json:"BirthName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Customer: Customer the user belongs to
-	Customer *GUID `json:",omitempty"`
+	Customer *GUID `json:"Customer,omitempty"`
 
 	// CustomerName: Name of Customer
-	CustomerName *string `json:",omitempty"`
+	CustomerName *string `json:"CustomerName,omitempty"`
 
 	// Email: Email address of the user
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// EndDate: Date after which the user login is disabled. NULL means no enddate
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FirstName: First name
-	FirstName *string `json:",omitempty"`
+	FirstName *string `json:"FirstName,omitempty"`
 
 	// FullName: Full name of the user
-	FullName *string `json:",omitempty"`
+	FullName *string `json:"FullName,omitempty"`
 
 	// Gender: Gender: M=Male, V=Female, O=Unknown
-	Gender *string `json:",omitempty"`
+	Gender *string `json:"Gender,omitempty"`
 
 	// HasRegisteredForTwoStepVerification: User has completed registration of Two-Step verification
-	HasRegisteredForTwoStepVerification *bool `json:",omitempty"`
+	HasRegisteredForTwoStepVerification *bool `json:"HasRegisteredForTwoStepVerification,omitempty"`
 
 	// HasTwoStepVerification: User must use Two-Step verification to log in
-	HasTwoStepVerification *bool `json:",omitempty"`
+	HasTwoStepVerification *bool `json:"HasTwoStepVerification,omitempty"`
 
 	// Initials: Initials
-	Initials *string `json:",omitempty"`
+	Initials *string `json:"Initials,omitempty"`
 
 	// IsAnonymised: Indicates whether the user is anonymised.
-	IsAnonymised *byte `json:",omitempty"`
+	IsAnonymised *byte `json:"IsAnonymised,omitempty"`
 
 	// Language: Language (culture) that is used in Exact Online
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// LastLogin: The last time this user logged in
-	LastLogin *Date `json:",omitempty"`
+	LastLogin *Date `json:"LastLogin,omitempty"`
 
 	// LastName: Last name
-	LastName *string `json:",omitempty"`
+	LastName *string `json:"LastName,omitempty"`
 
 	// MiddleName: Middle name
-	MiddleName *string `json:",omitempty"`
+	MiddleName *string `json:"MiddleName,omitempty"`
 
 	// Mobile: Mobile phone
-	Mobile *string `json:",omitempty"`
+	Mobile *string `json:"Mobile,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Nationality: Nationality
-	Nationality *string `json:",omitempty"`
+	Nationality *string `json:"Nationality,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Phone: Phone number
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension: Phone number extension
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// ProfileCode: Profile code
-	ProfileCode *string `json:",omitempty"`
+	ProfileCode *string `json:"ProfileCode,omitempty"`
 
 	// StartDate: Startdate after which the login is allowed. If the start date is NULL the login is allowed as well
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// StartDivision: Start Division
-	StartDivision *int `json:",omitempty"`
+	StartDivision *int `json:"StartDivision,omitempty"`
 
 	// Title: Title
-	Title *string `json:",omitempty"`
+	Title *string `json:"Title,omitempty"`
 
 	// UserName: Login name of the user
-	UserName *string `json:",omitempty"`
+	UserName *string `json:"UserName,omitempty"`
 
 	// UserRoles: Collection of user roles
-	UserRoles *[]byte `json:",omitempty"`
+	UserRoles *[]byte `json:"UserRoles,omitempty"`
 
 	// UserRolesPerDivision: Collection of user roles per division
-	UserRolesPerDivision *[]byte `json:",omitempty"`
+	UserRolesPerDivision *[]byte `json:"UserRolesPerDivision,omitempty"`
 
 	// UserTypesList: Obsolete
-	UserTypesList *string `json:",omitempty"`
+	UserTypesList *string `json:"UserTypesList,omitempty"`
 }
 
 func (s *UsersUsers) GetIdentifier() GUID {
@@ -153,3 +153,22 @@ func (s *UsersUsersService) List(ctx context.Context, division int, all bool) ([
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Users enitity, by UserID.
+func (s *UsersUsersService) Get(ctx context.Context, division int, id GUID) (*UsersUsers, error) {
+	var entities []*UsersUsers
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/users/Users?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Users entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

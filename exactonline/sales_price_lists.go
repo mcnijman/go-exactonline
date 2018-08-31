@@ -23,46 +23,46 @@ type SalesPriceListsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesPriceLists
 type SalesPriceLists struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code to indicate the price list
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: All prices in the price list are stored in this currency
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DivisionDescription: Description of Division
-	DivisionDescription *string `json:",omitempty"`
+	DivisionDescription *string `json:"DivisionDescription,omitempty"`
 
 	// Entity: Indicates the entity (Item, Item group, ..) on which this price list is based
-	Entity *int `json:",omitempty"`
+	Entity *int `json:"Entity,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Explanation or extra information can be stored in the notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *SalesPriceLists) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *SalesPriceListsService) List(ctx context.Context, division int, all boo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the PriceLists enitity, by ID.
+func (s *SalesPriceListsService) Get(ctx context.Context, division int, id GUID) (*SalesPriceLists, error) {
+	var entities []*SalesPriceLists
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/PriceLists?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d PriceLists entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

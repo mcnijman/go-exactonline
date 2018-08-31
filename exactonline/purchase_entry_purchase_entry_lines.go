@@ -23,148 +23,148 @@ type PurchaseEntryPurchaseEntryLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchaseEntryPurchaseEntryLines
 type PurchaseEntryPurchaseEntryLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Asset:
-	Asset *GUID `json:",omitempty"`
+	Asset *GUID `json:"Asset,omitempty"`
 
 	// AssetDescription:
-	AssetDescription *string `json:",omitempty"`
+	AssetDescription *string `json:"AssetDescription,omitempty"`
 
 	// CostCenter:
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostCenterDescription:
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostUnit:
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// CostUnitDescription:
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// From:
-	From *Date `json:",omitempty"`
+	From *Date `json:"From,omitempty"`
 
 	// GLAccount:
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode:
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription:
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// IntraStatArea:
-	IntraStatArea *string `json:",omitempty"`
+	IntraStatArea *string `json:"IntraStatArea,omitempty"`
 
 	// IntraStatCountry:
-	IntraStatCountry *string `json:",omitempty"`
+	IntraStatCountry *string `json:"IntraStatCountry,omitempty"`
 
 	// IntraStatDeliveryTerm:
-	IntraStatDeliveryTerm *string `json:",omitempty"`
+	IntraStatDeliveryTerm *string `json:"IntraStatDeliveryTerm,omitempty"`
 
 	// IntraStatTransactionA:
-	IntraStatTransactionA *string `json:",omitempty"`
+	IntraStatTransactionA *string `json:"IntraStatTransactionA,omitempty"`
 
 	// IntraStatTransportMethod:
-	IntraStatTransportMethod *string `json:",omitempty"`
+	IntraStatTransportMethod *string `json:"IntraStatTransportMethod,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PrivateUsePercentage:
-	PrivateUsePercentage *float64 `json:",omitempty"`
+	PrivateUsePercentage *float64 `json:"PrivateUsePercentage,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// SerialNumber:
-	SerialNumber *string `json:",omitempty"`
+	SerialNumber *string `json:"SerialNumber,omitempty"`
 
 	// StatisticalNetWeight:
-	StatisticalNetWeight *float64 `json:",omitempty"`
+	StatisticalNetWeight *float64 `json:"StatisticalNetWeight,omitempty"`
 
 	// StatisticalNumber:
-	StatisticalNumber *string `json:",omitempty"`
+	StatisticalNumber *string `json:"StatisticalNumber,omitempty"`
 
 	// StatisticalQuantity:
-	StatisticalQuantity *float64 `json:",omitempty"`
+	StatisticalQuantity *float64 `json:"StatisticalQuantity,omitempty"`
 
 	// StatisticalValue:
-	StatisticalValue *float64 `json:",omitempty"`
+	StatisticalValue *float64 `json:"StatisticalValue,omitempty"`
 
 	// Subscription:
-	Subscription *GUID `json:",omitempty"`
+	Subscription *GUID `json:"Subscription,omitempty"`
 
 	// SubscriptionDescription:
-	SubscriptionDescription *string `json:",omitempty"`
+	SubscriptionDescription *string `json:"SubscriptionDescription,omitempty"`
 
 	// To:
-	To *Date `json:",omitempty"`
+	To *Date `json:"To,omitempty"`
 
 	// TrackingNumber:
-	TrackingNumber *GUID `json:",omitempty"`
+	TrackingNumber *GUID `json:"TrackingNumber,omitempty"`
 
 	// TrackingNumberDescription:
-	TrackingNumberDescription *string `json:",omitempty"`
+	TrackingNumberDescription *string `json:"TrackingNumberDescription,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// VATAmountDC:
-	VATAmountDC *float64 `json:",omitempty"`
+	VATAmountDC *float64 `json:"VATAmountDC,omitempty"`
 
 	// VATAmountFC:
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// VATBaseAmountDC:
-	VATBaseAmountDC *float64 `json:",omitempty"`
+	VATBaseAmountDC *float64 `json:"VATBaseAmountDC,omitempty"`
 
 	// VATBaseAmountFC:
-	VATBaseAmountFC *float64 `json:",omitempty"`
+	VATBaseAmountFC *float64 `json:"VATBaseAmountFC,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription:
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 
 	// VATNonDeductiblePercentage:
-	VATNonDeductiblePercentage *float64 `json:",omitempty"`
+	VATNonDeductiblePercentage *float64 `json:"VATNonDeductiblePercentage,omitempty"`
 
 	// VATPercentage:
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 
 	// WithholdingAmountDC:
-	WithholdingAmountDC *float64 `json:",omitempty"`
+	WithholdingAmountDC *float64 `json:"WithholdingAmountDC,omitempty"`
 
 	// WithholdingTax:
-	WithholdingTax *string `json:",omitempty"`
+	WithholdingTax *string `json:"WithholdingTax,omitempty"`
 }
 
 func (s *PurchaseEntryPurchaseEntryLines) GetIdentifier() GUID {
@@ -186,3 +186,22 @@ func (s *PurchaseEntryPurchaseEntryLinesService) List(ctx context.Context, divis
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the PurchaseEntryLines enitity, by ID.
+func (s *PurchaseEntryPurchaseEntryLinesService) Get(ctx context.Context, division int, id GUID) (*PurchaseEntryPurchaseEntryLines, error) {
+	var entities []*PurchaseEntryPurchaseEntryLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntryLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d PurchaseEntryLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

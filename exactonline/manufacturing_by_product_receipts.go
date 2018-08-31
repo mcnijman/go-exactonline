@@ -23,85 +23,85 @@ type ManufacturingByProductReceiptsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingByProductReceipts
 type ManufacturingByProductReceipts struct {
 	// StockTransactionId: ID of stock transaction related to this by-product finish
-	StockTransactionId *GUID `json:",omitempty"`
+	StockTransactionId *GUID `json:"StockTransactionId,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Date this by-product finish was created
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// DraftStockTransactionID: Serial or batch numbers are reserved prior to a POST to ByProductReceipts. This DraftStockTransactionID represents the group of serial or batch numbers to be used in this transaction.
-	DraftStockTransactionID *GUID `json:",omitempty"`
+	DraftStockTransactionID *GUID `json:"DraftStockTransactionID,omitempty"`
 
 	// HasReversibleQuantity: Indicates if this ByProductReceipt has a quantity eligible to be reversed via ByProductReversals
-	HasReversibleQuantity *bool `json:",omitempty"`
+	HasReversibleQuantity *bool `json:"HasReversibleQuantity,omitempty"`
 
 	// IsBackflush: Boolean indicating if this by-product finish was the result of shop order backflushing
-	IsBackflush *bool `json:",omitempty"`
+	IsBackflush *bool `json:"IsBackflush,omitempty"`
 
 	// IsBatch: Does the ByProductReceipt&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the ByProductReceipt&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSerial: Does the ByProductReceipt&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: ID of by-product item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of by-product item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of by-product item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of by-product item
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// Quantity: Quantity of this by-product finish
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// ShopOrder: ID of shop order, which produced the by-product
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// ShopOrderMaterialPlan: ID of the shop order material plan for this by-product
-	ShopOrderMaterialPlan *GUID `json:",omitempty"`
+	ShopOrderMaterialPlan *GUID `json:"ShopOrderMaterialPlan,omitempty"`
 
 	// ShopOrderNumber: Number of shop order, which produced the by-product
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// StorageLocation: ID of storage location finished to
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Code of storage location finished to
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Description of storage location finished to
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// TransactionDate: Effective date of this by-product finish
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of by-product item
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of by-product item
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of warehouse finished to
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse finished to
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse finished to
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingByProductReceipts) GetIdentifier() GUID {
@@ -123,3 +123,22 @@ func (s *ManufacturingByProductReceiptsService) List(ctx context.Context, divisi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ByProductReceipts enitity, by StockTransactionId.
+func (s *ManufacturingByProductReceiptsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingByProductReceipts, error) {
+	var entities []*ManufacturingByProductReceipts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReceipts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ByProductReceipts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,46 +23,46 @@ type ProjectProjectRestrictionRebillingsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectRestrictionRebillings
 type ProjectProjectRestrictionRebillings struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// CostTypeRebill: Cost type reference
-	CostTypeRebill *GUID `json:",omitempty"`
+	CostTypeRebill *GUID `json:"CostTypeRebill,omitempty"`
 
 	// CostTypeRebillCode: Cost type code
-	CostTypeRebillCode *string `json:",omitempty"`
+	CostTypeRebillCode *string `json:"CostTypeRebillCode,omitempty"`
 
 	// CostTypeRebillDescription: Cost type description
-	CostTypeRebillDescription *string `json:",omitempty"`
+	CostTypeRebillDescription *string `json:"CostTypeRebillDescription,omitempty"`
 
 	// Created: Date created
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: Creator user ID
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Creator name
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Date modified
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: Modifier user ID
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Modifier name
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Project: Project linked to the restriction
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode: Project code
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Project description
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
 func (s *ProjectProjectRestrictionRebillings) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *ProjectProjectRestrictionRebillingsService) List(ctx context.Context, d
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProjectRestrictionRebillings enitity, by ID.
+func (s *ProjectProjectRestrictionRebillingsService) Get(ctx context.Context, division int, id GUID) (*ProjectProjectRestrictionRebillings, error) {
+	var entities []*ProjectProjectRestrictionRebillings
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionRebillings?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProjectRestrictionRebillings entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

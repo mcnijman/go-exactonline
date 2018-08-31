@@ -23,19 +23,19 @@ type FinancialAgingOverviewService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialAgingOverview
 type FinancialAgingOverview struct {
 	// AgeGroup: Primary key
-	AgeGroup *int `json:",omitempty"`
+	AgeGroup *int `json:"AgeGroup,omitempty"`
 
 	// AgeGroupDescription: Description of AgeGroup
-	AgeGroupDescription *string `json:",omitempty"`
+	AgeGroupDescription *string `json:"AgeGroupDescription,omitempty"`
 
 	// AmountPayable: Amount payable
-	AmountPayable *float64 `json:",omitempty"`
+	AmountPayable *float64 `json:"AmountPayable,omitempty"`
 
 	// AmountReceivable: Amount receivable
-	AmountReceivable *float64 `json:",omitempty"`
+	AmountReceivable *float64 `json:"AmountReceivable,omitempty"`
 
 	// CurrencyCode: Code of Currency
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 }
 
 func (s *FinancialAgingOverview) GetIdentifier() int {
@@ -57,3 +57,22 @@ func (s *FinancialAgingOverviewService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AgingOverview enitity, by AgeGroup.
+func (s *FinancialAgingOverviewService) Get(ctx context.Context, division int, id int) (*FinancialAgingOverview, error) {
+	var entities []*FinancialAgingOverview
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingOverview?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AgingOverview entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

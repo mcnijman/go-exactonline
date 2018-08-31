@@ -23,55 +23,55 @@ type GeneralJournalEntryGeneralJournalEntriesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=GeneralJournalEntryGeneralJournalEntries
 type GeneralJournalEntryGeneralJournalEntries struct {
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// ExchangeRate:
-	ExchangeRate *float64 `json:",omitempty"`
+	ExchangeRate *float64 `json:"ExchangeRate,omitempty"`
 
 	// FinancialPeriod:
-	FinancialPeriod *int `json:",omitempty"`
+	FinancialPeriod *int `json:"FinancialPeriod,omitempty"`
 
 	// FinancialYear:
-	FinancialYear *int `json:",omitempty"`
+	FinancialYear *int `json:"FinancialYear,omitempty"`
 
 	// GeneralJournalEntryLines:
-	GeneralJournalEntryLines *[]byte `json:",omitempty"`
+	GeneralJournalEntryLines *[]byte `json:"GeneralJournalEntryLines,omitempty"`
 
 	// JournalCode:
-	JournalCode *string `json:",omitempty"`
+	JournalCode *string `json:"JournalCode,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Reversal:
-	Reversal *bool `json:",omitempty"`
+	Reversal *bool `json:"Reversal,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
 func (s *GeneralJournalEntryGeneralJournalEntries) GetIdentifier() GUID {
@@ -93,3 +93,22 @@ func (s *GeneralJournalEntryGeneralJournalEntriesService) List(ctx context.Conte
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GeneralJournalEntries enitity, by EntryID.
+func (s *GeneralJournalEntryGeneralJournalEntriesService) Get(ctx context.Context, division int, id GUID) (*GeneralJournalEntryGeneralJournalEntries, error) {
+	var entities []*GeneralJournalEntryGeneralJournalEntries
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntries?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GeneralJournalEntries entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

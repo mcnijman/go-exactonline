@@ -23,199 +23,199 @@ type SalesInvoiceSalesInvoicesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesInvoiceSalesInvoices
 type SalesInvoiceSalesInvoices struct {
 	// InvoiceID:
-	InvoiceID *GUID `json:",omitempty"`
+	InvoiceID *GUID `json:"InvoiceID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountDiscount:
-	AmountDiscount *float64 `json:",omitempty"`
+	AmountDiscount *float64 `json:"AmountDiscount,omitempty"`
 
 	// AmountDiscountExclVat:
-	AmountDiscountExclVat *float64 `json:",omitempty"`
+	AmountDiscountExclVat *float64 `json:"AmountDiscountExclVat,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// AmountFCExclVat:
-	AmountFCExclVat *float64 `json:",omitempty"`
+	AmountFCExclVat *float64 `json:"AmountFCExclVat,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// DeliverTo:
-	DeliverTo *GUID `json:",omitempty"`
+	DeliverTo *GUID `json:"DeliverTo,omitempty"`
 
 	// DeliverToAddress:
-	DeliverToAddress *GUID `json:",omitempty"`
+	DeliverToAddress *GUID `json:"DeliverToAddress,omitempty"`
 
 	// DeliverToContactPerson:
-	DeliverToContactPerson *GUID `json:",omitempty"`
+	DeliverToContactPerson *GUID `json:"DeliverToContactPerson,omitempty"`
 
 	// DeliverToContactPersonFullName:
-	DeliverToContactPersonFullName *string `json:",omitempty"`
+	DeliverToContactPersonFullName *string `json:"DeliverToContactPersonFullName,omitempty"`
 
 	// DeliverToName:
-	DeliverToName *string `json:",omitempty"`
+	DeliverToName *string `json:"DeliverToName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Discount:
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// DiscountType:
-	DiscountType *int `json:",omitempty"`
+	DiscountType *int `json:"DiscountType,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentNumber:
-	DocumentNumber *int `json:",omitempty"`
+	DocumentNumber *int `json:"DocumentNumber,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// DueDate:
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// ExtraDutyAmountFC:
-	ExtraDutyAmountFC *float64 `json:",omitempty"`
+	ExtraDutyAmountFC *float64 `json:"ExtraDutyAmountFC,omitempty"`
 
 	// GAccountAmountFC:
-	GAccountAmountFC *float64 `json:",omitempty"`
+	GAccountAmountFC *float64 `json:"GAccountAmountFC,omitempty"`
 
 	// InvoiceDate:
-	InvoiceDate *Date `json:",omitempty"`
+	InvoiceDate *Date `json:"InvoiceDate,omitempty"`
 
 	// InvoiceNumber:
-	InvoiceNumber *int `json:",omitempty"`
+	InvoiceNumber *int `json:"InvoiceNumber,omitempty"`
 
 	// InvoiceTo:
-	InvoiceTo *GUID `json:",omitempty"`
+	InvoiceTo *GUID `json:"InvoiceTo,omitempty"`
 
 	// InvoiceToContactPerson:
-	InvoiceToContactPerson *GUID `json:",omitempty"`
+	InvoiceToContactPerson *GUID `json:"InvoiceToContactPerson,omitempty"`
 
 	// InvoiceToContactPersonFullName:
-	InvoiceToContactPersonFullName *string `json:",omitempty"`
+	InvoiceToContactPersonFullName *string `json:"InvoiceToContactPersonFullName,omitempty"`
 
 	// InvoiceToName:
-	InvoiceToName *string `json:",omitempty"`
+	InvoiceToName *string `json:"InvoiceToName,omitempty"`
 
 	// IsExtraDuty:
-	IsExtraDuty *bool `json:",omitempty"`
+	IsExtraDuty *bool `json:"IsExtraDuty,omitempty"`
 
 	// Journal:
-	Journal *string `json:",omitempty"`
+	Journal *string `json:"Journal,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// OrderDate:
-	OrderDate *Date `json:",omitempty"`
+	OrderDate *Date `json:"OrderDate,omitempty"`
 
 	// OrderedBy:
-	OrderedBy *GUID `json:",omitempty"`
+	OrderedBy *GUID `json:"OrderedBy,omitempty"`
 
 	// OrderedByContactPerson:
-	OrderedByContactPerson *GUID `json:",omitempty"`
+	OrderedByContactPerson *GUID `json:"OrderedByContactPerson,omitempty"`
 
 	// OrderedByContactPersonFullName:
-	OrderedByContactPersonFullName *string `json:",omitempty"`
+	OrderedByContactPersonFullName *string `json:"OrderedByContactPersonFullName,omitempty"`
 
 	// OrderedByName:
-	OrderedByName *string `json:",omitempty"`
+	OrderedByName *string `json:"OrderedByName,omitempty"`
 
 	// OrderNumber:
-	OrderNumber *int `json:",omitempty"`
+	OrderNumber *int `json:"OrderNumber,omitempty"`
 
 	// PaymentCondition:
-	PaymentCondition *string `json:",omitempty"`
+	PaymentCondition *string `json:"PaymentCondition,omitempty"`
 
 	// PaymentConditionDescription:
-	PaymentConditionDescription *string `json:",omitempty"`
+	PaymentConditionDescription *string `json:"PaymentConditionDescription,omitempty"`
 
 	// PaymentReference:
-	PaymentReference *string `json:",omitempty"`
+	PaymentReference *string `json:"PaymentReference,omitempty"`
 
 	// Remarks:
-	Remarks *string `json:",omitempty"`
+	Remarks *string `json:"Remarks,omitempty"`
 
 	// SalesInvoiceLines:
-	SalesInvoiceLines *[]byte `json:",omitempty"`
+	SalesInvoiceLines *[]byte `json:"SalesInvoiceLines,omitempty"`
 
 	// Salesperson:
-	Salesperson *GUID `json:",omitempty"`
+	Salesperson *GUID `json:"Salesperson,omitempty"`
 
 	// SalespersonFullName:
-	SalespersonFullName *string `json:",omitempty"`
+	SalespersonFullName *string `json:"SalespersonFullName,omitempty"`
 
 	// StarterSalesInvoiceStatus:
-	StarterSalesInvoiceStatus *int `json:",omitempty"`
+	StarterSalesInvoiceStatus *int `json:"StarterSalesInvoiceStatus,omitempty"`
 
 	// StarterSalesInvoiceStatusDescription:
-	StarterSalesInvoiceStatusDescription *string `json:",omitempty"`
+	StarterSalesInvoiceStatusDescription *string `json:"StarterSalesInvoiceStatusDescription,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// TaxSchedule:
-	TaxSchedule *GUID `json:",omitempty"`
+	TaxSchedule *GUID `json:"TaxSchedule,omitempty"`
 
 	// TaxScheduleCode:
-	TaxScheduleCode *string `json:",omitempty"`
+	TaxScheduleCode *string `json:"TaxScheduleCode,omitempty"`
 
 	// TaxScheduleDescription:
-	TaxScheduleDescription *string `json:",omitempty"`
+	TaxScheduleDescription *string `json:"TaxScheduleDescription,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// VATAmountDC:
-	VATAmountDC *float64 `json:",omitempty"`
+	VATAmountDC *float64 `json:"VATAmountDC,omitempty"`
 
 	// VATAmountFC:
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// WithholdingTaxAmountFC:
-	WithholdingTaxAmountFC *float64 `json:",omitempty"`
+	WithholdingTaxAmountFC *float64 `json:"WithholdingTaxAmountFC,omitempty"`
 
 	// WithholdingTaxBaseAmount:
-	WithholdingTaxBaseAmount *float64 `json:",omitempty"`
+	WithholdingTaxBaseAmount *float64 `json:"WithholdingTaxBaseAmount,omitempty"`
 
 	// WithholdingTaxPercentage:
-	WithholdingTaxPercentage *float64 `json:",omitempty"`
+	WithholdingTaxPercentage *float64 `json:"WithholdingTaxPercentage,omitempty"`
 
 	// YourRef:
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *SalesInvoiceSalesInvoices) GetIdentifier() GUID {
@@ -237,3 +237,22 @@ func (s *SalesInvoiceSalesInvoicesService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SalesInvoices enitity, by InvoiceID.
+func (s *SalesInvoiceSalesInvoicesService) Get(ctx context.Context, division int, id GUID) (*SalesInvoiceSalesInvoices, error) {
+	var entities []*SalesInvoiceSalesInvoices
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/SalesInvoices?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SalesInvoices entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

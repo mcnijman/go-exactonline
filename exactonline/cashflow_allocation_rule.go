@@ -23,43 +23,43 @@ type CashflowAllocationRuleService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowAllocationRule
 type CashflowAllocationRule struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: The account ID to which the imported bank transaction must be allocated.
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountBankAccount: The bank account number that should be in the imported bank transaction in order to perform the automatic allocation on bank account. Either bank account or word must be filled.
-	AccountBankAccount *string `json:",omitempty"`
+	AccountBankAccount *string `json:"AccountBankAccount,omitempty"`
 
 	// Costcenter: The cost centre that will be allocated to the imported bank transaction.
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// Costunit: The cost unit that will be allocated to the imported bank transaction.
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// Division: Division Code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: The G/L account to which the imported bank transaction must be allocated.
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// VATCode: The VAT code that will be allocated to the imported bank transaction.
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// Words: Words for the automatic allocation. Either bank account or word must be filled.
-	Words *string `json:",omitempty"`
+	Words *string `json:"Words,omitempty"`
 }
 
 func (s *CashflowAllocationRule) GetIdentifier() GUID {
@@ -81,3 +81,22 @@ func (s *CashflowAllocationRuleService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AllocationRule enitity, by ID.
+func (s *CashflowAllocationRuleService) Get(ctx context.Context, division int, id GUID) (*CashflowAllocationRule, error) {
+	var entities []*CashflowAllocationRule
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/cashflow/AllocationRule?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AllocationRule entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

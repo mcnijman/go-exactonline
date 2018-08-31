@@ -23,22 +23,22 @@ type WorkflowRequestAttachmentsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=WorkflowRequestAttachments
 type WorkflowRequestAttachments struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Division: The division
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DownloadUrl: To get the file in its original format (xml, jpg, pdf, etc.) append &amp;Download=1 to the url.
-	DownloadUrl *string `json:",omitempty"`
+	DownloadUrl *string `json:"DownloadUrl,omitempty"`
 
 	// FileName: Filename of the attachment
-	FileName *string `json:",omitempty"`
+	FileName *string `json:"FileName,omitempty"`
 
 	// FileSize: File size of the attachment
-	FileSize *float64 `json:",omitempty"`
+	FileSize *float64 `json:"FileSize,omitempty"`
 
 	// Request: The request this attachment is linked to
-	Request *GUID `json:",omitempty"`
+	Request *GUID `json:"Request,omitempty"`
 }
 
 func (s *WorkflowRequestAttachments) GetIdentifier() GUID {
@@ -60,3 +60,22 @@ func (s *WorkflowRequestAttachmentsService) List(ctx context.Context, division i
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the RequestAttachments enitity, by ID.
+func (s *WorkflowRequestAttachmentsService) Get(ctx context.Context, division int, id GUID) (*WorkflowRequestAttachments, error) {
+	var entities []*WorkflowRequestAttachments
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/workflow/RequestAttachments?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d RequestAttachments entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

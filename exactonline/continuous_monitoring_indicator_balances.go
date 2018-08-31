@@ -23,61 +23,61 @@ type ContinuousMonitoringIndicatorBalancesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorBalances
 type ContinuousMonitoringIndicatorBalances struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Indicates if this indicator is active or inactive
-	Active *byte `json:",omitempty"`
+	Active *byte `json:"Active,omitempty"`
 
 	// Classification: Indicator classification (1 = Quality, 2 = Advice). Default = 1
-	Classification *int `json:",omitempty"`
+	Classification *int `json:"Classification,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// CreateSignal: Indicates whether a signal is created
-	CreateSignal *byte `json:",omitempty"`
+	CreateSignal *byte `json:"CreateSignal,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of indicator
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ExternalCode: External code
-	ExternalCode *string `json:",omitempty"`
+	ExternalCode *string `json:"ExternalCode,omitempty"`
 
 	// IndicatorGLAccounts: Collection of GL accounts
-	IndicatorGLAccounts *[]byte `json:",omitempty"`
+	IndicatorGLAccounts *[]byte `json:"IndicatorGLAccounts,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Operator: Operator to be used in conjunction with journal (1 = Equal to, 2 = Unequal to, 3 = Greater than, 4 = Greater than or equal to, 5 = Less than, 6 = Less than or equal to, 7 = Between)
-	Operator *int `json:",omitempty"`
+	Operator *int `json:"Operator,omitempty"`
 
 	// Severity: Severity of the indicators (1 = Low, 2 = Medium, 3 = High, 4 = Critical)
-	Severity *int `json:",omitempty"`
+	Severity *int `json:"Severity,omitempty"`
 
 	// Type: Indicator type (1 = Balance G/L account per financial year, 2 = Usage of journals, 3 = Deviating amount entered, 4 = Liquidity, 5 = VAT Return deadline, 6 = Difference result in percentage, 7 = Different VAT code used)
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// ValueFrom: Value from/Value. Default value is 0. This field should be used together with any choice of operator.
-	ValueFrom *float64 `json:",omitempty"`
+	ValueFrom *float64 `json:"ValueFrom,omitempty"`
 
 	// ValueTo: Value to. Default value is 0.
-	ValueTo *float64 `json:",omitempty"`
+	ValueTo *float64 `json:"ValueTo,omitempty"`
 }
 
 func (s *ContinuousMonitoringIndicatorBalances) GetIdentifier() GUID {
@@ -99,3 +99,22 @@ func (s *ContinuousMonitoringIndicatorBalancesService) List(ctx context.Context,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the IndicatorBalances enitity, by ID.
+func (s *ContinuousMonitoringIndicatorBalancesService) Get(ctx context.Context, division int, id GUID) (*ContinuousMonitoringIndicatorBalances, error) {
+	var entities []*ContinuousMonitoringIndicatorBalances
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d IndicatorBalances entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

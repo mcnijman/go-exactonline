@@ -23,79 +23,79 @@ type ManufacturingOperationResourcesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingOperationResources
 type ManufacturingOperationResources struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Reference to Accounts
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AttendedPercentage: Attended percentage
-	AttendedPercentage *float64 `json:",omitempty"`
+	AttendedPercentage *float64 `json:"AttendedPercentage,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Reference to Currencies
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EfficiencyPercentage: Efficiency percentage
-	EfficiencyPercentage *float64 `json:",omitempty"`
+	EfficiencyPercentage *float64 `json:"EfficiencyPercentage,omitempty"`
 
 	// IsPrimary: Indicates if this is the primary operation of the workcenter
-	IsPrimary *byte `json:",omitempty"`
+	IsPrimary *byte `json:"IsPrimary,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Operation: Reference to Operations
-	Operation *GUID `json:",omitempty"`
+	Operation *GUID `json:"Operation,omitempty"`
 
 	// OperationDescription: Description of Operation
-	OperationDescription *string `json:",omitempty"`
+	OperationDescription *string `json:"OperationDescription,omitempty"`
 
 	// PurchaseLeadDays: Lead days from purchase
-	PurchaseLeadDays *int `json:",omitempty"`
+	PurchaseLeadDays *int `json:"PurchaseLeadDays,omitempty"`
 
 	// PurchaseUnit: Unit of purchased item from supplier
-	PurchaseUnit *string `json:",omitempty"`
+	PurchaseUnit *string `json:"PurchaseUnit,omitempty"`
 
 	// PurchaseVATCode: VAT code used for purchased item from supplier
-	PurchaseVATCode *string `json:",omitempty"`
+	PurchaseVATCode *string `json:"PurchaseVATCode,omitempty"`
 
 	// Run: Used in conjuction with RunMethod and EfficiencyPercentage to determine PlannedRunHours
-	Run *float64 `json:",omitempty"`
+	Run *float64 `json:"Run,omitempty"`
 
 	// RunMethod: Reference to OperationRunMethods
-	RunMethod *int `json:",omitempty"`
+	RunMethod *int `json:"RunMethod,omitempty"`
 
 	// Setup: Used in conjunction with SetupCount and SetupUnit to determine PlannedSetupHours
-	Setup *float64 `json:",omitempty"`
+	Setup *float64 `json:"Setup,omitempty"`
 
 	// SetupUnit: Reference to TimeUnits
-	SetupUnit *string `json:",omitempty"`
+	SetupUnit *string `json:"SetupUnit,omitempty"`
 
 	// Type: Reference to RoutingStepTypes
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// Workcenter: Reference to Workcenter
-	Workcenter *GUID `json:",omitempty"`
+	Workcenter *GUID `json:"Workcenter,omitempty"`
 
 	// WorkcenterDescription: Description of Workcenter
-	WorkcenterDescription *string `json:",omitempty"`
+	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
 func (s *ManufacturingOperationResources) GetIdentifier() GUID {
@@ -117,3 +117,22 @@ func (s *ManufacturingOperationResourcesService) List(ctx context.Context, divis
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the OperationResources enitity, by ID.
+func (s *ManufacturingOperationResourcesService) Get(ctx context.Context, division int, id GUID) (*ManufacturingOperationResources, error) {
+	var entities []*ManufacturingOperationResources
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/OperationResources?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d OperationResources entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,19 +23,19 @@ type ContinuousMonitoringIndicatorGLAccountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorGLAccounts
 type ContinuousMonitoringIndicatorGLAccounts struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// GLAccount: ID of GLAccount
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode: GL account code
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: Description of GLAccount
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// Indicator: ID of Indicators
-	Indicator *GUID `json:",omitempty"`
+	Indicator *GUID `json:"Indicator,omitempty"`
 }
 
 func (s *ContinuousMonitoringIndicatorGLAccounts) GetIdentifier() GUID {
@@ -57,3 +57,22 @@ func (s *ContinuousMonitoringIndicatorGLAccountsService) List(ctx context.Contex
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the IndicatorGLAccounts enitity, by ID.
+func (s *ContinuousMonitoringIndicatorGLAccountsService) Get(ctx context.Context, division int, id GUID) (*ContinuousMonitoringIndicatorGLAccounts, error) {
+	var entities []*ContinuousMonitoringIndicatorGLAccounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorGLAccounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d IndicatorGLAccounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

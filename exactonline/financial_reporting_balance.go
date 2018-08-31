@@ -23,58 +23,58 @@ type FinancialReportingBalanceService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialReportingBalance
 type FinancialReportingBalance struct {
 	// ID: Record ID
-	ID *int64 `json:",omitempty"`
+	ID *int64 `json:"ID,omitempty"`
 
 	// Amount: The sum of the amounts of all transactions in the grouping.
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// AmountCredit: The sum of the amounts of all credit transactions in the grouping.
-	AmountCredit *float64 `json:",omitempty"`
+	AmountCredit *float64 `json:"AmountCredit,omitempty"`
 
 	// AmountDebit: The sum of the amounts of all debit transactions in the grouping.
-	AmountDebit *float64 `json:",omitempty"`
+	AmountDebit *float64 `json:"AmountDebit,omitempty"`
 
 	// BalanceType: Balance type of the G/L account: B = Balance Sheet, W = Profit &amp; Loss.
-	BalanceType *string `json:",omitempty"`
+	BalanceType *string `json:"BalanceType,omitempty"`
 
 	// CostCenterCode: The code of the cost center.
-	CostCenterCode *string `json:",omitempty"`
+	CostCenterCode *string `json:"CostCenterCode,omitempty"`
 
 	// CostCenterDescription: The description of the cost center.
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostUnitCode: The code of the cost unit.
-	CostUnitCode *string `json:",omitempty"`
+	CostUnitCode *string `json:"CostUnitCode,omitempty"`
 
 	// CostUnitDescription: The description of the cost unit.
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// Count: The number of transactions in the grouping.
-	Count *int `json:",omitempty"`
+	Count *int `json:"Count,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: G/L account
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode: The code of the G/L account.
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: The description of the G/L account.
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// ReportingPeriod: The reporting period of the transactions in the grouping.
-	ReportingPeriod *int `json:",omitempty"`
+	ReportingPeriod *int `json:"ReportingPeriod,omitempty"`
 
 	// ReportingYear: The reporting year of the transactions in the grouping.
-	ReportingYear *int `json:",omitempty"`
+	ReportingYear *int `json:"ReportingYear,omitempty"`
 
 	// Status: Status: 20 = Open, 50 = Processed. To get &#39;after entry&#39; results, both Open and Processed amounts have to be included. This is by default, so it requires no extra filtering.
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Type: The type of the transactions in the grouping.
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *FinancialReportingBalance) GetIdentifier() int64 {
@@ -96,3 +96,22 @@ func (s *FinancialReportingBalanceService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ReportingBalance enitity, by ID.
+func (s *FinancialReportingBalanceService) Get(ctx context.Context, division int, id int64) (*FinancialReportingBalance, error) {
+	var entities []*FinancialReportingBalance
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ReportingBalance?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ReportingBalance entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

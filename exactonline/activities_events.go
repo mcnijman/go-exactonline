@@ -23,94 +23,94 @@ type ActivitiesEventsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesEvents
 type ActivitiesEvents struct {
 	// ID: The Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: The account that is related to the event
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName: The name of the account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Attachments: Attachments linked to the event
-	Attachments *[]byte `json:",omitempty"`
+	Attachments *[]byte `json:"Attachments,omitempty"`
 
 	// Campaign: The campaign linked to the event
-	Campaign *GUID `json:",omitempty"`
+	Campaign *GUID `json:"Campaign,omitempty"`
 
 	// CampaignDescription: Description of the campaign
-	CampaignDescription *string `json:",omitempty"`
+	CampaignDescription *string `json:"CampaignDescription,omitempty"`
 
 	// Contact: The contact person that is related to the event
-	Contact *GUID `json:",omitempty"`
+	Contact *GUID `json:"Contact,omitempty"`
 
 	// ContactFullName: The name of the contact person
-	ContactFullName *string `json:",omitempty"`
+	ContactFullName *string `json:"ContactFullName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: The description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: The division
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document: The document that is linked to the event
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentSubject: The subject of the document
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// EndDate: The end date and time
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// HID: The human readable key
-	HID *int `json:",omitempty"`
+	HID *int `json:"HID,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: The notes of the event
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Opportunity: The opportunity linked to the event
-	Opportunity *GUID `json:",omitempty"`
+	Opportunity *GUID `json:"Opportunity,omitempty"`
 
 	// OpportunityName: The name of the opportunity
-	OpportunityName *string `json:",omitempty"`
+	OpportunityName *string `json:"OpportunityName,omitempty"`
 
 	// Project: The project linked to the event
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectDescription: The description of the project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// StartDate: The start date and time
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Status: Status: 0 = Void, 5 = Rejected, 10 = Draft, 20 = Open, 30 = Approved, 40 = Realized, 50 = Processed
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription: The description of the status
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// User: The user that has the event
-	User *GUID `json:",omitempty"`
+	User *GUID `json:"User,omitempty"`
 
 	// UserFullName: The user name
-	UserFullName *string `json:",omitempty"`
+	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
 func (s *ActivitiesEvents) GetIdentifier() GUID {
@@ -132,3 +132,22 @@ func (s *ActivitiesEventsService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Events enitity, by ID.
+func (s *ActivitiesEventsService) Get(ctx context.Context, division int, id GUID) (*ActivitiesEvents, error) {
+	var entities []*ActivitiesEvents
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Events?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Events entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

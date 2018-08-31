@@ -23,70 +23,70 @@ type CRMQuotationLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMQuotationLines
 type CRMQuotationLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Discount:
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item:
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription:
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// NetPrice:
-	NetPrice *float64 `json:",omitempty"`
+	NetPrice *float64 `json:"NetPrice,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// QuotationID:
-	QuotationID *GUID `json:",omitempty"`
+	QuotationID *GUID `json:"QuotationID,omitempty"`
 
 	// QuotationNumber:
-	QuotationNumber *int `json:",omitempty"`
+	QuotationNumber *int `json:"QuotationNumber,omitempty"`
 
 	// UnitCode:
-	UnitCode *string `json:",omitempty"`
+	UnitCode *string `json:"UnitCode,omitempty"`
 
 	// UnitDescription:
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// UnitPrice:
-	UnitPrice *float64 `json:",omitempty"`
+	UnitPrice *float64 `json:"UnitPrice,omitempty"`
 
 	// VATAmountFC:
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATDescription:
-	VATDescription *string `json:",omitempty"`
+	VATDescription *string `json:"VATDescription,omitempty"`
 
 	// VATPercentage:
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 
 	// VersionNumber:
-	VersionNumber *int `json:",omitempty"`
+	VersionNumber *int `json:"VersionNumber,omitempty"`
 }
 
 func (s *CRMQuotationLines) GetIdentifier() GUID {
@@ -108,3 +108,22 @@ func (s *CRMQuotationLinesService) List(ctx context.Context, division int, all b
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the QuotationLines enitity, by ID.
+func (s *CRMQuotationLinesService) Get(ctx context.Context, division int, id GUID) (*CRMQuotationLines, error) {
+	var entities []*CRMQuotationLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/QuotationLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d QuotationLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

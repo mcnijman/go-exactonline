@@ -23,82 +23,82 @@ type ManufacturingWorkcentersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingWorkcenters
 type ManufacturingWorkcenters struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Capacity: Capacity of the work center
-	Capacity *int `json:",omitempty"`
+	Capacity *int `json:"Capacity,omitempty"`
 
 	// Code: Code of the work center
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Costcenter: Reference to CostCenters
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription: Description of Costcenter
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit: Reference to CostUnits
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription: Description of Costunit
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the work center
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GeneralBurdenRate: General burden rate
-	GeneralBurdenRate *float64 `json:",omitempty"`
+	GeneralBurdenRate *float64 `json:"GeneralBurdenRate,omitempty"`
 
 	// IsLaborBurdenPercent: Indicates if labor burden is calculated as a percentage or amount
-	IsLaborBurdenPercent *byte `json:",omitempty"`
+	IsLaborBurdenPercent *byte `json:"IsLaborBurdenPercent,omitempty"`
 
 	// LaborBurdenRate: Labor burden rate
-	LaborBurdenRate *float64 `json:",omitempty"`
+	LaborBurdenRate *float64 `json:"LaborBurdenRate,omitempty"`
 
 	// MachineBurdenRate: Machine burden rate
-	MachineBurdenRate *float64 `json:",omitempty"`
+	MachineBurdenRate *float64 `json:"MachineBurdenRate,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// ProductionArea: Area to which the work center belongs.
-	ProductionArea *GUID `json:",omitempty"`
+	ProductionArea *GUID `json:"ProductionArea,omitempty"`
 
 	// RunLaborRate: Run labor rate
-	RunLaborRate *float64 `json:",omitempty"`
+	RunLaborRate *float64 `json:"RunLaborRate,omitempty"`
 
 	// SearchCode: Search code of the work center
-	SearchCode *string `json:",omitempty"`
+	SearchCode *string `json:"SearchCode,omitempty"`
 
 	// SetupLaborRate: Setup labor rate
-	SetupLaborRate *float64 `json:",omitempty"`
+	SetupLaborRate *float64 `json:"SetupLaborRate,omitempty"`
 
 	// Status: Reference to WorkcenterStatus
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Type: Reference to WorkcenterTypes
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *ManufacturingWorkcenters) GetIdentifier() GUID {
@@ -120,3 +120,22 @@ func (s *ManufacturingWorkcentersService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Workcenters enitity, by ID.
+func (s *ManufacturingWorkcentersService) Get(ctx context.Context, division int, id GUID) (*ManufacturingWorkcenters, error) {
+	var entities []*ManufacturingWorkcenters
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/Workcenters?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Workcenters entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

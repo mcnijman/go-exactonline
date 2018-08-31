@@ -23,82 +23,82 @@ type ManufacturingSubOrderReversalsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingSubOrderReversals
 type ManufacturingSubOrderReversals struct {
 	// MaterialReversalStockTransactionId: MaterialReversal.StockTransactionId related to this SubOrderReversal&#39;s MaterialReversal
-	MaterialReversalStockTransactionId *GUID `json:",omitempty"`
+	MaterialReversalStockTransactionId *GUID `json:"MaterialReversalStockTransactionId,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Creation date of this SubOrderReversal
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// IsBatch: Does the SubOrderReversal&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the SubOrderReversal&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSerial: Does the SubOrderReversal&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Item reversed
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item reversed
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item reversed
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of shop order item
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// Note: Notes logged with this reversal
-	Note *string `json:",omitempty"`
+	Note *string `json:"Note,omitempty"`
 
 	// OriginalMaterialIssueStockTransactionId: MaterialIssue.StockTransactionId related to this SubOrderReceipt&#39;s original MaterialIssue
-	OriginalMaterialIssueStockTransactionId *GUID `json:",omitempty"`
+	OriginalMaterialIssueStockTransactionId *GUID `json:"OriginalMaterialIssueStockTransactionId,omitempty"`
 
 	// OriginalShopOrderReceiptStockTransactionId: ShopOrderReceipt.StockTransactionId related to this SubOrderReceipt&#39;s original ShopOrderReceipt
-	OriginalShopOrderReceiptStockTransactionId *GUID `json:",omitempty"`
+	OriginalShopOrderReceiptStockTransactionId *GUID `json:"OriginalShopOrderReceiptStockTransactionId,omitempty"`
 
 	// ParentShopOrder: Shop order reversed from
-	ParentShopOrder *GUID `json:",omitempty"`
+	ParentShopOrder *GUID `json:"ParentShopOrder,omitempty"`
 
 	// ParentShopOrderNumber: Number of shop order reversed from
-	ParentShopOrderNumber *int `json:",omitempty"`
+	ParentShopOrderNumber *int `json:"ParentShopOrderNumber,omitempty"`
 
 	// Quantity: Quantity of this SubOrderReversal
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// ShopOrderReversalStockTransactionId: ShopOrderReversal.StockTransactionId related to this SubOrderReversal&#39;s ShopOrderReversal
-	ShopOrderReversalStockTransactionId *GUID `json:",omitempty"`
+	ShopOrderReversalStockTransactionId *GUID `json:"ShopOrderReversalStockTransactionId,omitempty"`
 
 	// SubShopOrder: Shop order reversed to
-	SubShopOrder *GUID `json:",omitempty"`
+	SubShopOrder *GUID `json:"SubShopOrder,omitempty"`
 
 	// SubShopOrderNumber: Number of shop order reversed to
-	SubShopOrderNumber *int `json:",omitempty"`
+	SubShopOrderNumber *int `json:"SubShopOrderNumber,omitempty"`
 
 	// TransactionDate: Effective date of this SubOrderReversal
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of this SubOrderReversal&#39;s item
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of this SubOrderReversal&#39;s item
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of warehouse of this SubOrderReversal
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse of this SubOrderReversal
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse of this SubOrderReversal
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingSubOrderReversals) GetIdentifier() GUID {
@@ -120,3 +120,22 @@ func (s *ManufacturingSubOrderReversalsService) List(ctx context.Context, divisi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubOrderReversals enitity, by MaterialReversalStockTransactionId.
+func (s *ManufacturingSubOrderReversalsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingSubOrderReversals, error) {
+	var entities []*ManufacturingSubOrderReversals
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReversals?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubOrderReversals entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

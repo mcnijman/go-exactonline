@@ -23,31 +23,31 @@ type WebhooksWebhookSubscriptionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=WebhooksWebhookSubscriptions
 type WebhooksWebhookSubscriptions struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// CallbackURL: Callback URL endpoint
-	CallbackURL *string `json:",omitempty"`
+	CallbackURL *string `json:"CallbackURL,omitempty"`
 
 	// ClientID: OAuth client Id
-	ClientID *GUID `json:",omitempty"`
+	ClientID *GUID `json:"ClientID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the OAuth Client
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Topic: Webhook subscription topic, e.g.: FinancialTransactions, Items, StockPositions
-	Topic *string `json:",omitempty"`
+	Topic *string `json:"Topic,omitempty"`
 }
 
 func (s *WebhooksWebhookSubscriptions) GetIdentifier() GUID {
@@ -69,3 +69,22 @@ func (s *WebhooksWebhookSubscriptionsService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the WebhookSubscriptions enitity, by ID.
+func (s *WebhooksWebhookSubscriptionsService) Get(ctx context.Context, division int, id GUID) (*WebhooksWebhookSubscriptions, error) {
+	var entities []*WebhooksWebhookSubscriptions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/webhooks/WebhookSubscriptions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d WebhookSubscriptions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

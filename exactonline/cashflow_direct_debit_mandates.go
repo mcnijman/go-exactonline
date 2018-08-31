@@ -23,58 +23,58 @@ type CashflowDirectDebitMandatesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowDirectDebitMandates
 type CashflowDirectDebitMandates struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Account to which the mandate belongs.
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// BankAccount: Bank account to which the mandate belongs.
-	BankAccount *GUID `json:",omitempty"`
+	BankAccount *GUID `json:"BankAccount,omitempty"`
 
 	// CancellationDate: Date that the mandate is cancelled. Used to check the validity of the mandate.
-	CancellationDate *Date `json:",omitempty"`
+	CancellationDate *Date `json:"CancellationDate,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Displays the description of the mandate.
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// FirstSend: Indicates the first collection hasn&#39;t been sent/confirmed with this mandate.
-	FirstSend *byte `json:",omitempty"`
+	FirstSend *byte `json:"FirstSend,omitempty"`
 
 	// Main: Indicates if the mandate is the main, you can have only one main mandate
-	Main *byte `json:",omitempty"`
+	Main *byte `json:"Main,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PaymentType: Depending on the payment type, a different bank file will be generated. 0 = One-off payment, 1 = Recurrent payment, 2 = AdHoc (UK only)
-	PaymentType *int `json:",omitempty"`
+	PaymentType *int `json:"PaymentType,omitempty"`
 
 	// Reference: Displays a reference number for the mandate. It is a unique reference number that you can assign to each mandate.
-	Reference *string `json:",omitempty"`
+	Reference *string `json:"Reference,omitempty"`
 
 	// SignatureDate: Date that the mandate is signed. The collection must take place after the signature date of the mandate. The date is used to check the validity of the mandate.
-	SignatureDate *Date `json:",omitempty"`
+	SignatureDate *Date `json:"SignatureDate,omitempty"`
 
 	// Type: Depending on the type, a different bank file will be generated. 0 = Core, 1 = B2B and 2 = bottomline (UK only)
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *CashflowDirectDebitMandates) GetIdentifier() GUID {
@@ -96,3 +96,22 @@ func (s *CashflowDirectDebitMandatesService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DirectDebitMandates enitity, by ID.
+func (s *CashflowDirectDebitMandatesService) Get(ctx context.Context, division int, id GUID) (*CashflowDirectDebitMandates, error) {
+	var entities []*CashflowDirectDebitMandates
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/DirectDebitMandates?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DirectDebitMandates entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

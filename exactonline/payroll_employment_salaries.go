@@ -23,91 +23,91 @@ type PayrollEmploymentSalariesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmploymentSalaries
 type PayrollEmploymentSalaries struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AverageDaysPerWeek: The average number of contract days that an employee works per week
-	AverageDaysPerWeek *float64 `json:",omitempty"`
+	AverageDaysPerWeek *float64 `json:"AverageDaysPerWeek,omitempty"`
 
 	// AverageHoursPerWeek: The average number of contract hours that an employee works per week
-	AverageHoursPerWeek *float64 `json:",omitempty"`
+	AverageHoursPerWeek *float64 `json:"AverageHoursPerWeek,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee ID
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeFullName: Name of employee
-	EmployeeFullName *string `json:",omitempty"`
+	EmployeeFullName *string `json:"EmployeeFullName,omitempty"`
 
 	// EmployeeHID: Employee number
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// Employment: Employment
-	Employment *GUID `json:",omitempty"`
+	Employment *GUID `json:"Employment,omitempty"`
 
 	// EmploymentHID: Employment number
-	EmploymentHID *int `json:",omitempty"`
+	EmploymentHID *int `json:"EmploymentHID,omitempty"`
 
 	// EmploymentSalaryType: Salary type of employment. 1 - Periodical (fixed), 2 - Per hour (variable)
-	EmploymentSalaryType *int `json:",omitempty"`
+	EmploymentSalaryType *int `json:"EmploymentSalaryType,omitempty"`
 
 	// EmploymentSalaryTypeDescription: Salary type description
-	EmploymentSalaryTypeDescription *string `json:",omitempty"`
+	EmploymentSalaryTypeDescription *string `json:"EmploymentSalaryTypeDescription,omitempty"`
 
 	// EndDate: Salary record end date
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FulltimeAmount: Salary when working fulltime
-	FulltimeAmount *float64 `json:",omitempty"`
+	FulltimeAmount *float64 `json:"FulltimeAmount,omitempty"`
 
 	// HourlyWage: Hourly wage
-	HourlyWage *float64 `json:",omitempty"`
+	HourlyWage *float64 `json:"HourlyWage,omitempty"`
 
 	// InternalRate: Internal rate for time &amp; billing or professional service user
-	InternalRate *float64 `json:",omitempty"`
+	InternalRate *float64 `json:"InternalRate,omitempty"`
 
 	// JobLevel: Employee job level in context of a wage scale
-	JobLevel *int `json:",omitempty"`
+	JobLevel *int `json:"JobLevel,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// ParttimeAmount: Salary when working parttime
-	ParttimeAmount *float64 `json:",omitempty"`
+	ParttimeAmount *float64 `json:"ParttimeAmount,omitempty"`
 
 	// ParttimeFactor: Contract hours / Fulltime contract hours
-	ParttimeFactor *float64 `json:",omitempty"`
+	ParttimeFactor *float64 `json:"ParttimeFactor,omitempty"`
 
 	// Scale: Employee wage scale
-	Scale *string `json:",omitempty"`
+	Scale *string `json:"Scale,omitempty"`
 
 	// Schedule: Employment schedule
-	Schedule *GUID `json:",omitempty"`
+	Schedule *GUID `json:"Schedule,omitempty"`
 
 	// ScheduleCode: Employment schedule code
-	ScheduleCode *string `json:",omitempty"`
+	ScheduleCode *string `json:"ScheduleCode,omitempty"`
 
 	// ScheduleDescription: Description of employment schedule
-	ScheduleDescription *string `json:",omitempty"`
+	ScheduleDescription *string `json:"ScheduleDescription,omitempty"`
 
 	// StartDate: Salary record start date
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 }
 
 func (s *PayrollEmploymentSalaries) GetIdentifier() GUID {
@@ -129,3 +129,22 @@ func (s *PayrollEmploymentSalariesService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the EmploymentSalaries enitity, by ID.
+func (s *PayrollEmploymentSalariesService) Get(ctx context.Context, division int, id GUID) (*PayrollEmploymentSalaries, error) {
+	var entities []*PayrollEmploymentSalaries
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentSalaries?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d EmploymentSalaries entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

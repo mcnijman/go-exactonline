@@ -23,118 +23,118 @@ type DocumentsDocumentsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocuments
 type DocumentsDocuments struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode:
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Body:
-	Body *string `json:",omitempty"`
+	Body *string `json:"Body,omitempty"`
 
 	// Category:
-	Category *GUID `json:",omitempty"`
+	Category *GUID `json:"Category,omitempty"`
 
 	// CategoryDescription:
-	CategoryDescription *string `json:",omitempty"`
+	CategoryDescription *string `json:"CategoryDescription,omitempty"`
 
 	// Contact:
-	Contact *GUID `json:",omitempty"`
+	Contact *GUID `json:"Contact,omitempty"`
 
 	// ContactFullName:
-	ContactFullName *string `json:",omitempty"`
+	ContactFullName *string `json:"ContactFullName,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DocumentDate:
-	DocumentDate *Date `json:",omitempty"`
+	DocumentDate *Date `json:"DocumentDate,omitempty"`
 
 	// DocumentFolder:
-	DocumentFolder *GUID `json:",omitempty"`
+	DocumentFolder *GUID `json:"DocumentFolder,omitempty"`
 
 	// DocumentFolderCode:
-	DocumentFolderCode *string `json:",omitempty"`
+	DocumentFolderCode *string `json:"DocumentFolderCode,omitempty"`
 
 	// DocumentFolderDescription:
-	DocumentFolderDescription *string `json:",omitempty"`
+	DocumentFolderDescription *string `json:"DocumentFolderDescription,omitempty"`
 
 	// DocumentViewUrl:
-	DocumentViewUrl *string `json:",omitempty"`
+	DocumentViewUrl *string `json:"DocumentViewUrl,omitempty"`
 
 	// FinancialTransactionEntryID:
-	FinancialTransactionEntryID *GUID `json:",omitempty"`
+	FinancialTransactionEntryID *GUID `json:"FinancialTransactionEntryID,omitempty"`
 
 	// HasEmptyBody:
-	HasEmptyBody *bool `json:",omitempty"`
+	HasEmptyBody *bool `json:"HasEmptyBody,omitempty"`
 
 	// HID:
-	HID *int `json:",omitempty"`
+	HID *int `json:"HID,omitempty"`
 
 	// Language:
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Opportunity:
-	Opportunity *GUID `json:",omitempty"`
+	Opportunity *GUID `json:"Opportunity,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// SalesInvoiceNumber:
-	SalesInvoiceNumber *int `json:",omitempty"`
+	SalesInvoiceNumber *int `json:"SalesInvoiceNumber,omitempty"`
 
 	// SalesOrderNumber:
-	SalesOrderNumber *int `json:",omitempty"`
+	SalesOrderNumber *int `json:"SalesOrderNumber,omitempty"`
 
 	// SendMethod:
-	SendMethod *int `json:",omitempty"`
+	SendMethod *int `json:"SendMethod,omitempty"`
 
 	// ShopOrderNumber:
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// Subject:
-	Subject *string `json:",omitempty"`
+	Subject *string `json:"Subject,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
 func (s *DocumentsDocuments) GetIdentifier() GUID {
@@ -156,3 +156,22 @@ func (s *DocumentsDocumentsService) List(ctx context.Context, division int, all 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Documents enitity, by ID.
+func (s *DocumentsDocumentsService) Get(ctx context.Context, division int, id GUID) (*DocumentsDocuments, error) {
+	var entities []*DocumentsDocuments
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/Documents?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Documents entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

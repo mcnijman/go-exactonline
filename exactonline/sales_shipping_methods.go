@@ -23,46 +23,46 @@ type SalesShippingMethodsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesShippingMethods
 type SalesShippingMethods struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Active
-	Active *bool `json:",omitempty"`
+	Active *bool `json:"Active,omitempty"`
 
 	// Code: Code of the shipping method
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of shipping method
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// ShippingRatesURL: Shipping method rates URL
-	ShippingRatesURL *string `json:",omitempty"`
+	ShippingRatesURL *string `json:"ShippingRatesURL,omitempty"`
 
 	// TrackingURL: Tracking URL
-	TrackingURL *string `json:",omitempty"`
+	TrackingURL *string `json:"TrackingURL,omitempty"`
 }
 
 func (s *SalesShippingMethods) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *SalesShippingMethodsService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ShippingMethods enitity, by ID.
+func (s *SalesShippingMethodsService) Get(ctx context.Context, division int, id GUID) (*SalesShippingMethods, error) {
+	var entities []*SalesShippingMethods
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ShippingMethods entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

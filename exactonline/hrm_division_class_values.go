@@ -23,61 +23,61 @@ type HRMDivisionClassValuesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMDivisionClassValues
 type HRMDivisionClassValues struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Class_01: First classification
-	Class_01 *[]byte `json:",omitempty"`
+	Class_01 *[]byte `json:"Class_01,omitempty"`
 
 	// Class_01_ID: First classification ID
-	Class_01_ID *GUID `json:",omitempty"`
+	Class_01_ID *GUID `json:"Class_01_ID,omitempty"`
 
 	// Class_02: Second classification
-	Class_02 *[]byte `json:",omitempty"`
+	Class_02 *[]byte `json:"Class_02,omitempty"`
 
 	// Class_02_ID: Second classification ID
-	Class_02_ID *GUID `json:",omitempty"`
+	Class_02_ID *GUID `json:"Class_02_ID,omitempty"`
 
 	// Class_03: Third classification
-	Class_03 *[]byte `json:",omitempty"`
+	Class_03 *[]byte `json:"Class_03,omitempty"`
 
 	// Class_03_ID: Third classification ID
-	Class_03_ID *GUID `json:",omitempty"`
+	Class_03_ID *GUID `json:"Class_03_ID,omitempty"`
 
 	// Class_04: Fourth classification
-	Class_04 *[]byte `json:",omitempty"`
+	Class_04 *[]byte `json:"Class_04,omitempty"`
 
 	// Class_04_ID: Fourth classification ID
-	Class_04_ID *GUID `json:",omitempty"`
+	Class_04_ID *GUID `json:"Class_04_ID,omitempty"`
 
 	// Class_05: Fifth classification
-	Class_05 *[]byte `json:",omitempty"`
+	Class_05 *[]byte `json:"Class_05,omitempty"`
 
 	// Class_05_ID: Fifth classification ID
-	Class_05_ID *GUID `json:",omitempty"`
+	Class_05_ID *GUID `json:"Class_05_ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Customer: ID of customer
-	Customer *GUID `json:",omitempty"`
+	Customer *GUID `json:"Customer,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
 func (s *HRMDivisionClassValues) GetIdentifier() GUID {
@@ -99,3 +99,22 @@ func (s *HRMDivisionClassValuesService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DivisionClassValues enitity, by ID.
+func (s *HRMDivisionClassValuesService) Get(ctx context.Context, division int, id GUID) (*HRMDivisionClassValues, error) {
+	var entities []*HRMDivisionClassValues
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/DivisionClassValues?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DivisionClassValues entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

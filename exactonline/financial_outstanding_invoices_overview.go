@@ -23,31 +23,31 @@ type FinancialOutstandingInvoicesOverviewService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialOutstandingInvoicesOverview
 type FinancialOutstandingInvoicesOverview struct {
 	// CurrencyCode: Primary key
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
 	// OutstandingPayableInvoiceAmount: Total invoice amount to be paid
-	OutstandingPayableInvoiceAmount *float64 `json:",omitempty"`
+	OutstandingPayableInvoiceAmount *float64 `json:"OutstandingPayableInvoiceAmount,omitempty"`
 
 	// OutstandingPayableInvoiceCount: Number of invoices to be paid
-	OutstandingPayableInvoiceCount *float64 `json:",omitempty"`
+	OutstandingPayableInvoiceCount *float64 `json:"OutstandingPayableInvoiceCount,omitempty"`
 
 	// OutstandingReceivableInvoiceAmount: Total invoice amount to be received
-	OutstandingReceivableInvoiceAmount *float64 `json:",omitempty"`
+	OutstandingReceivableInvoiceAmount *float64 `json:"OutstandingReceivableInvoiceAmount,omitempty"`
 
 	// OutstandingReceivableInvoiceCount: Number of invoices to be received
-	OutstandingReceivableInvoiceCount *float64 `json:",omitempty"`
+	OutstandingReceivableInvoiceCount *float64 `json:"OutstandingReceivableInvoiceCount,omitempty"`
 
 	// OverduePayableInvoiceAmount: Total payable invoice amount that is overdue
-	OverduePayableInvoiceAmount *float64 `json:",omitempty"`
+	OverduePayableInvoiceAmount *float64 `json:"OverduePayableInvoiceAmount,omitempty"`
 
 	// OverduePayableInvoiceCount: Number of payable invoices that are overdue
-	OverduePayableInvoiceCount *float64 `json:",omitempty"`
+	OverduePayableInvoiceCount *float64 `json:"OverduePayableInvoiceCount,omitempty"`
 
 	// OverdueReceivableInvoiceAmount: Total receivable invoice amount that is overdue
-	OverdueReceivableInvoiceAmount *float64 `json:",omitempty"`
+	OverdueReceivableInvoiceAmount *float64 `json:"OverdueReceivableInvoiceAmount,omitempty"`
 
 	// OverdueReceivableInvoiceCount: Number of receivable invoices that are overdue
-	OverdueReceivableInvoiceCount *float64 `json:",omitempty"`
+	OverdueReceivableInvoiceCount *float64 `json:"OverdueReceivableInvoiceCount,omitempty"`
 }
 
 func (s *FinancialOutstandingInvoicesOverview) GetIdentifier() string {
@@ -69,3 +69,22 @@ func (s *FinancialOutstandingInvoicesOverviewService) List(ctx context.Context, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the OutstandingInvoicesOverview enitity, by CurrencyCode.
+func (s *FinancialOutstandingInvoicesOverviewService) Get(ctx context.Context, division int, id string) (*FinancialOutstandingInvoicesOverview, error) {
+	var entities []*FinancialOutstandingInvoicesOverview
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/OutstandingInvoicesOverview?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d OutstandingInvoicesOverview entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,94 +23,94 @@ type LogisticsItemGroupsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsItemGroups
 type LogisticsItemGroups struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the item group
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the item group
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLCosts: GL account on which the costs of items of this group will be booked
-	GLCosts *GUID `json:",omitempty"`
+	GLCosts *GUID `json:"GLCosts,omitempty"`
 
 	// GLCostsCode: Code of GLCosts
-	GLCostsCode *string `json:",omitempty"`
+	GLCostsCode *string `json:"GLCostsCode,omitempty"`
 
 	// GLCostsDescription: Description of GLCosts
-	GLCostsDescription *string `json:",omitempty"`
+	GLCostsDescription *string `json:"GLCostsDescription,omitempty"`
 
 	// GLPurchaseAccount: GL Purchase account for purchase invoicing according to (non-) perpetual inventory method
-	GLPurchaseAccount *GUID `json:",omitempty"`
+	GLPurchaseAccount *GUID `json:"GLPurchaseAccount,omitempty"`
 
 	// GLPurchaseAccountCode: Code of GLPurchase
-	GLPurchaseAccountCode *string `json:",omitempty"`
+	GLPurchaseAccountCode *string `json:"GLPurchaseAccountCode,omitempty"`
 
 	// GLPurchaseAccountDescription: Description of GLPurchaseAccount
-	GLPurchaseAccountDescription *string `json:",omitempty"`
+	GLPurchaseAccountDescription *string `json:"GLPurchaseAccountDescription,omitempty"`
 
 	// GLPurchasePriceDifference: GL account that will be used for the &#39;Standard cost price&#39; valuation method to balance the difference between purchase price and cost price
-	GLPurchasePriceDifference *GUID `json:",omitempty"`
+	GLPurchasePriceDifference *GUID `json:"GLPurchasePriceDifference,omitempty"`
 
 	// GLPurchasePriceDifferenceCode: Code of GLPurchasePriceDifference
-	GLPurchasePriceDifferenceCode *string `json:",omitempty"`
+	GLPurchasePriceDifferenceCode *string `json:"GLPurchasePriceDifferenceCode,omitempty"`
 
 	// GLPurchasePriceDifferenceDescr: Description of GLPurchasePriceDifference
-	GLPurchasePriceDifferenceDescr *string `json:",omitempty"`
+	GLPurchasePriceDifferenceDescr *string `json:"GLPurchasePriceDifferenceDescr,omitempty"`
 
 	// GLRevenue: GL account on which the revenue for items of this group will be booked
-	GLRevenue *GUID `json:",omitempty"`
+	GLRevenue *GUID `json:"GLRevenue,omitempty"`
 
 	// GLRevenueCode: Code of GLRevenue
-	GLRevenueCode *string `json:",omitempty"`
+	GLRevenueCode *string `json:"GLRevenueCode,omitempty"`
 
 	// GLRevenueDescription: Description of GLRevenue
-	GLRevenueDescription *string `json:",omitempty"`
+	GLRevenueDescription *string `json:"GLRevenueDescription,omitempty"`
 
 	// GLStock: GL account on which stock entries will be booked for items of this group
-	GLStock *GUID `json:",omitempty"`
+	GLStock *GUID `json:"GLStock,omitempty"`
 
 	// GLStockCode: Code of GLStock
-	GLStockCode *string `json:",omitempty"`
+	GLStockCode *string `json:"GLStockCode,omitempty"`
 
 	// GLStockDescription: Description of GLStock
-	GLStockDescription *string `json:",omitempty"`
+	GLStockDescription *string `json:"GLStockDescription,omitempty"`
 
 	// GLStockVariance: GL stock variance account for perpetual inventory
-	GLStockVariance *GUID `json:",omitempty"`
+	GLStockVariance *GUID `json:"GLStockVariance,omitempty"`
 
 	// GLStockVarianceCode: Code of GLStockVariance
-	GLStockVarianceCode *string `json:",omitempty"`
+	GLStockVarianceCode *string `json:"GLStockVarianceCode,omitempty"`
 
 	// GLStockVarianceDescription: Description of GLStockVariance
-	GLStockVarianceDescription *string `json:",omitempty"`
+	GLStockVarianceDescription *string `json:"GLStockVarianceDescription,omitempty"`
 
 	// IsDefault: Indicates if this is the default item group that will be assigned when a new item is created
-	IsDefault *byte `json:",omitempty"`
+	IsDefault *byte `json:"IsDefault,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *LogisticsItemGroups) GetIdentifier() GUID {
@@ -132,3 +132,22 @@ func (s *LogisticsItemGroupsService) List(ctx context.Context, division int, all
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ItemGroups enitity, by ID.
+func (s *LogisticsItemGroupsService) Get(ctx context.Context, division int, id GUID) (*LogisticsItemGroups, error) {
+	var entities []*LogisticsItemGroups
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/ItemGroups?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ItemGroups entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

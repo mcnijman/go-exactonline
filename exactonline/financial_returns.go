@@ -23,49 +23,49 @@ type FinancialReturnsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialReturns
 type FinancialReturns struct {
 	// DocumentID: Primary key, document ID
-	DocumentID *GUID `json:",omitempty"`
+	DocumentID *GUID `json:"DocumentID,omitempty"`
 
 	// Amount: Amount in the currency of the transaction
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Currency: Currency
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DocumentViewUrl: Url to view the document
-	DocumentViewUrl *string `json:",omitempty"`
+	DocumentViewUrl *string `json:"DocumentViewUrl,omitempty"`
 
 	// DueDate: Due date
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// Frequency: Frequency
-	Frequency *string `json:",omitempty"`
+	Frequency *string `json:"Frequency,omitempty"`
 
 	// PayrollDeclarationType: Payroll declaration type
-	PayrollDeclarationType *string `json:",omitempty"`
+	PayrollDeclarationType *string `json:"PayrollDeclarationType,omitempty"`
 
 	// Period: Period
-	Period *int `json:",omitempty"`
+	Period *int `json:"Period,omitempty"`
 
 	// PeriodDescription: Description of Period
-	PeriodDescription *string `json:",omitempty"`
+	PeriodDescription *string `json:"PeriodDescription,omitempty"`
 
 	// Request: Reference to request
-	Request *GUID `json:",omitempty"`
+	Request *GUID `json:"Request,omitempty"`
 
 	// Status: Status
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Type: Type
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// Year: Year
-	Year *int `json:",omitempty"`
+	Year *int `json:"Year,omitempty"`
 }
 
 func (s *FinancialReturns) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *FinancialReturnsService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Returns enitity, by DocumentID.
+func (s *FinancialReturnsService) Get(ctx context.Context, division int, id GUID) (*FinancialReturns, error) {
+	var entities []*FinancialReturns
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/Returns?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Returns entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

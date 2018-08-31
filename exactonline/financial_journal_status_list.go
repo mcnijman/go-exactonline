@@ -23,28 +23,28 @@ type FinancialJournalStatusListService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialJournalStatusList
 type FinancialJournalStatusList struct {
 	// Journal:
-	Journal *string `json:",omitempty"`
+	Journal *string `json:"Journal,omitempty"`
 
 	// Period:
-	Period *int `json:",omitempty"`
+	Period *int `json:"Period,omitempty"`
 
 	// Year:
-	Year *int `json:",omitempty"`
+	Year *int `json:"Year,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// JournalType:
-	JournalType *int `json:",omitempty"`
+	JournalType *int `json:"JournalType,omitempty"`
 
 	// JournalTypeDescription:
-	JournalTypeDescription *string `json:",omitempty"`
+	JournalTypeDescription *string `json:"JournalTypeDescription,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
 func (s *FinancialJournalStatusList) GetIdentifier() string {
@@ -66,3 +66,22 @@ func (s *FinancialJournalStatusListService) List(ctx context.Context, division i
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the JournalStatusList enitity, by Journal.
+func (s *FinancialJournalStatusListService) Get(ctx context.Context, division int, id string) (*FinancialJournalStatusList, error) {
+	var entities []*FinancialJournalStatusList
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/JournalStatusList?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d JournalStatusList entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

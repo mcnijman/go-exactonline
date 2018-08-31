@@ -23,49 +23,49 @@ type AccountancySolutionLinksService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AccountancySolutionLinks
 type AccountancySolutionLinks struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: ID of account to which solution is linked
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// Division: Accountant main division
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ExternalSolutionCode: If type is external predefined, represents ID of PracticeManagementExternalSolutions (mandatory for External solution)
-	ExternalSolutionCode *int `json:",omitempty"`
+	ExternalSolutionCode *int `json:"ExternalSolutionCode,omitempty"`
 
 	// ExternalSolutionName: Name of the external solution
-	ExternalSolutionName *string `json:",omitempty"`
+	ExternalSolutionName *string `json:"ExternalSolutionName,omitempty"`
 
 	// ExternalSolutionUrl: Customer URl in external solution, like solution.com/id123 (mandatory for External and ExternalOther solution)
-	ExternalSolutionUrl *string `json:",omitempty"`
+	ExternalSolutionUrl *string `json:"ExternalSolutionUrl,omitempty"`
 
 	// InternalSolutionDivision: Division code of linked internal solution (mandatory for Internal solution)
-	InternalSolutionDivision *int `json:",omitempty"`
+	InternalSolutionDivision *int `json:"InternalSolutionDivision,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// Name: Name of the solution link
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// OtherExternalSolutionName: Name of the custom external solution (mandatory for ExternalOther solution)
-	OtherExternalSolutionName *string `json:",omitempty"`
+	OtherExternalSolutionName *string `json:"OtherExternalSolutionName,omitempty"`
 
 	// SolutionType: Type of solution: 0 - Internal(EOL), 1 - External(Wellknown solution), 2 - ExternalOther
-	SolutionType *int `json:",omitempty"`
+	SolutionType *int `json:"SolutionType,omitempty"`
 
 	// Status: Link status: 0 - Active, 1 - Inactive, 2 -Archived
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *AccountancySolutionLinks) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *AccountancySolutionLinksService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SolutionLinks enitity, by ID.
+func (s *AccountancySolutionLinksService) Get(ctx context.Context, division int, id GUID) (*AccountancySolutionLinks, error) {
+	var entities []*AccountancySolutionLinks
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/SolutionLinks?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SolutionLinks entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

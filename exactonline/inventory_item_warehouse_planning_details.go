@@ -23,49 +23,49 @@ type InventoryItemWarehousePlanningDetailsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehousePlanningDetails
 type InventoryItemWarehousePlanningDetails struct {
 	// Item: ID of item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// PlannedDate: Date which quantity in stock is planned to change
-	PlannedDate *Date `json:",omitempty"`
+	PlannedDate *Date `json:"PlannedDate,omitempty"`
 
 	// PlannedQuantity: Amount by which quantity in stock is planned to change
-	PlannedQuantity *float64 `json:",omitempty"`
+	PlannedQuantity *float64 `json:"PlannedQuantity,omitempty"`
 
 	// PlanningSourceDescription: Human readable description of the PlanningSource (translated to user&#39;s language) - Examples: Purchase Order, Sales Order, Shop Order, etc.
-	PlanningSourceDescription *string `json:",omitempty"`
+	PlanningSourceDescription *string `json:"PlanningSourceDescription,omitempty"`
 
 	// PlanningSourceID: ID of the PlanningSource
-	PlanningSourceID *GUID `json:",omitempty"`
+	PlanningSourceID *GUID `json:"PlanningSourceID,omitempty"`
 
 	// PlanningSourceLineNumber: Line number of the PlanningSource if the PlanningSourceType supports line numbers
-	PlanningSourceLineNumber *int `json:",omitempty"`
+	PlanningSourceLineNumber *int `json:"PlanningSourceLineNumber,omitempty"`
 
 	// PlanningSourceNumber: Human readable number of the PlanningSource - Examples: Shop order number &#39;201600001&#39; or Sales order number &#39;2016020001&#39;
-	PlanningSourceNumber *int `json:",omitempty"`
+	PlanningSourceNumber *int `json:"PlanningSourceNumber,omitempty"`
 
 	// PlanningSourceUrl: REST API URL of this specific PlanningSource and PlanningSourceID (Assembly orders and warehouse transfers not supported over REST)
-	PlanningSourceUrl *string `json:",omitempty"`
+	PlanningSourceUrl *string `json:"PlanningSourceUrl,omitempty"`
 
 	// PlanningType: Type of the PlanningSource - 120=GoodsDelivery, 124=WarehouseTransferDelivery, 130=GoodsReceipt, 134=WarehouseTransferReceipt, 140=ShopOrderStockReceipt, 147=ShopOrderByProductReceipt, 150=ShopOrderRequirement, 160=AssemblyOrderReceipt, 165=AssemblyOrderIssue
-	PlanningType *int `json:",omitempty"`
+	PlanningType *int `json:"PlanningType,omitempty"`
 
 	// PlanningTypeDescription: Human readable description of the PlanningSourceType (translated to user&#39;s language) - Examples: &#39;Shop order stock receipt&#39; or &#39;Goods delivery&#39;
-	PlanningTypeDescription *string `json:",omitempty"`
+	PlanningTypeDescription *string `json:"PlanningTypeDescription,omitempty"`
 
 	// Warehouse: ID of warehouse
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryItemWarehousePlanningDetails) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *InventoryItemWarehousePlanningDetailsService) List(ctx context.Context,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ItemWarehousePlanningDetails enitity, by Item.
+func (s *InventoryItemWarehousePlanningDetailsService) Get(ctx context.Context, division int, id GUID) (*InventoryItemWarehousePlanningDetails, error) {
+	var entities []*InventoryItemWarehousePlanningDetails
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehousePlanningDetails?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ItemWarehousePlanningDetails entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

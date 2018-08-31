@@ -23,79 +23,79 @@ type SubscriptionSubscriptionLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionLines
 type SubscriptionSubscriptionLines struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AmountDC: Amount in the default currency of the company
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC: Amount in the currency of the transaction
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Costcenter: Cost center
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// Costunit: Cost unit
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Discount: Discount percentage
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryID: Entry ID
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// FromDate: From date
-	FromDate *Date `json:",omitempty"`
+	FromDate *Date `json:"FromDate,omitempty"`
 
 	// Item: Reference to Item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// LineType: Reference to LineType
-	LineType *int `json:",omitempty"`
+	LineType *int `json:"LineType,omitempty"`
 
 	// LineTypeDescription: Description of LineType
-	LineTypeDescription *string `json:",omitempty"`
+	LineTypeDescription *string `json:"LineTypeDescription,omitempty"`
 
 	// NetPrice: Net price in the currency of the transaction
-	NetPrice *float64 `json:",omitempty"`
+	NetPrice *float64 `json:"NetPrice,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Quantity: Quantity
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// ToDate: To date
-	ToDate *Date `json:",omitempty"`
+	ToDate *Date `json:"ToDate,omitempty"`
 
 	// UnitCode: Unit code
-	UnitCode *string `json:",omitempty"`
+	UnitCode *string `json:"UnitCode,omitempty"`
 
 	// UnitDescription: Description of Unit
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// UnitPrice: Unit price in the currency of the transaction (price * unit factor)
-	UnitPrice *float64 `json:",omitempty"`
+	UnitPrice *float64 `json:"UnitPrice,omitempty"`
 
 	// VATAmountFC: Vat Amount in the currency of the transaction
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// VATCode: VATCode
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription: Description of VATCode
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 }
 
 func (s *SubscriptionSubscriptionLines) GetIdentifier() GUID {
@@ -117,3 +117,22 @@ func (s *SubscriptionSubscriptionLinesService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubscriptionLines enitity, by ID.
+func (s *SubscriptionSubscriptionLinesService) Get(ctx context.Context, division int, id GUID) (*SubscriptionSubscriptionLines, error) {
+	var entities []*SubscriptionSubscriptionLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubscriptionLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

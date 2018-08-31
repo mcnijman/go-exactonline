@@ -23,13 +23,13 @@ type ProjectTimeAndBillingEntryRecentAccountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingEntryRecentAccounts
 type ProjectTimeAndBillingEntryRecentAccounts struct {
 	// AccountId: Primary key
-	AccountId *GUID `json:",omitempty"`
+	AccountId *GUID `json:"AccountId,omitempty"`
 
 	// AccountName: Name of account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// DateLastUsed: Date last used
-	DateLastUsed *Date `json:",omitempty"`
+	DateLastUsed *Date `json:"DateLastUsed,omitempty"`
 }
 
 func (s *ProjectTimeAndBillingEntryRecentAccounts) GetIdentifier() GUID {
@@ -51,3 +51,22 @@ func (s *ProjectTimeAndBillingEntryRecentAccountsService) List(ctx context.Conte
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TimeAndBillingEntryRecentAccounts enitity, by AccountId.
+func (s *ProjectTimeAndBillingEntryRecentAccountsService) Get(ctx context.Context, division int, id GUID) (*ProjectTimeAndBillingEntryRecentAccounts, error) {
+	var entities []*ProjectTimeAndBillingEntryRecentAccounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentAccounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TimeAndBillingEntryRecentAccounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

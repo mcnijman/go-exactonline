@@ -23,52 +23,52 @@ type ManufacturingProductionAreasService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingProductionAreas
 type ManufacturingProductionAreas struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the production area group
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Costcenter: Reference to Cost center
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription: Description of Costcenter
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit: Reference to Cost unit
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription: Description of Costunit
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the production area
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// IsDefault: Indicates if this is the default production area. This will be used when creating a new production area
-	IsDefault *byte `json:",omitempty"`
+	IsDefault *byte `json:"IsDefault,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Production area notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *ManufacturingProductionAreas) GetIdentifier() GUID {
@@ -90,3 +90,22 @@ func (s *ManufacturingProductionAreasService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProductionAreas enitity, by ID.
+func (s *ManufacturingProductionAreasService) Get(ctx context.Context, division int, id GUID) (*ManufacturingProductionAreas, error) {
+	var entities []*ManufacturingProductionAreas
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ProductionAreas?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProductionAreas entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

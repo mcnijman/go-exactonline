@@ -23,70 +23,70 @@ type ManufacturingStageForDeliveryReceiptsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingStageForDeliveryReceipts
 type ManufacturingStageForDeliveryReceipts struct {
 	// Id: ID of staged for delivery entry
-	Id *GUID `json:",omitempty"`
+	Id *GUID `json:"Id,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Date this Stage for delivery wa created
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// HasReversibleQuantity: Indicates if this StageForDeliveryReceipt has a quantity eligible to be reversed via StageForDeliveryReversals
-	HasReversibleQuantity *bool `json:",omitempty"`
+	HasReversibleQuantity *bool `json:"HasReversibleQuantity,omitempty"`
 
 	// IsBatch: Does the shop order receipt&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the stage for delivery receipt&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSerial: Does the shop order receipt&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Item staged for delivery
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item staged for delivery
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item staged for delivery
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of shop order item
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// Quantity: Quantity of this StageForDeliveryReceipt
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// RelatedId: ID of the original stage for delivery entry
-	RelatedId *GUID `json:",omitempty"`
+	RelatedId *GUID `json:"RelatedId,omitempty"`
 
 	// ShopOrder: Shop order staged for delivery
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// ShopOrderNumber: Number of shop order staged for delivery
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// TransactionDate: Effective date of this stage for delivery receipt
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of item finished
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of item finished
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of the shop order warehouse
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of the shop order warehouse
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of the shop order warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingStageForDeliveryReceipts) GetIdentifier() GUID {
@@ -108,3 +108,22 @@ func (s *ManufacturingStageForDeliveryReceiptsService) List(ctx context.Context,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the StageForDeliveryReceipts enitity, by Id.
+func (s *ManufacturingStageForDeliveryReceiptsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingStageForDeliveryReceipts, error) {
+	var entities []*ManufacturingStageForDeliveryReceipts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/StageForDeliveryReceipts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d StageForDeliveryReceipts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,148 +23,148 @@ type SalesEntrySalesEntriesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesEntrySalesEntries
 type SalesEntrySalesEntries struct {
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// BatchNumber:
-	BatchNumber *int `json:",omitempty"`
+	BatchNumber *int `json:"BatchNumber,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Customer:
-	Customer *GUID `json:",omitempty"`
+	Customer *GUID `json:"Customer,omitempty"`
 
 	// CustomerName:
-	CustomerName *string `json:",omitempty"`
+	CustomerName *string `json:"CustomerName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentNumber:
-	DocumentNumber *int `json:",omitempty"`
+	DocumentNumber *int `json:"DocumentNumber,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// DueDate:
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// EntryDate:
-	EntryDate *Date `json:",omitempty"`
+	EntryDate *Date `json:"EntryDate,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// ExternalLinkDescription:
-	ExternalLinkDescription *string `json:",omitempty"`
+	ExternalLinkDescription *string `json:"ExternalLinkDescription,omitempty"`
 
 	// ExternalLinkReference:
-	ExternalLinkReference *string `json:",omitempty"`
+	ExternalLinkReference *string `json:"ExternalLinkReference,omitempty"`
 
 	// GAccountAmountFC:
-	GAccountAmountFC *float64 `json:",omitempty"`
+	GAccountAmountFC *float64 `json:"GAccountAmountFC,omitempty"`
 
 	// InvoiceNumber:
-	InvoiceNumber *int `json:",omitempty"`
+	InvoiceNumber *int `json:"InvoiceNumber,omitempty"`
 
 	// IsExtraDuty:
-	IsExtraDuty *bool `json:",omitempty"`
+	IsExtraDuty *bool `json:"IsExtraDuty,omitempty"`
 
 	// Journal:
-	Journal *string `json:",omitempty"`
+	Journal *string `json:"Journal,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// OrderNumber:
-	OrderNumber *int `json:",omitempty"`
+	OrderNumber *int `json:"OrderNumber,omitempty"`
 
 	// PaymentCondition:
-	PaymentCondition *string `json:",omitempty"`
+	PaymentCondition *string `json:"PaymentCondition,omitempty"`
 
 	// PaymentConditionDescription:
-	PaymentConditionDescription *string `json:",omitempty"`
+	PaymentConditionDescription *string `json:"PaymentConditionDescription,omitempty"`
 
 	// PaymentReference:
-	PaymentReference *string `json:",omitempty"`
+	PaymentReference *string `json:"PaymentReference,omitempty"`
 
 	// ProcessNumber:
-	ProcessNumber *int `json:",omitempty"`
+	ProcessNumber *int `json:"ProcessNumber,omitempty"`
 
 	// Rate:
-	Rate *float64 `json:",omitempty"`
+	Rate *float64 `json:"Rate,omitempty"`
 
 	// ReportingPeriod:
-	ReportingPeriod *int `json:",omitempty"`
+	ReportingPeriod *int `json:"ReportingPeriod,omitempty"`
 
 	// ReportingYear:
-	ReportingYear *int `json:",omitempty"`
+	ReportingYear *int `json:"ReportingYear,omitempty"`
 
 	// Reversal:
-	Reversal *bool `json:",omitempty"`
+	Reversal *bool `json:"Reversal,omitempty"`
 
 	// SalesEntryLines:
-	SalesEntryLines *[]byte `json:",omitempty"`
+	SalesEntryLines *[]byte `json:"SalesEntryLines,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// VATAmountDC:
-	VATAmountDC *float64 `json:",omitempty"`
+	VATAmountDC *float64 `json:"VATAmountDC,omitempty"`
 
 	// VATAmountFC:
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// WithholdingTaxAmountDC:
-	WithholdingTaxAmountDC *float64 `json:",omitempty"`
+	WithholdingTaxAmountDC *float64 `json:"WithholdingTaxAmountDC,omitempty"`
 
 	// WithholdingTaxBaseAmount:
-	WithholdingTaxBaseAmount *float64 `json:",omitempty"`
+	WithholdingTaxBaseAmount *float64 `json:"WithholdingTaxBaseAmount,omitempty"`
 
 	// WithholdingTaxPercentage:
-	WithholdingTaxPercentage *float64 `json:",omitempty"`
+	WithholdingTaxPercentage *float64 `json:"WithholdingTaxPercentage,omitempty"`
 
 	// YourRef:
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *SalesEntrySalesEntries) GetIdentifier() GUID {
@@ -186,3 +186,22 @@ func (s *SalesEntrySalesEntriesService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SalesEntries enitity, by EntryID.
+func (s *SalesEntrySalesEntriesService) Get(ctx context.Context, division int, id GUID) (*SalesEntrySalesEntries, error) {
+	var entities []*SalesEntrySalesEntries
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesentry/SalesEntries?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SalesEntries entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,34 +23,34 @@ type CashflowImportNotificationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowImportNotifications
 type CashflowImportNotifications struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BankAccount: Number of the bank account related to the notification.
-	BankAccount *string `json:",omitempty"`
+	BankAccount *string `json:"BankAccount,omitempty"`
 
 	// BankAccountID: ID of the bank account related to the notification.
-	BankAccountID *GUID `json:",omitempty"`
+	BankAccountID *GUID `json:"BankAccountID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document: ID of the document related to the notification.
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// Result: Code of the import result
-	Result *int `json:",omitempty"`
+	Result *int `json:"Result,omitempty"`
 
 	// ResultDescription: Description of the import result
-	ResultDescription *string `json:",omitempty"`
+	ResultDescription *string `json:"ResultDescription,omitempty"`
 
 	// RetriedBy: ID of the user that requested a retry of the import.
-	RetriedBy *GUID `json:",omitempty"`
+	RetriedBy *GUID `json:"RetriedBy,omitempty"`
 
 	// RetriedOn: Date when the retry was requested.
-	RetriedOn *Date `json:",omitempty"`
+	RetriedOn *Date `json:"RetriedOn,omitempty"`
 }
 
 func (s *CashflowImportNotifications) GetIdentifier() GUID {
@@ -72,3 +72,22 @@ func (s *CashflowImportNotificationsService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ImportNotifications enitity, by ID.
+func (s *CashflowImportNotificationsService) Get(ctx context.Context, division int, id GUID) (*CashflowImportNotifications, error) {
+	var entities []*CashflowImportNotifications
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotifications?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ImportNotifications entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

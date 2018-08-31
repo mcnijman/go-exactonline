@@ -23,61 +23,61 @@ type HRMLeaveBuildUpRegistrationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMLeaveBuildUpRegistrations
 type HRMLeaveBuildUpRegistrations struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Date: Date of leave build up
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// Description: Description of leave build up
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee linked to the leave build up
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeFullName: Employee full name
-	EmployeeFullName *string `json:",omitempty"`
+	EmployeeFullName *string `json:"EmployeeFullName,omitempty"`
 
 	// EmployeeHID: Numeric ID of the employee
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// Hours: Total number of leave build up hours
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// LeaveType: Type of leave
-	LeaveType *GUID `json:",omitempty"`
+	LeaveType *GUID `json:"LeaveType,omitempty"`
 
 	// LeaveTypeCode: Code for type of leave
-	LeaveTypeCode *string `json:",omitempty"`
+	LeaveTypeCode *string `json:"LeaveTypeCode,omitempty"`
 
 	// LeaveTypeDescription: Description for type of leave
-	LeaveTypeDescription *string `json:",omitempty"`
+	LeaveTypeDescription *string `json:"LeaveTypeDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra information for leave build up
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Status: Status of leave build up, 1 = Submitted, 2 = Approved, 3 = Rejected
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *HRMLeaveBuildUpRegistrations) GetIdentifier() GUID {
@@ -99,3 +99,22 @@ func (s *HRMLeaveBuildUpRegistrationsService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the LeaveBuildUpRegistrations enitity, by ID.
+func (s *HRMLeaveBuildUpRegistrationsService) Get(ctx context.Context, division int, id GUID) (*HRMLeaveBuildUpRegistrations, error) {
+	var entities []*HRMLeaveBuildUpRegistrations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/LeaveBuildUpRegistrations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d LeaveBuildUpRegistrations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

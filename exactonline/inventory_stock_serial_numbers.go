@@ -23,88 +23,88 @@ type InventoryStockSerialNumbersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStockSerialNumbers
 type InventoryStockSerialNumbers struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DraftStockTransactionID: ID representing a group of serial numbers being reserved for use in a subsequent stock transaction
-	DraftStockTransactionID *GUID `json:",omitempty"`
+	DraftStockTransactionID *GUID `json:"DraftStockTransactionID,omitempty"`
 
 	// EndDate: End date of effective period for serial number
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// IsBlocked: Boolean value indicating whether or not the serial number is blocked
-	IsBlocked *byte `json:",omitempty"`
+	IsBlocked *byte `json:"IsBlocked,omitempty"`
 
 	// IsDraft: Boolean value indicating if this serial number is being reserved
-	IsDraft *byte `json:",omitempty"`
+	IsDraft *byte `json:"IsDraft,omitempty"`
 
 	// Item: Item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Item code
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Remarks: Remarks
-	Remarks *string `json:",omitempty"`
+	Remarks *string `json:"Remarks,omitempty"`
 
 	// SerialNumber: Human readable serial number
-	SerialNumber *string `json:",omitempty"`
+	SerialNumber *string `json:"SerialNumber,omitempty"`
 
 	// SerialNumberID: Serial number ID
-	SerialNumberID *GUID `json:",omitempty"`
+	SerialNumberID *GUID `json:"SerialNumberID,omitempty"`
 
 	// StartDate: Start date of effective period for serial number
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// StockCountLine: ID of stock count entry
-	StockCountLine *GUID `json:",omitempty"`
+	StockCountLine *GUID `json:"StockCountLine,omitempty"`
 
 	// StockTransactionID: ID of the stock transaction in which this serial number was used
-	StockTransactionID *GUID `json:",omitempty"`
+	StockTransactionID *GUID `json:"StockTransactionID,omitempty"`
 
 	// StockTransactionType: Type of stock transaction associated with this serial number.Available values:10 = Opening balance120 = Goods delivery121 = Sales return122 = Stock out (Drop shipment)123 = Stock in (Drop shipment return)124 = Warehouse transfer delivery125 = Location Transfer Delivery130 = Goods receipt131 = Purchase return132 = Stock in (Drop shipment)133 = Stock out (Drop shipment return)134 = Warehouse transfer receipt135 = Location Transfer Receipt140 = Shop order stock receipt141 = Shop order stock reversal147 = Shop order by-product receipt148 = Shop order by-product reversal150 = Requirement issue151 = Requirement reversal155 = Subcontract issue156 = Subcontract return160 = Receipt (Assembly)161 = Return receipt (Disassembly)165 = Issue (Assembly)166 = Return issue (Disassembly)180 = Stock revaluation181 = Financial revaluation195 = Stock count196 = Adjust stock - out197 = Adjust stock - in
-	StockTransactionType *int `json:",omitempty"`
+	StockTransactionType *int `json:"StockTransactionType,omitempty"`
 
 	// StorageLocation: Storage location which this serial number is entering or leaving
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Code of the storage location which this serial number is entering or leaving
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Description of the storage location which this serial number is entering or leaving
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// Warehouse: Warehouse which this serial number is entering or leaving
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of the warehouse which this serial number is entering or leaving
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of the warehouse which this serial number is entering or leaving
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryStockSerialNumbers) GetIdentifier() GUID {
@@ -126,3 +126,22 @@ func (s *InventoryStockSerialNumbersService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the StockSerialNumbers enitity, by ID.
+func (s *InventoryStockSerialNumbersService) Get(ctx context.Context, division int, id GUID) (*InventoryStockSerialNumbers, error) {
+	var entities []*InventoryStockSerialNumbers
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d StockSerialNumbers entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,64 +23,64 @@ type HRMAbsenceRegistrationTransactionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMAbsenceRegistrationTransactions
 type HRMAbsenceRegistrationTransactions struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AbsenceRegistration: Reference key to Absence Registration
-	AbsenceRegistration *GUID `json:",omitempty"`
+	AbsenceRegistration *GUID `json:"AbsenceRegistration,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndTime: End time on the last day of absence stored as DateTime, and the date should be ignored
-	EndTime *Date `json:",omitempty"`
+	EndTime *Date `json:"EndTime,omitempty"`
 
 	// ExpectedEndDate: Expected end date of absence
-	ExpectedEndDate *Date `json:",omitempty"`
+	ExpectedEndDate *Date `json:"ExpectedEndDate,omitempty"`
 
 	// Hours: Total number of absence hours
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// HoursFirstDay: Hours of absence on the first day
-	HoursFirstDay *float64 `json:",omitempty"`
+	HoursFirstDay *float64 `json:"HoursFirstDay,omitempty"`
 
 	// HoursLastDay: Hours of absence on the last day
-	HoursLastDay *float64 `json:",omitempty"`
+	HoursLastDay *float64 `json:"HoursLastDay,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra information for absence
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// NotificationMoment: Notification moment of absence
-	NotificationMoment *Date `json:",omitempty"`
+	NotificationMoment *Date `json:"NotificationMoment,omitempty"`
 
 	// PercentageDisablement: Percentage disablement
-	PercentageDisablement *float64 `json:",omitempty"`
+	PercentageDisablement *float64 `json:"PercentageDisablement,omitempty"`
 
 	// StartDate: Start date of absence
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// StartTime: Start time on the first day of absence stored as DateTime, and the date should be ignored
-	StartTime *Date `json:",omitempty"`
+	StartTime *Date `json:"StartTime,omitempty"`
 
 	// Status: Status of absence, 0 = Open, 1 = Recovered
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *HRMAbsenceRegistrationTransactions) GetIdentifier() GUID {
@@ -102,3 +102,22 @@ func (s *HRMAbsenceRegistrationTransactionsService) List(ctx context.Context, di
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AbsenceRegistrationTransactions enitity, by ID.
+func (s *HRMAbsenceRegistrationTransactionsService) Get(ctx context.Context, division int, id GUID) (*HRMAbsenceRegistrationTransactions, error) {
+	var entities []*HRMAbsenceRegistrationTransactions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AbsenceRegistrationTransactions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

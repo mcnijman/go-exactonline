@@ -23,52 +23,52 @@ type FinancialReceivablesListService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialReceivablesList
 type FinancialReceivablesList struct {
 	// HID: Primary key, human readable ID
-	HID *int64 `json:",omitempty"`
+	HID *int64 `json:"HID,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountId: Reference to the account
-	AccountId *GUID `json:",omitempty"`
+	AccountId *GUID `json:"AccountId,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Amount: Amount
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// AmountInTransit: Amount in transit
-	AmountInTransit *float64 `json:",omitempty"`
+	AmountInTransit *float64 `json:"AmountInTransit,omitempty"`
 
 	// CurrencyCode: Code of Currency
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DueDate: Date the invoice is due (This due date is not the discount due date)
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// EntryNumber: Entry number
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// Id: Obsolete
-	Id *GUID `json:",omitempty"`
+	Id *GUID `json:"Id,omitempty"`
 
 	// InvoiceDate: Invoice date
-	InvoiceDate *Date `json:",omitempty"`
+	InvoiceDate *Date `json:"InvoiceDate,omitempty"`
 
 	// InvoiceNumber: Invoice number. The value is 0 when the invoice number of the linked transaction is empty.
-	InvoiceNumber *int `json:",omitempty"`
+	InvoiceNumber *int `json:"InvoiceNumber,omitempty"`
 
 	// JournalCode: Code of Journal
-	JournalCode *string `json:",omitempty"`
+	JournalCode *string `json:"JournalCode,omitempty"`
 
 	// JournalDescription: Description of Journal
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// YourRef: Your reference
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *FinancialReceivablesList) GetIdentifier() int64 {
@@ -90,3 +90,22 @@ func (s *FinancialReceivablesListService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ReceivablesList enitity, by HID.
+func (s *FinancialReceivablesListService) Get(ctx context.Context, division int, id int64) (*FinancialReceivablesList, error) {
+	var entities []*FinancialReceivablesList
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ReceivablesList entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

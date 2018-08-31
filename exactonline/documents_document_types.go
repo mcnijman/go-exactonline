@@ -23,31 +23,31 @@ type DocumentsDocumentTypesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentTypes
 type DocumentsDocumentTypes struct {
 	// ID: Primary key
-	ID *int `json:",omitempty"`
+	ID *int `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Description: Document type description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DocumentIsCreatable: Indicates if documents of this type can be created
-	DocumentIsCreatable *bool `json:",omitempty"`
+	DocumentIsCreatable *bool `json:"DocumentIsCreatable,omitempty"`
 
 	// DocumentIsDeletable: Indicates if documents of this type can be deleted
-	DocumentIsDeletable *bool `json:",omitempty"`
+	DocumentIsDeletable *bool `json:"DocumentIsDeletable,omitempty"`
 
 	// DocumentIsUpdatable: Indicates if documents of this type can be updated
-	DocumentIsUpdatable *bool `json:",omitempty"`
+	DocumentIsUpdatable *bool `json:"DocumentIsUpdatable,omitempty"`
 
 	// DocumentIsViewable: Indicates if documents of this type can be retrieved
-	DocumentIsViewable *bool `json:",omitempty"`
+	DocumentIsViewable *bool `json:"DocumentIsViewable,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// TypeCategory: ID of the document type category
-	TypeCategory *int `json:",omitempty"`
+	TypeCategory *int `json:"TypeCategory,omitempty"`
 }
 
 func (s *DocumentsDocumentTypes) GetIdentifier() int {
@@ -69,3 +69,22 @@ func (s *DocumentsDocumentTypesService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentTypes enitity, by ID.
+func (s *DocumentsDocumentTypesService) Get(ctx context.Context, division int, id int) (*DocumentsDocumentTypes, error) {
+	var entities []*DocumentsDocumentTypes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentTypes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

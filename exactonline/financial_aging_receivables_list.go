@@ -23,55 +23,55 @@ type FinancialAgingReceivablesListService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialAgingReceivablesList
 type FinancialAgingReceivablesList struct {
 	// AccountId: Primary key
-	AccountId *GUID `json:",omitempty"`
+	AccountId *GUID `json:"AccountId,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AgeGroup1: Age group 1
-	AgeGroup1 *int `json:",omitempty"`
+	AgeGroup1 *int `json:"AgeGroup1,omitempty"`
 
 	// AgeGroup1Amount: Amount of age group 1
-	AgeGroup1Amount *float64 `json:",omitempty"`
+	AgeGroup1Amount *float64 `json:"AgeGroup1Amount,omitempty"`
 
 	// AgeGroup1Description: Description of AgeGroup1
-	AgeGroup1Description *string `json:",omitempty"`
+	AgeGroup1Description *string `json:"AgeGroup1Description,omitempty"`
 
 	// AgeGroup2: Age group 2
-	AgeGroup2 *int `json:",omitempty"`
+	AgeGroup2 *int `json:"AgeGroup2,omitempty"`
 
 	// AgeGroup2Amount: Amount of age group 2
-	AgeGroup2Amount *float64 `json:",omitempty"`
+	AgeGroup2Amount *float64 `json:"AgeGroup2Amount,omitempty"`
 
 	// AgeGroup2Description: Description of AgeGroup2
-	AgeGroup2Description *string `json:",omitempty"`
+	AgeGroup2Description *string `json:"AgeGroup2Description,omitempty"`
 
 	// AgeGroup3: Age group 3
-	AgeGroup3 *int `json:",omitempty"`
+	AgeGroup3 *int `json:"AgeGroup3,omitempty"`
 
 	// AgeGroup3Amount: Amount of age group 3
-	AgeGroup3Amount *float64 `json:",omitempty"`
+	AgeGroup3Amount *float64 `json:"AgeGroup3Amount,omitempty"`
 
 	// AgeGroup3Description: Description of AgeGroup3
-	AgeGroup3Description *string `json:",omitempty"`
+	AgeGroup3Description *string `json:"AgeGroup3Description,omitempty"`
 
 	// AgeGroup4: Age group 4
-	AgeGroup4 *int `json:",omitempty"`
+	AgeGroup4 *int `json:"AgeGroup4,omitempty"`
 
 	// AgeGroup4Amount: Amount of age group 4
-	AgeGroup4Amount *float64 `json:",omitempty"`
+	AgeGroup4Amount *float64 `json:"AgeGroup4Amount,omitempty"`
 
 	// AgeGroup4Description: Description of AgeGroup4
-	AgeGroup4Description *string `json:",omitempty"`
+	AgeGroup4Description *string `json:"AgeGroup4Description,omitempty"`
 
 	// CurrencyCode: Code of Currency
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
 	// TotalAmount: Total amount of all age groups
-	TotalAmount *float64 `json:",omitempty"`
+	TotalAmount *float64 `json:"TotalAmount,omitempty"`
 }
 
 func (s *FinancialAgingReceivablesList) GetIdentifier() GUID {
@@ -93,3 +93,22 @@ func (s *FinancialAgingReceivablesListService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AgingReceivablesList enitity, by AccountId.
+func (s *FinancialAgingReceivablesListService) Get(ctx context.Context, division int, id GUID) (*FinancialAgingReceivablesList, error) {
+	var entities []*FinancialAgingReceivablesList
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingReceivablesList?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AgingReceivablesList entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

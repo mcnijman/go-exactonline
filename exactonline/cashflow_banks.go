@@ -23,34 +23,34 @@ type CashflowBanksService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowBanks
 type CashflowBanks struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BankName: The name of the bank
-	BankName *string `json:",omitempty"`
+	BankName *string `json:"BankName,omitempty"`
 
 	// BICCode: The bank identification code of the bank
-	BICCode *string `json:",omitempty"`
+	BICCode *string `json:"BICCode,omitempty"`
 
 	// Country: The country in which the bank is based
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Description: The extended description of the bank
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Format: The account format used by the bank
-	Format *string `json:",omitempty"`
+	Format *string `json:"Format,omitempty"`
 
 	// HomePageAddress: The website of the bank
-	HomePageAddress *string `json:",omitempty"`
+	HomePageAddress *string `json:"HomePageAddress,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Status: The status of the bank. A = Active, P = Passive
-	Status *string `json:",omitempty"`
+	Status *string `json:"Status,omitempty"`
 }
 
 func (s *CashflowBanks) GetIdentifier() GUID {
@@ -72,3 +72,22 @@ func (s *CashflowBanksService) List(ctx context.Context, division int, all bool)
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Banks enitity, by ID.
+func (s *CashflowBanksService) Get(ctx context.Context, division int, id GUID) (*CashflowBanks, error) {
+	var entities []*CashflowBanks
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/Banks?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Banks entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

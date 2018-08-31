@@ -23,76 +23,76 @@ type HRMLeaveRegistrationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMLeaveRegistrations
 type HRMLeaveRegistrations struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of leave
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee linked to the leave registration
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeFullName: Employee full name
-	EmployeeFullName *string `json:",omitempty"`
+	EmployeeFullName *string `json:"EmployeeFullName,omitempty"`
 
 	// EmployeeHID: Numeric ID of the employee
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// EndDate: End date of leave
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// EndTime: End time on the last day of leave stored as DateTime, and the date should be ignored
-	EndTime *Date `json:",omitempty"`
+	EndTime *Date `json:"EndTime,omitempty"`
 
 	// Hours: Total number of leave hours
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// HoursFirstDay: Hours of leave on the first day
-	HoursFirstDay *float64 `json:",omitempty"`
+	HoursFirstDay *float64 `json:"HoursFirstDay,omitempty"`
 
 	// HoursLastDay: Hours of leave on the last day
-	HoursLastDay *float64 `json:",omitempty"`
+	HoursLastDay *float64 `json:"HoursLastDay,omitempty"`
 
 	// LeaveType: Type of leave
-	LeaveType *GUID `json:",omitempty"`
+	LeaveType *GUID `json:"LeaveType,omitempty"`
 
 	// LeaveTypeCode: Code for type of leave
-	LeaveTypeCode *string `json:",omitempty"`
+	LeaveTypeCode *string `json:"LeaveTypeCode,omitempty"`
 
 	// LeaveTypeDescription: Description for type of leave
-	LeaveTypeDescription *string `json:",omitempty"`
+	LeaveTypeDescription *string `json:"LeaveTypeDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra information for leave
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// StartDate: Start date of leave
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// StartTime: Start time on the first day of leave stored as DateTime, and the date should be ignored
-	StartTime *Date `json:",omitempty"`
+	StartTime *Date `json:"StartTime,omitempty"`
 
 	// Status: Status of leave, 1 = Submitted, 2 = Approved, 3 = Rejected
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *HRMLeaveRegistrations) GetIdentifier() GUID {
@@ -114,3 +114,22 @@ func (s *HRMLeaveRegistrationsService) List(ctx context.Context, division int, a
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the LeaveRegistrations enitity, by ID.
+func (s *HRMLeaveRegistrationsService) Get(ctx context.Context, division int, id GUID) (*HRMLeaveRegistrations, error) {
+	var entities []*HRMLeaveRegistrations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/LeaveRegistrations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d LeaveRegistrations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

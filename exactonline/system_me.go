@@ -23,91 +23,91 @@ type SystemMeService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SystemSystemMe
 type SystemMe struct {
 	// UserID: Primary key
-	UserID *GUID `json:",omitempty"`
+	UserID *GUID `json:"UserID,omitempty"`
 
 	// CurrentDivision: Division number that is currently used in the API. You should use a division number in the url
-	CurrentDivision *int `json:",omitempty"`
+	CurrentDivision *int `json:"CurrentDivision,omitempty"`
 
 	// DivisionCustomer: Owner account of the division
-	DivisionCustomer *GUID `json:",omitempty"`
+	DivisionCustomer *GUID `json:"DivisionCustomer,omitempty"`
 
 	// DivisionCustomerCode: Owner account code of the division
-	DivisionCustomerCode *string `json:",omitempty"`
+	DivisionCustomerCode *string `json:"DivisionCustomerCode,omitempty"`
 
 	// DivisionCustomerName: Owner account name of the division
-	DivisionCustomerName *string `json:",omitempty"`
+	DivisionCustomerName *string `json:"DivisionCustomerName,omitempty"`
 
 	// DivisionCustomerSiretNumber: Owner account SIRET Number of the division for French legislation
-	DivisionCustomerSiretNumber *string `json:",omitempty"`
+	DivisionCustomerSiretNumber *string `json:"DivisionCustomerSiretNumber,omitempty"`
 
 	// DivisionCustomerVatNumber: Owner account VAT Number of the division
-	DivisionCustomerVatNumber *string `json:",omitempty"`
+	DivisionCustomerVatNumber *string `json:"DivisionCustomerVatNumber,omitempty"`
 
 	// Email: Email address of the user
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// EmployeeID: Employee ID
-	EmployeeID *GUID `json:",omitempty"`
+	EmployeeID *GUID `json:"EmployeeID,omitempty"`
 
 	// FirstName: First name
-	FirstName *string `json:",omitempty"`
+	FirstName *string `json:"FirstName,omitempty"`
 
 	// FullName: Full name of the user
-	FullName *string `json:",omitempty"`
+	FullName *string `json:"FullName,omitempty"`
 
 	// Gender: Gender: M=Male, V=Female, O=Unknown
-	Gender *string `json:",omitempty"`
+	Gender *string `json:"Gender,omitempty"`
 
 	// Initials: Initials
-	Initials *string `json:",omitempty"`
+	Initials *string `json:"Initials,omitempty"`
 
 	// Language: Language spoken by this user
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// LanguageCode: Language (culture) that is used in Exact Online
-	LanguageCode *string `json:",omitempty"`
+	LanguageCode *string `json:"LanguageCode,omitempty"`
 
 	// LastName: Last name
-	LastName *string `json:",omitempty"`
+	LastName *string `json:"LastName,omitempty"`
 
 	// Legislation: Legislation
-	Legislation *int64 `json:",omitempty"`
+	Legislation *int64 `json:"Legislation,omitempty"`
 
 	// MiddleName: Middle name
-	MiddleName *string `json:",omitempty"`
+	MiddleName *string `json:"MiddleName,omitempty"`
 
 	// Mobile: Mobile phone
-	Mobile *string `json:",omitempty"`
+	Mobile *string `json:"Mobile,omitempty"`
 
 	// Nationality: Nationality
-	Nationality *string `json:",omitempty"`
+	Nationality *string `json:"Nationality,omitempty"`
 
 	// Phone: Phone number
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension: Phone number extension
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// PictureUrl: Url that can be used to retrieve the picture of the user
-	PictureUrl *string `json:",omitempty"`
+	PictureUrl *string `json:"PictureUrl,omitempty"`
 
 	// ServerTime: The current date and time in Exact Online
-	ServerTime *string `json:",omitempty"`
+	ServerTime *string `json:"ServerTime,omitempty"`
 
 	// ServerUtcOffset: The time difference with UTC in seconds
-	ServerUtcOffset *float64 `json:",omitempty"`
+	ServerUtcOffset *float64 `json:"ServerUtcOffset,omitempty"`
 
 	// ThumbnailPicture: Binary thumbnail picture of this user
-	ThumbnailPicture *[]byte `json:",omitempty"`
+	ThumbnailPicture *[]byte `json:"ThumbnailPicture,omitempty"`
 
 	// ThumbnailPictureFormat: File type of the picture
-	ThumbnailPictureFormat *string `json:",omitempty"`
+	ThumbnailPictureFormat *string `json:"ThumbnailPictureFormat,omitempty"`
 
 	// Title: Title
-	Title *string `json:",omitempty"`
+	Title *string `json:"Title,omitempty"`
 
 	// UserName: Login name of the user
-	UserName *string `json:",omitempty"`
+	UserName *string `json:"UserName,omitempty"`
 }
 
 func (s *SystemMe) GetIdentifier() GUID {
@@ -129,3 +129,22 @@ func (s *SystemMeService) List(ctx context.Context, division int, all bool) ([]*
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Me enitity, by UserID.
+func (s *SystemMeService) Get(ctx context.Context, division int, id GUID) (*SystemMe, error) {
+	var entities []*SystemMe
+	u, err := s.client.ResolvePathWithDivision("/api/v1/current/Me?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Me entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,85 +23,85 @@ type ManufacturingMaterialReversalsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingMaterialReversals
 type ManufacturingMaterialReversals struct {
 	// ReversalStockTransactionId: ID of stock transaction related to this material issue
-	ReversalStockTransactionId *GUID `json:",omitempty"`
+	ReversalStockTransactionId *GUID `json:"ReversalStockTransactionId,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Date this reversal was created
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// IsBackflush: Boolean indicating if this reversal was the result of shop order backflushing, processed during a ShopOrderReversal
-	IsBackflush *bool `json:",omitempty"`
+	IsBackflush *bool `json:"IsBackflush,omitempty"`
 
 	// IsBatch: Does the issue reversal&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the material reversal&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSerial: Does the issue reversal&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Item reversed
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item reversed
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item reversed
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of item issued
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// Note: Notes logged with this reversal
-	Note *string `json:",omitempty"`
+	Note *string `json:"Note,omitempty"`
 
 	// OriginalStockTransactionId: ID of the original stock transaction, which was reversed
-	OriginalStockTransactionId *GUID `json:",omitempty"`
+	OriginalStockTransactionId *GUID `json:"OriginalStockTransactionId,omitempty"`
 
 	// Quantity: Quantity of this reversal
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// ShopOrder: ID of shop order reversed from
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// ShopOrderMaterialPlan: ID of shop order material plan
-	ShopOrderMaterialPlan *GUID `json:",omitempty"`
+	ShopOrderMaterialPlan *GUID `json:"ShopOrderMaterialPlan,omitempty"`
 
 	// ShopOrderNumber: Number of shop order reversed from
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// StorageLocation: ID of storage location reversed to
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Code of storage location reversed to
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Description of storage location reversed to
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// TransactionDate: Effective date of this reversal
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of item reversed
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of item reversed
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of warehouse reversed to
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse reversed to
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse reversed to
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingMaterialReversals) GetIdentifier() GUID {
@@ -123,3 +123,22 @@ func (s *ManufacturingMaterialReversalsService) List(ctx context.Context, divisi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the MaterialReversals enitity, by ReversalStockTransactionId.
+func (s *ManufacturingMaterialReversalsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingMaterialReversals, error) {
+	var entities []*ManufacturingMaterialReversals
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/MaterialReversals?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d MaterialReversals entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

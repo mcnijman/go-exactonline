@@ -23,142 +23,142 @@ type GeneralJournalEntryGeneralJournalEntryLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=GeneralJournalEntryGeneralJournalEntryLines
 type GeneralJournalEntryGeneralJournalEntryLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode:
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// AmountVATDC:
-	AmountVATDC *float64 `json:",omitempty"`
+	AmountVATDC *float64 `json:"AmountVATDC,omitempty"`
 
 	// AmountVATFC:
-	AmountVATFC *float64 `json:",omitempty"`
+	AmountVATFC *float64 `json:"AmountVATFC,omitempty"`
 
 	// Asset:
-	Asset *GUID `json:",omitempty"`
+	Asset *GUID `json:"Asset,omitempty"`
 
 	// AssetCode:
-	AssetCode *string `json:",omitempty"`
+	AssetCode *string `json:"AssetCode,omitempty"`
 
 	// AssetDescription:
-	AssetDescription *string `json:",omitempty"`
+	AssetDescription *string `json:"AssetDescription,omitempty"`
 
 	// CostCenter:
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostCenterDescription:
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostUnit:
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// CostUnitDescription:
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Date:
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentNumber:
-	DocumentNumber *int `json:",omitempty"`
+	DocumentNumber *int `json:"DocumentNumber,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// GLAccount:
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode:
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription:
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OffsetID:
-	OffsetID *GUID `json:",omitempty"`
+	OffsetID *GUID `json:"OffsetID,omitempty"`
 
 	// OurRef:
-	OurRef *int `json:",omitempty"`
+	OurRef *int `json:"OurRef,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// VATBaseAmountDC:
-	VATBaseAmountDC *float64 `json:",omitempty"`
+	VATBaseAmountDC *float64 `json:"VATBaseAmountDC,omitempty"`
 
 	// VATBaseAmountFC:
-	VATBaseAmountFC *float64 `json:",omitempty"`
+	VATBaseAmountFC *float64 `json:"VATBaseAmountFC,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription:
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 
 	// VATPercentage:
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 
 	// VATType:
-	VATType *string `json:",omitempty"`
+	VATType *string `json:"VATType,omitempty"`
 }
 
 func (s *GeneralJournalEntryGeneralJournalEntryLines) GetIdentifier() GUID {
@@ -180,3 +180,22 @@ func (s *GeneralJournalEntryGeneralJournalEntryLinesService) List(ctx context.Co
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GeneralJournalEntryLines enitity, by ID.
+func (s *GeneralJournalEntryGeneralJournalEntryLinesService) Get(ctx context.Context, division int, id GUID) (*GeneralJournalEntryGeneralJournalEntryLines, error) {
+	var entities []*GeneralJournalEntryGeneralJournalEntryLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntryLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GeneralJournalEntryLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

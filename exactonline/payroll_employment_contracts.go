@@ -23,88 +23,88 @@ type PayrollEmploymentContractsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmploymentContracts
 type PayrollEmploymentContracts struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// ContractFlexPhase: Flexible employment contract phase
-	ContractFlexPhase *int `json:",omitempty"`
+	ContractFlexPhase *int `json:"ContractFlexPhase,omitempty"`
 
 	// ContractFlexPhaseDescription: Flexible employment contract phase description.
-	ContractFlexPhaseDescription *string `json:",omitempty"`
+	ContractFlexPhaseDescription *string `json:"ContractFlexPhaseDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document: Document ID of the employment contract
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// Employee: ID of employee
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeFullName: Name of employee
-	EmployeeFullName *string `json:",omitempty"`
+	EmployeeFullName *string `json:"EmployeeFullName,omitempty"`
 
 	// EmployeeHID: Numeric ID of the employee
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// EmployeeType: Type of employee. 1 - Employee, 2 - Contractor, 3 - Temporary, 4 - Student, 5 - Flexworker
-	EmployeeType *int `json:",omitempty"`
+	EmployeeType *int `json:"EmployeeType,omitempty"`
 
 	// EmployeeTypeDescription: Employee type description
-	EmployeeTypeDescription *string `json:",omitempty"`
+	EmployeeTypeDescription *string `json:"EmployeeTypeDescription,omitempty"`
 
 	// Employment: Employment ID
-	Employment *GUID `json:",omitempty"`
+	Employment *GUID `json:"Employment,omitempty"`
 
 	// EmploymentHID: Numeric ID of the employment
-	EmploymentHID *int `json:",omitempty"`
+	EmploymentHID *int `json:"EmploymentHID,omitempty"`
 
 	// EndDate: End date of employment contract
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes of employment contract
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// ProbationEndDate: Employment probation end date
-	ProbationEndDate *Date `json:",omitempty"`
+	ProbationEndDate *Date `json:"ProbationEndDate,omitempty"`
 
 	// ProbationPeriod: Employment probation period
-	ProbationPeriod *int `json:",omitempty"`
+	ProbationPeriod *int `json:"ProbationPeriod,omitempty"`
 
 	// ReasonContract: Employment contract reason code. 1 - New employment, 2 - Employment change, 3 - New legal employer, 4 - Acquisition 5 - Previous contract expired, 6 - Other
-	ReasonContract *int `json:",omitempty"`
+	ReasonContract *int `json:"ReasonContract,omitempty"`
 
 	// ReasonContractDescription: Employment contract reason description
-	ReasonContractDescription *string `json:",omitempty"`
+	ReasonContractDescription *string `json:"ReasonContractDescription,omitempty"`
 
 	// Sequence: Sequence number
-	Sequence *int `json:",omitempty"`
+	Sequence *int `json:"Sequence,omitempty"`
 
 	// StartDate: Start date of employment contract
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Type: Type of employment contract. 1 - Definite, 2 - Indefinite, 3 - External
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription: Description of employment contract type
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
 func (s *PayrollEmploymentContracts) GetIdentifier() GUID {
@@ -126,3 +126,22 @@ func (s *PayrollEmploymentContractsService) List(ctx context.Context, division i
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the EmploymentContracts enitity, by ID.
+func (s *PayrollEmploymentContractsService) Get(ctx context.Context, division int, id GUID) (*PayrollEmploymentContracts, error) {
+	var entities []*PayrollEmploymentContracts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContracts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d EmploymentContracts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

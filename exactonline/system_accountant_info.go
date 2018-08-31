@@ -23,43 +23,43 @@ type SystemAccountantInfoService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SystemSystemAccountantInfo
 type SystemAccountantInfo struct {
 	// ID: The account ID of the accountant.
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AddressLine1: First address line.
-	AddressLine1 *string `json:",omitempty"`
+	AddressLine1 *string `json:"AddressLine1,omitempty"`
 
 	// AddressLine2: Second address line.
-	AddressLine2 *string `json:",omitempty"`
+	AddressLine2 *string `json:"AddressLine2,omitempty"`
 
 	// AddressLine3: Third address line.
-	AddressLine3 *string `json:",omitempty"`
+	AddressLine3 *string `json:"AddressLine3,omitempty"`
 
 	// City: City.
-	City *string `json:",omitempty"`
+	City *string `json:"City,omitempty"`
 
 	// Email: Email.
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// IsAccountant: Indicates if the customer is an accountant himself.
-	IsAccountant *bool `json:",omitempty"`
+	IsAccountant *bool `json:"IsAccountant,omitempty"`
 
 	// Logo: Logo.
-	Logo *[]byte `json:",omitempty"`
+	Logo *[]byte `json:"Logo,omitempty"`
 
 	// MenuLogoUrl: Url to retrieve the logo of the accountant.
-	MenuLogoUrl *string `json:",omitempty"`
+	MenuLogoUrl *string `json:"MenuLogoUrl,omitempty"`
 
 	// Name: The name of the accountant.
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// Phone: Phone.
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// Postcode: Postcode.
-	Postcode *string `json:",omitempty"`
+	Postcode *string `json:"Postcode,omitempty"`
 
 	// Website: Website.
-	Website *string `json:",omitempty"`
+	Website *string `json:"Website,omitempty"`
 }
 
 func (s *SystemAccountantInfo) GetIdentifier() GUID {
@@ -81,3 +81,22 @@ func (s *SystemAccountantInfoService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AccountantInfo enitity, by ID.
+func (s *SystemAccountantInfoService) Get(ctx context.Context, division int, id GUID) (*SystemAccountantInfo, error) {
+	var entities []*SystemAccountantInfo
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/system/AccountantInfo?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AccountantInfo entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

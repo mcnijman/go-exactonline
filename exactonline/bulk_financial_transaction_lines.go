@@ -23,208 +23,208 @@ type BulkFinancialTransactionLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BulkFinancialTransactionLines
 type BulkFinancialTransactionLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode:
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// AmountVATBaseFC:
-	AmountVATBaseFC *float64 `json:",omitempty"`
+	AmountVATBaseFC *float64 `json:"AmountVATBaseFC,omitempty"`
 
 	// AmountVATFC:
-	AmountVATFC *float64 `json:",omitempty"`
+	AmountVATFC *float64 `json:"AmountVATFC,omitempty"`
 
 	// Asset:
-	Asset *GUID `json:",omitempty"`
+	Asset *GUID `json:"Asset,omitempty"`
 
 	// AssetCode:
-	AssetCode *string `json:",omitempty"`
+	AssetCode *string `json:"AssetCode,omitempty"`
 
 	// AssetDescription:
-	AssetDescription *string `json:",omitempty"`
+	AssetDescription *string `json:"AssetDescription,omitempty"`
 
 	// CostCenter:
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostCenterDescription:
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostUnit:
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// CostUnitDescription:
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Date:
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentNumber:
-	DocumentNumber *int `json:",omitempty"`
+	DocumentNumber *int `json:"DocumentNumber,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// DueDate:
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// ExchangeRate:
-	ExchangeRate *float64 `json:",omitempty"`
+	ExchangeRate *float64 `json:"ExchangeRate,omitempty"`
 
 	// ExtraDutyAmountFC:
-	ExtraDutyAmountFC *float64 `json:",omitempty"`
+	ExtraDutyAmountFC *float64 `json:"ExtraDutyAmountFC,omitempty"`
 
 	// ExtraDutyPercentage:
-	ExtraDutyPercentage *float64 `json:",omitempty"`
+	ExtraDutyPercentage *float64 `json:"ExtraDutyPercentage,omitempty"`
 
 	// FinancialPeriod:
-	FinancialPeriod *int `json:",omitempty"`
+	FinancialPeriod *int `json:"FinancialPeriod,omitempty"`
 
 	// FinancialYear:
-	FinancialYear *int `json:",omitempty"`
+	FinancialYear *int `json:"FinancialYear,omitempty"`
 
 	// GLAccount:
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode:
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription:
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// InvoiceNumber:
-	InvoiceNumber *int `json:",omitempty"`
+	InvoiceNumber *int `json:"InvoiceNumber,omitempty"`
 
 	// Item:
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode:
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription:
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// JournalCode:
-	JournalCode *string `json:",omitempty"`
+	JournalCode *string `json:"JournalCode,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// LineType:
-	LineType *int `json:",omitempty"`
+	LineType *int `json:"LineType,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OffsetID:
-	OffsetID *GUID `json:",omitempty"`
+	OffsetID *GUID `json:"OffsetID,omitempty"`
 
 	// OrderNumber:
-	OrderNumber *int `json:",omitempty"`
+	OrderNumber *int `json:"OrderNumber,omitempty"`
 
 	// PaymentDiscountAmount:
-	PaymentDiscountAmount *float64 `json:",omitempty"`
+	PaymentDiscountAmount *float64 `json:"PaymentDiscountAmount,omitempty"`
 
 	// PaymentReference:
-	PaymentReference *string `json:",omitempty"`
+	PaymentReference *string `json:"PaymentReference,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// SerialNumber:
-	SerialNumber *string `json:",omitempty"`
+	SerialNumber *string `json:"SerialNumber,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Subscription:
-	Subscription *GUID `json:",omitempty"`
+	Subscription *GUID `json:"Subscription,omitempty"`
 
 	// SubscriptionDescription:
-	SubscriptionDescription *string `json:",omitempty"`
+	SubscriptionDescription *string `json:"SubscriptionDescription,omitempty"`
 
 	// TrackingNumber:
-	TrackingNumber *string `json:",omitempty"`
+	TrackingNumber *string `json:"TrackingNumber,omitempty"`
 
 	// TrackingNumberDescription:
-	TrackingNumberDescription *string `json:",omitempty"`
+	TrackingNumberDescription *string `json:"TrackingNumberDescription,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription:
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 
 	// VATPercentage:
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 
 	// VATType:
-	VATType *string `json:",omitempty"`
+	VATType *string `json:"VATType,omitempty"`
 
 	// YourRef:
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *BulkFinancialTransactionLines) GetIdentifier() GUID {
@@ -246,3 +246,22 @@ func (s *BulkFinancialTransactionLinesService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the FinancialTransactionLines enitity, by ID.
+func (s *BulkFinancialTransactionLinesService) Get(ctx context.Context, division int, id GUID) (*BulkFinancialTransactionLines, error) {
+	var entities []*BulkFinancialTransactionLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d FinancialTransactionLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

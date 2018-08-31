@@ -23,55 +23,55 @@ type InventoryWarehousesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryWarehouses
 type InventoryWarehouses struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the warehouse
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DefaultStorageLocation: The default storage location of this warehouse. Warehouses can have a default storage location in packages Manufacturing Premium or Wholesale Premium
-	DefaultStorageLocation *GUID `json:",omitempty"`
+	DefaultStorageLocation *GUID `json:"DefaultStorageLocation,omitempty"`
 
 	// DefaultStorageLocationCode: Default storage location&#39;s code
-	DefaultStorageLocationCode *string `json:",omitempty"`
+	DefaultStorageLocationCode *string `json:"DefaultStorageLocationCode,omitempty"`
 
 	// DefaultStorageLocationDescription: Default storage location&#39;s description
-	DefaultStorageLocationDescription *string `json:",omitempty"`
+	DefaultStorageLocationDescription *string `json:"DefaultStorageLocationDescription,omitempty"`
 
 	// Description: The description of the warehouse
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EMail: Email address
-	EMail *string `json:",omitempty"`
+	EMail *string `json:"EMail,omitempty"`
 
 	// Main: Indicates if this is the main warehouse. There&#39;s always exactly one main warehouse per administration
-	Main *byte `json:",omitempty"`
+	Main *byte `json:"Main,omitempty"`
 
 	// ManagerUser: User reponsible for the warehouse
-	ManagerUser *GUID `json:",omitempty"`
+	ManagerUser *GUID `json:"ManagerUser,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// UseStorageLocations: Indicates if this warehouse is using storage locations. The storage locations will not be removed when when this is deactivated
-	UseStorageLocations *byte `json:",omitempty"`
+	UseStorageLocations *byte `json:"UseStorageLocations,omitempty"`
 }
 
 func (s *InventoryWarehouses) GetIdentifier() GUID {
@@ -93,3 +93,22 @@ func (s *InventoryWarehousesService) List(ctx context.Context, division int, all
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Warehouses enitity, by ID.
+func (s *InventoryWarehousesService) Get(ctx context.Context, division int, id GUID) (*InventoryWarehouses, error) {
+	var entities []*InventoryWarehouses
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/Warehouses?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Warehouses entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

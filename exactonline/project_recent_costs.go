@@ -23,79 +23,79 @@ type ProjectRecentCostsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectRecentCosts
 type ProjectRecentCosts struct {
 	// Id: Primary key
-	Id *int `json:",omitempty"`
+	Id *int `json:"Id,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountId: Reference to Account
-	AccountId *GUID `json:",omitempty"`
+	AccountId *GUID `json:"AccountId,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AmountApproved: Amount approved
-	AmountApproved *float64 `json:",omitempty"`
+	AmountApproved *float64 `json:"AmountApproved,omitempty"`
 
 	// AmountDraft: Amount draft
-	AmountDraft *float64 `json:",omitempty"`
+	AmountDraft *float64 `json:"AmountDraft,omitempty"`
 
 	// AmountRejected: Amount rejected
-	AmountRejected *float64 `json:",omitempty"`
+	AmountRejected *float64 `json:"AmountRejected,omitempty"`
 
 	// AmountSubmitted: Amount submitted
-	AmountSubmitted *float64 `json:",omitempty"`
+	AmountSubmitted *float64 `json:"AmountSubmitted,omitempty"`
 
 	// CurrencyCode: Code of Currency
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
 	// Date: Date
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// EntryId: Entry ID
-	EntryId *GUID `json:",omitempty"`
+	EntryId *GUID `json:"EntryId,omitempty"`
 
 	// Expense: Reference to Expense
-	Expense *GUID `json:",omitempty"`
+	Expense *GUID `json:"Expense,omitempty"`
 
 	// ExpenseDescription: Description of Expense
-	ExpenseDescription *string `json:",omitempty"`
+	ExpenseDescription *string `json:"ExpenseDescription,omitempty"`
 
 	// ItemCode: Code of Item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemId: Reference to Item
-	ItemId *GUID `json:",omitempty"`
+	ItemId *GUID `json:"ItemId,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// ProjectCode: Code of Project
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Description of Project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// ProjectId: Reference to Project
-	ProjectId *GUID `json:",omitempty"`
+	ProjectId *GUID `json:"ProjectId,omitempty"`
 
 	// QuantityApproved: Quantity approved
-	QuantityApproved *float64 `json:",omitempty"`
+	QuantityApproved *float64 `json:"QuantityApproved,omitempty"`
 
 	// QuantityDraft: Quantity draft
-	QuantityDraft *float64 `json:",omitempty"`
+	QuantityDraft *float64 `json:"QuantityDraft,omitempty"`
 
 	// QuantityRejected: Quantity rejected
-	QuantityRejected *float64 `json:",omitempty"`
+	QuantityRejected *float64 `json:"QuantityRejected,omitempty"`
 
 	// QuantitySubmitted: Quantity submitted
-	QuantitySubmitted *float64 `json:",omitempty"`
+	QuantitySubmitted *float64 `json:"QuantitySubmitted,omitempty"`
 
 	// WeekNumber: Week number
-	WeekNumber *int `json:",omitempty"`
+	WeekNumber *int `json:"WeekNumber,omitempty"`
 }
 
 func (s *ProjectRecentCosts) GetIdentifier() int {
@@ -117,3 +117,22 @@ func (s *ProjectRecentCostsService) List(ctx context.Context, division int, all 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the RecentCosts enitity, by Id.
+func (s *ProjectRecentCostsService) Get(ctx context.Context, division int, id int) (*ProjectRecentCosts, error) {
+	var entities []*ProjectRecentCosts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/RecentCosts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d RecentCosts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

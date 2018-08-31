@@ -23,37 +23,37 @@ type AccountancyInvolvedUserRolesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AccountancyInvolvedUserRoles
 type AccountancyInvolvedUserRoles struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the involved user role
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of role
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DescriptionTermID: Description term code of role
-	DescriptionTermID *int `json:",omitempty"`
+	DescriptionTermID *int `json:"DescriptionTermID,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
 func (s *AccountancyInvolvedUserRoles) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *AccountancyInvolvedUserRolesService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the InvolvedUserRoles enitity, by ID.
+func (s *AccountancyInvolvedUserRolesService) Get(ctx context.Context, division int, id GUID) (*AccountancyInvolvedUserRoles, error) {
+	var entities []*AccountancyInvolvedUserRoles
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/InvolvedUserRoles?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d InvolvedUserRoles entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,13 +23,13 @@ type FinancialRevenueListService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialRevenueList
 type FinancialRevenueList struct {
 	// Period: Reporting period
-	Period *int `json:",omitempty"`
+	Period *int `json:"Period,omitempty"`
 
 	// Year: Current Reporting year
-	Year *int `json:",omitempty"`
+	Year *int `json:"Year,omitempty"`
 
 	// Amount: Total amount in the default currency of the company
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 }
 
 func (s *FinancialRevenueList) GetIdentifier() int {
@@ -51,3 +51,22 @@ func (s *FinancialRevenueListService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the RevenueList enitity, by Period.
+func (s *FinancialRevenueListService) Get(ctx context.Context, division int, id int) (*FinancialRevenueList, error) {
+	var entities []*FinancialRevenueList
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/RevenueList?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d RevenueList entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

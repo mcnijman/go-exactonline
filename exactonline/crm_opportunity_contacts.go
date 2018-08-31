@@ -23,205 +23,205 @@ type CRMOpportunityContactsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadCRMOpportunityContacts
 type CRMOpportunityContacts struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountIsCustomer:
-	AccountIsCustomer *bool `json:",omitempty"`
+	AccountIsCustomer *bool `json:"AccountIsCustomer,omitempty"`
 
 	// AccountIsSupplier:
-	AccountIsSupplier *bool `json:",omitempty"`
+	AccountIsSupplier *bool `json:"AccountIsSupplier,omitempty"`
 
 	// AccountMainContact:
-	AccountMainContact *GUID `json:",omitempty"`
+	AccountMainContact *GUID `json:"AccountMainContact,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AddressLine2:
-	AddressLine2 *string `json:",omitempty"`
+	AddressLine2 *string `json:"AddressLine2,omitempty"`
 
 	// AddressStreet:
-	AddressStreet *string `json:",omitempty"`
+	AddressStreet *string `json:"AddressStreet,omitempty"`
 
 	// AddressStreetNumber:
-	AddressStreetNumber *string `json:",omitempty"`
+	AddressStreetNumber *string `json:"AddressStreetNumber,omitempty"`
 
 	// AddressStreetNumberSuffix:
-	AddressStreetNumberSuffix *string `json:",omitempty"`
+	AddressStreetNumberSuffix *string `json:"AddressStreetNumberSuffix,omitempty"`
 
 	// AllowMailing:
-	AllowMailing *int `json:",omitempty"`
+	AllowMailing *int `json:"AllowMailing,omitempty"`
 
 	// BirthDate:
-	BirthDate *Date `json:",omitempty"`
+	BirthDate *Date `json:"BirthDate,omitempty"`
 
 	// BirthName:
-	BirthName *string `json:",omitempty"`
+	BirthName *string `json:"BirthName,omitempty"`
 
 	// BirthNamePrefix:
-	BirthNamePrefix *string `json:",omitempty"`
+	BirthNamePrefix *string `json:"BirthNamePrefix,omitempty"`
 
 	// BirthPlace:
-	BirthPlace *string `json:",omitempty"`
+	BirthPlace *string `json:"BirthPlace,omitempty"`
 
 	// BusinessEmail:
-	BusinessEmail *string `json:",omitempty"`
+	BusinessEmail *string `json:"BusinessEmail,omitempty"`
 
 	// BusinessFax:
-	BusinessFax *string `json:",omitempty"`
+	BusinessFax *string `json:"BusinessFax,omitempty"`
 
 	// BusinessMobile:
-	BusinessMobile *string `json:",omitempty"`
+	BusinessMobile *string `json:"BusinessMobile,omitempty"`
 
 	// BusinessPhone:
-	BusinessPhone *string `json:",omitempty"`
+	BusinessPhone *string `json:"BusinessPhone,omitempty"`
 
 	// BusinessPhoneExtension:
-	BusinessPhoneExtension *string `json:",omitempty"`
+	BusinessPhoneExtension *string `json:"BusinessPhoneExtension,omitempty"`
 
 	// City:
-	City *string `json:",omitempty"`
+	City *string `json:"City,omitempty"`
 
 	// Code:
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Contact:
-	Contact *GUID `json:",omitempty"`
+	Contact *GUID `json:"Contact,omitempty"`
 
 	// Country:
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Email:
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// EndDate:
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FirstName:
-	FirstName *string `json:",omitempty"`
+	FirstName *string `json:"FirstName,omitempty"`
 
 	// FullName:
-	FullName *string `json:",omitempty"`
+	FullName *string `json:"FullName,omitempty"`
 
 	// Gender:
-	Gender *string `json:",omitempty"`
+	Gender *string `json:"Gender,omitempty"`
 
 	// HID:
-	HID *int `json:",omitempty"`
+	HID *int `json:"HID,omitempty"`
 
 	// IdentificationDate:
-	IdentificationDate *Date `json:",omitempty"`
+	IdentificationDate *Date `json:"IdentificationDate,omitempty"`
 
 	// IdentificationDocument:
-	IdentificationDocument *GUID `json:",omitempty"`
+	IdentificationDocument *GUID `json:"IdentificationDocument,omitempty"`
 
 	// IdentificationUser:
-	IdentificationUser *GUID `json:",omitempty"`
+	IdentificationUser *GUID `json:"IdentificationUser,omitempty"`
 
 	// Initials:
-	Initials *string `json:",omitempty"`
+	Initials *string `json:"Initials,omitempty"`
 
 	// IsAnonymised:
-	IsAnonymised *byte `json:",omitempty"`
+	IsAnonymised *byte `json:"IsAnonymised,omitempty"`
 
 	// IsMailingExcluded:
-	IsMailingExcluded *bool `json:",omitempty"`
+	IsMailingExcluded *bool `json:"IsMailingExcluded,omitempty"`
 
 	// IsMainContact:
-	IsMainContact *bool `json:",omitempty"`
+	IsMainContact *bool `json:"IsMainContact,omitempty"`
 
 	// JobTitleDescription:
-	JobTitleDescription *string `json:",omitempty"`
+	JobTitleDescription *string `json:"JobTitleDescription,omitempty"`
 
 	// Language:
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// LastName:
-	LastName *string `json:",omitempty"`
+	LastName *string `json:"LastName,omitempty"`
 
 	// MarketingNotes:
-	MarketingNotes *string `json:",omitempty"`
+	MarketingNotes *string `json:"MarketingNotes,omitempty"`
 
 	// MiddleName:
-	MiddleName *string `json:",omitempty"`
+	MiddleName *string `json:"MiddleName,omitempty"`
 
 	// Mobile:
-	Mobile *string `json:",omitempty"`
+	Mobile *string `json:"Mobile,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Nationality:
-	Nationality *string `json:",omitempty"`
+	Nationality *string `json:"Nationality,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Opportunity:
-	Opportunity *GUID `json:",omitempty"`
+	Opportunity *GUID `json:"Opportunity,omitempty"`
 
 	// PartnerName:
-	PartnerName *string `json:",omitempty"`
+	PartnerName *string `json:"PartnerName,omitempty"`
 
 	// PartnerNamePrefix:
-	PartnerNamePrefix *string `json:",omitempty"`
+	PartnerNamePrefix *string `json:"PartnerNamePrefix,omitempty"`
 
 	// Person:
-	Person *GUID `json:",omitempty"`
+	Person *GUID `json:"Person,omitempty"`
 
 	// Phone:
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension:
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// Picture:
-	Picture *[]byte `json:",omitempty"`
+	Picture *[]byte `json:"Picture,omitempty"`
 
 	// PictureName:
-	PictureName *string `json:",omitempty"`
+	PictureName *string `json:"PictureName,omitempty"`
 
 	// PictureThumbnailUrl:
-	PictureThumbnailUrl *string `json:",omitempty"`
+	PictureThumbnailUrl *string `json:"PictureThumbnailUrl,omitempty"`
 
 	// PictureUrl:
-	PictureUrl *string `json:",omitempty"`
+	PictureUrl *string `json:"PictureUrl,omitempty"`
 
 	// Postcode:
-	Postcode *string `json:",omitempty"`
+	Postcode *string `json:"Postcode,omitempty"`
 
 	// SocialSecurityNumber:
-	SocialSecurityNumber *string `json:",omitempty"`
+	SocialSecurityNumber *string `json:"SocialSecurityNumber,omitempty"`
 
 	// StartDate:
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// State:
-	State *string `json:",omitempty"`
+	State *string `json:"State,omitempty"`
 
 	// Title:
-	Title *string `json:",omitempty"`
+	Title *string `json:"Title,omitempty"`
 }
 
 func (s *CRMOpportunityContacts) GetIdentifier() GUID {
@@ -243,3 +243,22 @@ func (s *CRMOpportunityContactsService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the OpportunityContacts enitity, by ID.
+func (s *CRMOpportunityContactsService) Get(ctx context.Context, division int, id GUID) (*CRMOpportunityContacts, error) {
+	var entities []*CRMOpportunityContacts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/crm/OpportunityContacts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d OpportunityContacts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

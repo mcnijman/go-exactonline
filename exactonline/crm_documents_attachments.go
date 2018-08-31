@@ -23,19 +23,19 @@ type CRMDocumentsAttachmentsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadCRMDocumentsAttachments
 type CRMDocumentsAttachments struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AttachmentFileName: Filename of the attachment
-	AttachmentFileName *string `json:",omitempty"`
+	AttachmentFileName *string `json:"AttachmentFileName,omitempty"`
 
 	// AttachmentFileSize: File size of the attachment
-	AttachmentFileSize *float64 `json:",omitempty"`
+	AttachmentFileSize *float64 `json:"AttachmentFileSize,omitempty"`
 
 	// AttachmentUrl: Url for downloading the attachment. To get the file in its original format (xml, jpg, pdf, etc.) append &amp;Download=1 to the url.
-	AttachmentUrl *string `json:",omitempty"`
+	AttachmentUrl *string `json:"AttachmentUrl,omitempty"`
 
 	// CanShowInWebView:
-	CanShowInWebView *bool `json:",omitempty"`
+	CanShowInWebView *bool `json:"CanShowInWebView,omitempty"`
 }
 
 func (s *CRMDocumentsAttachments) GetIdentifier() GUID {
@@ -57,3 +57,22 @@ func (s *CRMDocumentsAttachmentsService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentsAttachments enitity, by ID.
+func (s *CRMDocumentsAttachmentsService) Get(ctx context.Context, division int, id GUID) (*CRMDocumentsAttachments, error) {
+	var entities []*CRMDocumentsAttachments
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/crm/DocumentsAttachments?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentsAttachments entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

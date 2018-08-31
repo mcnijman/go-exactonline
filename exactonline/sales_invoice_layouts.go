@@ -23,34 +23,34 @@ type SalesInvoiceLayoutsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesInvoiceLayouts
 type SalesInvoiceLayouts struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Subject: Layout name
-	Subject *string `json:",omitempty"`
+	Subject *string `json:"Subject,omitempty"`
 
 	// Type: Type: 1=Layout, 2=E-mail text layout, 3=Word template
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *SalesInvoiceLayouts) GetIdentifier() GUID {
@@ -72,3 +72,22 @@ func (s *SalesInvoiceLayoutsService) List(ctx context.Context, division int, all
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Layouts enitity, by ID.
+func (s *SalesInvoiceLayoutsService) Get(ctx context.Context, division int, id GUID) (*SalesInvoiceLayouts, error) {
+	var entities []*SalesInvoiceLayouts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/Layouts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Layouts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

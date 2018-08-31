@@ -23,49 +23,49 @@ type ProjectProjectRestrictionItemsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectRestrictionItems
 type ProjectProjectRestrictionItems struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Date created
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: Creator user ID
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Creator name
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Item linked to the restriction
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Item code
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of the item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemIsTime: Indicates if the item is a time unit item
-	ItemIsTime *byte `json:",omitempty"`
+	ItemIsTime *byte `json:"ItemIsTime,omitempty"`
 
 	// Modified: Date modified
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: Modifier user ID
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Modifier name
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Project: Project linked to the restriction
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode: Project code
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Project description
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
 func (s *ProjectProjectRestrictionItems) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *ProjectProjectRestrictionItemsService) List(ctx context.Context, divisi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProjectRestrictionItems enitity, by ID.
+func (s *ProjectProjectRestrictionItemsService) Get(ctx context.Context, division int, id GUID) (*ProjectProjectRestrictionItems, error) {
+	var entities []*ProjectProjectRestrictionItems
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionItems?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProjectRestrictionItems entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

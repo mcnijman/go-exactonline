@@ -23,61 +23,61 @@ type HRMAbsenceRegistrationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMAbsenceRegistrations
 type HRMAbsenceRegistrations struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AbsenceRegistrationTransactions: Collection of absence registration transactions
-	AbsenceRegistrationTransactions *[]byte `json:",omitempty"`
+	AbsenceRegistrationTransactions *[]byte `json:"AbsenceRegistrationTransactions,omitempty"`
 
 	// Cause: Absence cause, only supported for the Netherland legislation
-	Cause *int `json:",omitempty"`
+	Cause *int `json:"Cause,omitempty"`
 
 	// CauseCode: Code for the absence cause, only supported for the Netherland legislation
-	CauseCode *string `json:",omitempty"`
+	CauseCode *string `json:"CauseCode,omitempty"`
 
 	// CauseDescription: Description for the absence cause, only supported for the Netherland legislation
-	CauseDescription *string `json:",omitempty"`
+	CauseDescription *string `json:"CauseDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee linked to the absence
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeFullName: Employee full name
-	EmployeeFullName *string `json:",omitempty"`
+	EmployeeFullName *string `json:"EmployeeFullName,omitempty"`
 
 	// EmployeeHID: Numeric ID of the employee
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// Kind: Absence kind, only supported for the Netherland legislation
-	Kind *int `json:",omitempty"`
+	Kind *int `json:"Kind,omitempty"`
 
 	// KindCode: Code for the absence kind, only supported for the Netherland legislation
-	KindCode *string `json:",omitempty"`
+	KindCode *string `json:"KindCode,omitempty"`
 
 	// KindDescription: Description for the absence kind, only supported for the Netherland legislation
-	KindDescription *string `json:",omitempty"`
+	KindDescription *string `json:"KindDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra information for absence
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *HRMAbsenceRegistrations) GetIdentifier() GUID {
@@ -99,3 +99,22 @@ func (s *HRMAbsenceRegistrationsService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AbsenceRegistrations enitity, by ID.
+func (s *HRMAbsenceRegistrationsService) Get(ctx context.Context, division int, id GUID) (*HRMAbsenceRegistrations, error) {
+	var entities []*HRMAbsenceRegistrations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AbsenceRegistrations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

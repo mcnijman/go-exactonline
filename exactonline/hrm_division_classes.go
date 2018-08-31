@@ -23,46 +23,46 @@ type HRMDivisionClassesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMDivisionClasses
 type HRMDivisionClasses struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// ClassNameCustomer: Classification customer ID
-	ClassNameCustomer *GUID `json:",omitempty"`
+	ClassNameCustomer *GUID `json:"ClassNameCustomer,omitempty"`
 
 	// ClassNameDescription: Related classification description
-	ClassNameDescription *string `json:",omitempty"`
+	ClassNameDescription *string `json:"ClassNameDescription,omitempty"`
 
 	// ClassNameID: Related classification ID
-	ClassNameID *GUID `json:",omitempty"`
+	ClassNameID *GUID `json:"ClassNameID,omitempty"`
 
 	// Code: Property code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Property description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DescriptionTermID: Property description term ID
-	DescriptionTermID *int `json:",omitempty"`
+	DescriptionTermID *int `json:"DescriptionTermID,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// SequenceNr: Related classification sequence number
-	SequenceNr *int `json:",omitempty"`
+	SequenceNr *int `json:"SequenceNr,omitempty"`
 }
 
 func (s *HRMDivisionClasses) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *HRMDivisionClassesService) List(ctx context.Context, division int, all 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DivisionClasses enitity, by ID.
+func (s *HRMDivisionClassesService) Get(ctx context.Context, division int, id GUID) (*HRMDivisionClasses, error) {
+	var entities []*HRMDivisionClasses
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/DivisionClasses?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DivisionClasses entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,163 +23,163 @@ type CRMAddressesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMAddresses
 type CRMAddresses struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Account linked to the address
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountIsSupplier: Indicates if the account is a supplier
-	AccountIsSupplier *bool `json:",omitempty"`
+	AccountIsSupplier *bool `json:"AccountIsSupplier,omitempty"`
 
 	// AccountName: Name of the account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AddressLine1: First address line
-	AddressLine1 *string `json:",omitempty"`
+	AddressLine1 *string `json:"AddressLine1,omitempty"`
 
 	// AddressLine2: Second address line
-	AddressLine2 *string `json:",omitempty"`
+	AddressLine2 *string `json:"AddressLine2,omitempty"`
 
 	// AddressLine3: Third address line
-	AddressLine3 *string `json:",omitempty"`
+	AddressLine3 *string `json:"AddressLine3,omitempty"`
 
 	// City: City
-	City *string `json:",omitempty"`
+	City *string `json:"City,omitempty"`
 
 	// Contact: Contact linked to Address
-	Contact *GUID `json:",omitempty"`
+	Contact *GUID `json:"Contact,omitempty"`
 
 	// ContactName: Contact name
-	ContactName *string `json:",omitempty"`
+	ContactName *string `json:"ContactName,omitempty"`
 
 	// Country: Country code
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// CountryName: Country name
-	CountryName *string `json:",omitempty"`
+	CountryName *string `json:"CountryName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Fax: Fax number
-	Fax *string `json:",omitempty"`
+	Fax *string `json:"Fax,omitempty"`
 
 	// FreeBoolField_01: Free boolean field 1
-	FreeBoolField_01 *bool `json:",omitempty"`
+	FreeBoolField_01 *bool `json:"FreeBoolField_01,omitempty"`
 
 	// FreeBoolField_02: Free boolean field 2
-	FreeBoolField_02 *bool `json:",omitempty"`
+	FreeBoolField_02 *bool `json:"FreeBoolField_02,omitempty"`
 
 	// FreeBoolField_03: Free boolean field 3
-	FreeBoolField_03 *bool `json:",omitempty"`
+	FreeBoolField_03 *bool `json:"FreeBoolField_03,omitempty"`
 
 	// FreeBoolField_04: Free boolean field 4
-	FreeBoolField_04 *bool `json:",omitempty"`
+	FreeBoolField_04 *bool `json:"FreeBoolField_04,omitempty"`
 
 	// FreeBoolField_05: Free boolean field 5
-	FreeBoolField_05 *bool `json:",omitempty"`
+	FreeBoolField_05 *bool `json:"FreeBoolField_05,omitempty"`
 
 	// FreeDateField_01: Free date field 1
-	FreeDateField_01 *Date `json:",omitempty"`
+	FreeDateField_01 *Date `json:"FreeDateField_01,omitempty"`
 
 	// FreeDateField_02: Free date field 2
-	FreeDateField_02 *Date `json:",omitempty"`
+	FreeDateField_02 *Date `json:"FreeDateField_02,omitempty"`
 
 	// FreeDateField_03: Free date field 3
-	FreeDateField_03 *Date `json:",omitempty"`
+	FreeDateField_03 *Date `json:"FreeDateField_03,omitempty"`
 
 	// FreeDateField_04: Free date field 4
-	FreeDateField_04 *Date `json:",omitempty"`
+	FreeDateField_04 *Date `json:"FreeDateField_04,omitempty"`
 
 	// FreeDateField_05: Free date field 5
-	FreeDateField_05 *Date `json:",omitempty"`
+	FreeDateField_05 *Date `json:"FreeDateField_05,omitempty"`
 
 	// FreeNumberField_01: Free number field 1
-	FreeNumberField_01 *float64 `json:",omitempty"`
+	FreeNumberField_01 *float64 `json:"FreeNumberField_01,omitempty"`
 
 	// FreeNumberField_02: Free number field 2
-	FreeNumberField_02 *float64 `json:",omitempty"`
+	FreeNumberField_02 *float64 `json:"FreeNumberField_02,omitempty"`
 
 	// FreeNumberField_03: Free number field 3
-	FreeNumberField_03 *float64 `json:",omitempty"`
+	FreeNumberField_03 *float64 `json:"FreeNumberField_03,omitempty"`
 
 	// FreeNumberField_04: Free number field 4
-	FreeNumberField_04 *float64 `json:",omitempty"`
+	FreeNumberField_04 *float64 `json:"FreeNumberField_04,omitempty"`
 
 	// FreeNumberField_05: Free number field 5
-	FreeNumberField_05 *float64 `json:",omitempty"`
+	FreeNumberField_05 *float64 `json:"FreeNumberField_05,omitempty"`
 
 	// FreeTextField_01: Free text field 1
-	FreeTextField_01 *string `json:",omitempty"`
+	FreeTextField_01 *string `json:"FreeTextField_01,omitempty"`
 
 	// FreeTextField_02: Free text field 2
-	FreeTextField_02 *string `json:",omitempty"`
+	FreeTextField_02 *string `json:"FreeTextField_02,omitempty"`
 
 	// FreeTextField_03: Free text field 3
-	FreeTextField_03 *string `json:",omitempty"`
+	FreeTextField_03 *string `json:"FreeTextField_03,omitempty"`
 
 	// FreeTextField_04: Free text field 4
-	FreeTextField_04 *string `json:",omitempty"`
+	FreeTextField_04 *string `json:"FreeTextField_04,omitempty"`
 
 	// FreeTextField_05: Free text field 5
-	FreeTextField_05 *string `json:",omitempty"`
+	FreeTextField_05 *string `json:"FreeTextField_05,omitempty"`
 
 	// Mailbox: Mailbox
-	Mailbox *string `json:",omitempty"`
+	Mailbox *string `json:"Mailbox,omitempty"`
 
 	// Main: Indicates if the address is the main address for this type
-	Main *bool `json:",omitempty"`
+	Main *bool `json:"Main,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// NicNumber: Last 5 digits of SIRET number which is an intern sequential number of 4 digits representing the identification of the localization of the office
-	NicNumber *string `json:",omitempty"`
+	NicNumber *string `json:"NicNumber,omitempty"`
 
 	// Notes: Notes for an address
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Phone: Phone number
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension: Phone extension
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// Postcode: Postcode
-	Postcode *string `json:",omitempty"`
+	Postcode *string `json:"Postcode,omitempty"`
 
 	// State: State
-	State *string `json:",omitempty"`
+	State *string `json:"State,omitempty"`
 
 	// StateDescription: Name of the State
-	StateDescription *string `json:",omitempty"`
+	StateDescription *string `json:"StateDescription,omitempty"`
 
 	// Type: The type of address. Visit=1, Postal=2, Invoice=3, Delivery=4
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// Warehouse: The warehouse linked to the address, if a warehouse is linked the account will be empty. Can only be filled for type=Delivery
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of the warehoude
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of the warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *CRMAddresses) GetIdentifier() GUID {
@@ -201,3 +201,22 @@ func (s *CRMAddressesService) List(ctx context.Context, division int, all bool) 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Addresses enitity, by ID.
+func (s *CRMAddressesService) Get(ctx context.Context, division int, id GUID) (*CRMAddresses, error) {
+	var entities []*CRMAddresses
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Addresses entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

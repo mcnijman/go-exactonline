@@ -23,163 +23,163 @@ type ProjectProjectsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjects
 type ProjectProjects struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: The account for this project
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountContact: Contact person of Account
-	AccountContact *GUID `json:",omitempty"`
+	AccountContact *GUID `json:"AccountContact,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AllowAdditionalInvoicing: Is additional invoice is allowed for project
-	AllowAdditionalInvoicing *bool `json:",omitempty"`
+	AllowAdditionalInvoicing *bool `json:"AllowAdditionalInvoicing,omitempty"`
 
 	// BlockEntry: Block time and cost entries
-	BlockEntry *bool `json:",omitempty"`
+	BlockEntry *bool `json:"BlockEntry,omitempty"`
 
 	// BlockRebilling: Block rebilling
-	BlockRebilling *bool `json:",omitempty"`
+	BlockRebilling *bool `json:"BlockRebilling,omitempty"`
 
 	// BudgetedAmount: Budgeted amount of sales in the default currency of the company
-	BudgetedAmount *float64 `json:",omitempty"`
+	BudgetedAmount *float64 `json:"BudgetedAmount,omitempty"`
 
 	// BudgetedCosts: Budgeted amount of costs in the default currency of the company
-	BudgetedCosts *float64 `json:",omitempty"`
+	BudgetedCosts *float64 `json:"BudgetedCosts,omitempty"`
 
 	// BudgetedHoursPerHourType: Collection of budgeted hours
-	BudgetedHoursPerHourType *[]byte `json:",omitempty"`
+	BudgetedHoursPerHourType *[]byte `json:"BudgetedHoursPerHourType,omitempty"`
 
 	// BudgetedRevenue: Budgeted amount of revenue in the default currency of the company
-	BudgetedRevenue *float64 `json:",omitempty"`
+	BudgetedRevenue *float64 `json:"BudgetedRevenue,omitempty"`
 
 	// BudgetOverrunHours: BudgetOverrunHours: 10-Allowed, 20-Not Allowed
-	BudgetOverrunHours *byte `json:",omitempty"`
+	BudgetOverrunHours *byte `json:"BudgetOverrunHours,omitempty"`
 
 	// BudgetType: Budget type
-	BudgetType *int `json:",omitempty"`
+	BudgetType *int `json:"BudgetType,omitempty"`
 
 	// BudgetTypeDescription: Budget type description
-	BudgetTypeDescription *string `json:",omitempty"`
+	BudgetTypeDescription *string `json:"BudgetTypeDescription,omitempty"`
 
 	// Classification: Used only for PSA to link a project classification to the project
-	Classification *GUID `json:",omitempty"`
+	Classification *GUID `json:"Classification,omitempty"`
 
 	// ClassificationDescription: Description of Classification
-	ClassificationDescription *string `json:",omitempty"`
+	ClassificationDescription *string `json:"ClassificationDescription,omitempty"`
 
 	// Code: Code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// CostsAmountFC: Used only for PSA to store the budgetted costs of a project (except for project type Campaign and Non-billable). Positive quantities only
-	CostsAmountFC *float64 `json:",omitempty"`
+	CostsAmountFC *float64 `json:"CostsAmountFC,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// CustomerPOnumber: Used only for PSA to store the customer&#39;s PO number
-	CustomerPOnumber *string `json:",omitempty"`
+	CustomerPOnumber *string `json:"CustomerPOnumber,omitempty"`
 
 	// Description: Description of the project
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DivisionName: Name of Division
-	DivisionName *string `json:",omitempty"`
+	DivisionName *string `json:"DivisionName,omitempty"`
 
 	// EndDate: End date of the project. In combination with the start date the status is determined
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FixedPriceItem: Item used for fixed price invoicing. To be defined per project. If empty the functionality relies on the setting
-	FixedPriceItem *GUID `json:",omitempty"`
+	FixedPriceItem *GUID `json:"FixedPriceItem,omitempty"`
 
 	// FixedPriceItemDescription: Description of FixedPriceItem
-	FixedPriceItemDescription *string `json:",omitempty"`
+	FixedPriceItemDescription *string `json:"FixedPriceItemDescription,omitempty"`
 
 	// InternalNotes: Internal notes not to be printed in invoice
-	InternalNotes *string `json:",omitempty"`
+	InternalNotes *string `json:"InternalNotes,omitempty"`
 
 	// InvoiceAsQuoted: Is invoice as quoted
-	InvoiceAsQuoted *bool `json:",omitempty"`
+	InvoiceAsQuoted *bool `json:"InvoiceAsQuoted,omitempty"`
 
 	// InvoiceTerms: Collection of invoice terms
-	InvoiceTerms *[]byte `json:",omitempty"`
+	InvoiceTerms *[]byte `json:"InvoiceTerms,omitempty"`
 
 	// Manager: Responsible person for this project
-	Manager *GUID `json:",omitempty"`
+	Manager *GUID `json:"Manager,omitempty"`
 
 	// ManagerFullname: Name of Manager
-	ManagerFullname *string `json:",omitempty"`
+	ManagerFullname *string `json:"ManagerFullname,omitempty"`
 
 	// MarkupPercentage: Purchase markup percentage
-	MarkupPercentage *float64 `json:",omitempty"`
+	MarkupPercentage *float64 `json:"MarkupPercentage,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: For additional information about projects
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PrepaidItem: Used only for PSA. This item is used for prepaid invoicing. If left empty, the functionality relies on a setting
-	PrepaidItem *GUID `json:",omitempty"`
+	PrepaidItem *GUID `json:"PrepaidItem,omitempty"`
 
 	// PrepaidItemDescription: Description of PrepaidItem
-	PrepaidItemDescription *string `json:",omitempty"`
+	PrepaidItemDescription *string `json:"PrepaidItemDescription,omitempty"`
 
 	// PrepaidType: PrepaidType: 1-Retainer, 2-Hour type bundle
-	PrepaidType *int `json:",omitempty"`
+	PrepaidType *int `json:"PrepaidType,omitempty"`
 
 	// PrepaidTypeDescription: Description of PrepaidType
-	PrepaidTypeDescription *string `json:",omitempty"`
+	PrepaidTypeDescription *string `json:"PrepaidTypeDescription,omitempty"`
 
 	// ProjectRestrictionEmployees: Collection of employee restrictions
-	ProjectRestrictionEmployees *[]byte `json:",omitempty"`
+	ProjectRestrictionEmployees *[]byte `json:"ProjectRestrictionEmployees,omitempty"`
 
 	// ProjectRestrictionItems: Collection of item restrictions
-	ProjectRestrictionItems *[]byte `json:",omitempty"`
+	ProjectRestrictionItems *[]byte `json:"ProjectRestrictionItems,omitempty"`
 
 	// ProjectRestrictionRebillings: Collection of rebilling restrictions
-	ProjectRestrictionRebillings *[]byte `json:",omitempty"`
+	ProjectRestrictionRebillings *[]byte `json:"ProjectRestrictionRebillings,omitempty"`
 
 	// SalesTimeQuantity: Budgeted time. Total number of hours estimated for the fixed price project
-	SalesTimeQuantity *float64 `json:",omitempty"`
+	SalesTimeQuantity *float64 `json:"SalesTimeQuantity,omitempty"`
 
 	// SourceQuotation: Source quotation
-	SourceQuotation *GUID `json:",omitempty"`
+	SourceQuotation *GUID `json:"SourceQuotation,omitempty"`
 
 	// StartDate: Start date of a project. In combination with the end date the status is determined
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// TimeQuantityToAlert: Alert when exceeding (Hours)
-	TimeQuantityToAlert *float64 `json:",omitempty"`
+	TimeQuantityToAlert *float64 `json:"TimeQuantityToAlert,omitempty"`
 
 	// Type: Reference to ProjectTypes
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription: Description of Type
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// UseBillingMilestones: Using billing milestones
-	UseBillingMilestones *bool `json:",omitempty"`
+	UseBillingMilestones *bool `json:"UseBillingMilestones,omitempty"`
 }
 
 func (s *ProjectProjects) GetIdentifier() GUID {
@@ -201,3 +201,22 @@ func (s *ProjectProjectsService) List(ctx context.Context, division int, all boo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Projects enitity, by ID.
+func (s *ProjectProjectsService) Get(ctx context.Context, division int, id GUID) (*ProjectProjects, error) {
+	var entities []*ProjectProjects
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/Projects?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Projects entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

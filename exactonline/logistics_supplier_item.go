@@ -23,97 +23,97 @@ type LogisticsSupplierItemService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsSupplierItem
 type LogisticsSupplierItem struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// CopyRemarks: Copy purchase remarks to purchase lines
-	CopyRemarks *byte `json:",omitempty"`
+	CopyRemarks *byte `json:"CopyRemarks,omitempty"`
 
 	// CountryOfOrigin: Country of origin code
-	CountryOfOrigin *string `json:",omitempty"`
+	CountryOfOrigin *string `json:"CountryOfOrigin,omitempty"`
 
 	// CountryOfOriginDescription: Description of country of origin
-	CountryOfOriginDescription *string `json:",omitempty"`
+	CountryOfOriginDescription *string `json:"CountryOfOriginDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Currency of item price
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// CurrencyDescription: Description of currency of item price
-	CurrencyDescription *string `json:",omitempty"`
+	CurrencyDescription *string `json:"CurrencyDescription,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DropShipment: Indicates that the supplier will deliver the item directly to customer. Values: 0 = No, 1 = Yes, 2 = Optional
-	DropShipment *byte `json:",omitempty"`
+	DropShipment *byte `json:"DropShipment,omitempty"`
 
 	// Item: Item ID
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Item code
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// MainSupplier: Indicates this is a main supplier
-	MainSupplier *bool `json:",omitempty"`
+	MainSupplier *bool `json:"MainSupplier,omitempty"`
 
 	// MinimumQuantity: Minimum quantity of the item for purchase, only available for Wholesale &amp; Distribution (Premium only)
-	MinimumQuantity *float64 `json:",omitempty"`
+	MinimumQuantity *float64 `json:"MinimumQuantity,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PurchaseLeadTime: The number of days between placing an order with a supplier and receiving items from the supplier
-	PurchaseLeadTime *int `json:",omitempty"`
+	PurchaseLeadTime *int `json:"PurchaseLeadTime,omitempty"`
 
 	// PurchasePrice: Purchase price
-	PurchasePrice *float64 `json:",omitempty"`
+	PurchasePrice *float64 `json:"PurchasePrice,omitempty"`
 
 	// PurchaseUnit: Unit code
-	PurchaseUnit *string `json:",omitempty"`
+	PurchaseUnit *string `json:"PurchaseUnit,omitempty"`
 
 	// PurchaseUnitDescription: Description of unit
-	PurchaseUnitDescription *string `json:",omitempty"`
+	PurchaseUnitDescription *string `json:"PurchaseUnitDescription,omitempty"`
 
 	// PurchaseUnitFactor: This is the multiplication factor when going from default item unit to the unit of this price
-	PurchaseUnitFactor *float64 `json:",omitempty"`
+	PurchaseUnitFactor *float64 `json:"PurchaseUnitFactor,omitempty"`
 
 	// PurchaseVATCode: VAT code
-	PurchaseVATCode *string `json:",omitempty"`
+	PurchaseVATCode *string `json:"PurchaseVATCode,omitempty"`
 
 	// PurchaseVATCodeDescription: Description of VAT
-	PurchaseVATCodeDescription *string `json:",omitempty"`
+	PurchaseVATCodeDescription *string `json:"PurchaseVATCodeDescription,omitempty"`
 
 	// Supplier: Supplier ID
-	Supplier *GUID `json:",omitempty"`
+	Supplier *GUID `json:"Supplier,omitempty"`
 
 	// SupplierCode: Supplier code
-	SupplierCode *string `json:",omitempty"`
+	SupplierCode *string `json:"SupplierCode,omitempty"`
 
 	// SupplierDescription: Description of supplier
-	SupplierDescription *string `json:",omitempty"`
+	SupplierDescription *string `json:"SupplierDescription,omitempty"`
 
 	// SupplierItemCode: Supplier’s item code
-	SupplierItemCode *string `json:",omitempty"`
+	SupplierItemCode *string `json:"SupplierItemCode,omitempty"`
 }
 
 func (s *LogisticsSupplierItem) GetIdentifier() GUID {
@@ -135,3 +135,22 @@ func (s *LogisticsSupplierItemService) List(ctx context.Context, division int, a
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SupplierItem enitity, by ID.
+func (s *LogisticsSupplierItemService) Get(ctx context.Context, division int, id GUID) (*LogisticsSupplierItem, error) {
+	var entities []*LogisticsSupplierItem
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SupplierItem?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SupplierItem entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

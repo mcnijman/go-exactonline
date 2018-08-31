@@ -23,145 +23,145 @@ type ManufacturingShopOrderRoutingStepPlansService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingShopOrderRoutingStepPlans
 type ManufacturingShopOrderRoutingStepPlans struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Reference to Account providing the Outsourced item
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName: Account name
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AccountNumber: Account number
-	AccountNumber *string `json:",omitempty"`
+	AccountNumber *string `json:"AccountNumber,omitempty"`
 
 	// AttendedPercentage: Attended Percentage
-	AttendedPercentage *float64 `json:",omitempty"`
+	AttendedPercentage *float64 `json:"AttendedPercentage,omitempty"`
 
 	// Backflush: Indicates if this is a backflush step
-	Backflush *byte `json:",omitempty"`
+	Backflush *byte `json:"Backflush,omitempty"`
 
 	// CostPerItem: Total cost / Shop order planned quantity
-	CostPerItem *float64 `json:",omitempty"`
+	CostPerItem *float64 `json:"CostPerItem,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the operation
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EfficiencyPercentage: Efficiency Percentage
-	EfficiencyPercentage *float64 `json:",omitempty"`
+	EfficiencyPercentage *float64 `json:"EfficiencyPercentage,omitempty"`
 
 	// FactorType: Conversion factor type between Shop order Item and Subcontract purchase Unit
-	FactorType *int `json:",omitempty"`
+	FactorType *int `json:"FactorType,omitempty"`
 
 	// LineNumber: Sequential order of the operation
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Operation: Reference to Operations
-	Operation *GUID `json:",omitempty"`
+	Operation *GUID `json:"Operation,omitempty"`
 
 	// OperationCode: Code of the routing step operation
-	OperationCode *string `json:",omitempty"`
+	OperationCode *string `json:"OperationCode,omitempty"`
 
 	// OperationDescription: Description of the operation step
-	OperationDescription *string `json:",omitempty"`
+	OperationDescription *string `json:"OperationDescription,omitempty"`
 
 	// OperationResource: Reference to OperationResources
-	OperationResource *GUID `json:",omitempty"`
+	OperationResource *GUID `json:"OperationResource,omitempty"`
 
 	// PlannedEndDate: Planned end date
-	PlannedEndDate *Date `json:",omitempty"`
+	PlannedEndDate *Date `json:"PlannedEndDate,omitempty"`
 
 	// PlannedRunHours: Planned run hours
-	PlannedRunHours *float64 `json:",omitempty"`
+	PlannedRunHours *float64 `json:"PlannedRunHours,omitempty"`
 
 	// PlannedSetupHours: Planned setup hours
-	PlannedSetupHours *float64 `json:",omitempty"`
+	PlannedSetupHours *float64 `json:"PlannedSetupHours,omitempty"`
 
 	// PlannedStartDate: Planned start date
-	PlannedStartDate *Date `json:",omitempty"`
+	PlannedStartDate *Date `json:"PlannedStartDate,omitempty"`
 
 	// PlannedTotalHours: Setup hours &#43; Run hours
-	PlannedTotalHours *float64 `json:",omitempty"`
+	PlannedTotalHours *float64 `json:"PlannedTotalHours,omitempty"`
 
 	// PurchaseUnit: Reference to Units
-	PurchaseUnit *string `json:",omitempty"`
+	PurchaseUnit *string `json:"PurchaseUnit,omitempty"`
 
 	// PurchaseUnitFactor: Purchase Unit Factor
-	PurchaseUnitFactor *float64 `json:",omitempty"`
+	PurchaseUnitFactor *float64 `json:"PurchaseUnitFactor,omitempty"`
 
 	// PurchaseUnitPriceFC: Purchase Unit Price in the currency of the transaction
-	PurchaseUnitPriceFC *float64 `json:",omitempty"`
+	PurchaseUnitPriceFC *float64 `json:"PurchaseUnitPriceFC,omitempty"`
 
 	// PurchaseUnitQuantity: Purchase unit quantity of the plan
-	PurchaseUnitQuantity *float64 `json:",omitempty"`
+	PurchaseUnitQuantity *float64 `json:"PurchaseUnitQuantity,omitempty"`
 
 	// RoutingStepType: Reference to RoutingStepTypes
-	RoutingStepType *int `json:",omitempty"`
+	RoutingStepType *int `json:"RoutingStepType,omitempty"`
 
 	// Run: Used in conjunction with RunMethod, and EfficiencyPercentage to determine PlannedRunHours
-	Run *float64 `json:",omitempty"`
+	Run *float64 `json:"Run,omitempty"`
 
 	// RunMethod: Reference to OperationMethod
-	RunMethod *int `json:",omitempty"`
+	RunMethod *int `json:"RunMethod,omitempty"`
 
 	// RunMethodDescription: Description of RunMethod
-	RunMethodDescription *string `json:",omitempty"`
+	RunMethodDescription *string `json:"RunMethodDescription,omitempty"`
 
 	// Setup: Used in conjunction with SetupCount and Setup Unit to determine PlannedSetupHours
-	Setup *float64 `json:",omitempty"`
+	Setup *float64 `json:"Setup,omitempty"`
 
 	// SetupUnit: Reference to TimeUnits
-	SetupUnit *string `json:",omitempty"`
+	SetupUnit *string `json:"SetupUnit,omitempty"`
 
 	// ShopOrder: Reference to Shop orders
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// Status: Reference to OperationStatus
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription: Description of Status
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// SubcontractedLeadDays: Subcontracted lead days
-	SubcontractedLeadDays *int `json:",omitempty"`
+	SubcontractedLeadDays *int `json:"SubcontractedLeadDays,omitempty"`
 
 	// TimeTransactions: Collection of TimeTransactions
-	TimeTransactions *[]byte `json:",omitempty"`
+	TimeTransactions *[]byte `json:"TimeTransactions,omitempty"`
 
 	// TotalCostDC: Total cost of the routing line
-	TotalCostDC *float64 `json:",omitempty"`
+	TotalCostDC *float64 `json:"TotalCostDC,omitempty"`
 
 	// Workcenter: Reference to Workcenters
-	Workcenter *GUID `json:",omitempty"`
+	Workcenter *GUID `json:"Workcenter,omitempty"`
 
 	// WorkcenterCode: Workcenter code
-	WorkcenterCode *string `json:",omitempty"`
+	WorkcenterCode *string `json:"WorkcenterCode,omitempty"`
 
 	// WorkcenterDescription: Workcenter description
-	WorkcenterDescription *string `json:",omitempty"`
+	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
 func (s *ManufacturingShopOrderRoutingStepPlans) GetIdentifier() GUID {
@@ -183,3 +183,22 @@ func (s *ManufacturingShopOrderRoutingStepPlansService) List(ctx context.Context
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ShopOrderRoutingStepPlans enitity, by ID.
+func (s *ManufacturingShopOrderRoutingStepPlansService) Get(ctx context.Context, division int, id GUID) (*ManufacturingShopOrderRoutingStepPlans, error) {
+	var entities []*ManufacturingShopOrderRoutingStepPlans
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderRoutingStepPlans?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ShopOrderRoutingStepPlans entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

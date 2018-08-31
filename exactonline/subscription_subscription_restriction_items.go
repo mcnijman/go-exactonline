@@ -23,46 +23,46 @@ type SubscriptionSubscriptionRestrictionItemsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionRestrictionItems
 type SubscriptionSubscriptionRestrictionItems struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Item linked to the restriction
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Subscription: Reference to subscription
-	Subscription *GUID `json:",omitempty"`
+	Subscription *GUID `json:"Subscription,omitempty"`
 
 	// SubscriptionDescription: Description of subscription
-	SubscriptionDescription *string `json:",omitempty"`
+	SubscriptionDescription *string `json:"SubscriptionDescription,omitempty"`
 
 	// SubscriptionNumber: Number of subscription
-	SubscriptionNumber *int `json:",omitempty"`
+	SubscriptionNumber *int `json:"SubscriptionNumber,omitempty"`
 }
 
 func (s *SubscriptionSubscriptionRestrictionItems) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *SubscriptionSubscriptionRestrictionItemsService) List(ctx context.Conte
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubscriptionRestrictionItems enitity, by ID.
+func (s *SubscriptionSubscriptionRestrictionItemsService) Get(ctx context.Context, division int, id GUID) (*SubscriptionSubscriptionRestrictionItems, error) {
+	var entities []*SubscriptionSubscriptionRestrictionItems
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionRestrictionItems?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubscriptionRestrictionItems entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

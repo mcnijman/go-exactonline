@@ -23,67 +23,67 @@ type FinancialGLClassificationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLClassifications
 type FinancialGLClassifications struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Abstract: Abstract elements are only used in presentation linkbases to group other elements. They are not supposed to be used in instance documents
-	Abstract *bool `json:",omitempty"`
+	Abstract *bool `json:"Abstract,omitempty"`
 
 	// Balance: Only used for amount concepts: in that case either &#39;debit&#39; or &#39;credit&#39;
-	Balance *string `json:",omitempty"`
+	Balance *string `json:"Balance,omitempty"`
 
 	// Code: The Code is unique
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the element. Note that this description is only used for division-specific taxonomies (or reporting schemes).
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division is optional. For taxonomies of Taxonomies.Type = 0 (general taxonomies), the Division is empty. For division specific taxonomies it is mandatory
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// IsTupleSubElement: Obsolete
-	IsTupleSubElement *bool `json:",omitempty"`
+	IsTupleSubElement *bool `json:"IsTupleSubElement,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Name: The Name is unique in the namespace
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// Nillable: Determines whether usage of the element is mandatory in an instance document
-	Nillable *bool `json:",omitempty"`
+	Nillable *bool `json:"Nillable,omitempty"`
 
 	// Parent: Parent element for reporting schemes. In a reporting scheme, an element can have only one parent. This column is only used for reporting schemes. Note that in a real taxonomy, elements can have multiple parents.
-	Parent *GUID `json:",omitempty"`
+	Parent *GUID `json:"Parent,omitempty"`
 
 	// PeriodType: Only used for item concepts: either &#39;instant&#39; or &#39;duration&#39;. &#39;instant&#39; is used for balance types of concepts, &#39;duration&#39; is used for P&amp;L types of concepts
-	PeriodType *string `json:",omitempty"`
+	PeriodType *string `json:"PeriodType,omitempty"`
 
 	// SubstitutionGroup: Mostly import sutstitutiongroup is xbrli:tuple, which makes the element a tuple concept. The default substitutiongroup for item concepts is xbrli:item
-	SubstitutionGroup *string `json:",omitempty"`
+	SubstitutionGroup *string `json:"SubstitutionGroup,omitempty"`
 
 	// TaxonomyNamespace: Namespace of the element
-	TaxonomyNamespace *GUID `json:",omitempty"`
+	TaxonomyNamespace *GUID `json:"TaxonomyNamespace,omitempty"`
 
 	// TaxonomyNamespaceDescription: Description of TaxonomyNamespace
-	TaxonomyNamespaceDescription *string `json:",omitempty"`
+	TaxonomyNamespaceDescription *string `json:"TaxonomyNamespaceDescription,omitempty"`
 
 	// Type: Type of the element
-	Type *GUID `json:",omitempty"`
+	Type *GUID `json:"Type,omitempty"`
 }
 
 func (s *FinancialGLClassifications) GetIdentifier() GUID {
@@ -105,3 +105,22 @@ func (s *FinancialGLClassificationsService) List(ctx context.Context, division i
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GLClassifications enitity, by ID.
+func (s *FinancialGLClassificationsService) Get(ctx context.Context, division int, id GUID) (*FinancialGLClassifications, error) {
+	var entities []*FinancialGLClassifications
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLClassifications?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GLClassifications entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

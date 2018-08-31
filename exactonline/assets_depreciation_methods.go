@@ -23,61 +23,61 @@ type AssetsDepreciationMethodsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AssetsDepreciationMethods
 type AssetsDepreciationMethods struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Amount: When the method is fixed amount, this is the periodic depreciation amount
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// Code: Code of the depreciation method
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DepreciationInterval: Describes the periodic interval
-	DepreciationInterval *string `json:",omitempty"`
+	DepreciationInterval *string `json:"DepreciationInterval,omitempty"`
 
 	// Description: Description of the method
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// MaxPercentage: Indicates the maximum value when using depreciation type degressive to linear
-	MaxPercentage *float64 `json:",omitempty"`
+	MaxPercentage *float64 `json:"MaxPercentage,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Percentage: Degressive percentage for methods: 10 - Degressive to linear, 11 - Degressive (fixed perc. of book value), 12 - Degressive to linear (Belgium &amp; Luxembourg only). And interest percentage for method: 40 - Normal annuity method. On import: Can not be modified if depreciation method is already linked to an asset. For Belgium &amp; Luxembourg the degressive percentage is calculated as double of the linear percentage
-	Percentage *float64 `json:",omitempty"`
+	Percentage *float64 `json:"Percentage,omitempty"`
 
 	// Percentage2: Linear percentage for methods: 10 - Degressive to linear, 3 - Linear depreciation (Belgium &amp; Luxembourg only), 12 - Degressive to linear (Belgium &amp; Luxembourg only). On import: Can not be modified if depreciation method is already linked to an asset
-	Percentage2 *float64 `json:",omitempty"`
+	Percentage2 *float64 `json:"Percentage2,omitempty"`
 
 	// Periods: The total number of periods for the depreciation method. Used in combination with depreciation interval: only used when interval is periodic
-	Periods *int `json:",omitempty"`
+	Periods *int `json:"Periods,omitempty"`
 
 	// Type: The actual type of deprecation, such as lineair or degressive. The periodic amounts are based on this type, in combination with other fields, such as the interval and the periods
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription: Description of Type
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// Years: Determines the total number of years for the depreciation method. Used in combination with depreciation interval: only used when interval is yearly
-	Years *int `json:",omitempty"`
+	Years *int `json:"Years,omitempty"`
 }
 
 func (s *AssetsDepreciationMethods) GetIdentifier() GUID {
@@ -99,3 +99,22 @@ func (s *AssetsDepreciationMethodsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DepreciationMethods enitity, by ID.
+func (s *AssetsDepreciationMethodsService) Get(ctx context.Context, division int, id GUID) (*AssetsDepreciationMethods, error) {
+	var entities []*AssetsDepreciationMethods
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DepreciationMethods entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

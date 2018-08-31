@@ -23,55 +23,55 @@ type MailboxMailboxesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=MailboxMailboxes
 type MailboxMailboxes struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: The account this mailbox belongs to. Can be empty if the owner of the mailbox isn&#39;t an Exact Online customer yet
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Extra description of the mailbox
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// ForDivision: Only used when this mailbox is used for one specific administration, for example invoices to this mailbox will only be booked in this administration
-	ForDivision *int `json:",omitempty"`
+	ForDivision *int `json:"ForDivision,omitempty"`
 
 	// ForDivisionDescription: Description of ForDivision
-	ForDivisionDescription *string `json:",omitempty"`
+	ForDivisionDescription *string `json:"ForDivisionDescription,omitempty"`
 
 	// Mailbox: E-mail address-like format, for example johndoe@exactonline.nl
-	Mailbox *string `json:",omitempty"`
+	Mailbox *string `json:"Mailbox,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Publish: Customers can decide if they want this mailbox to be visible by all. i.e. some other customer can see this in address maintenance for digital postbox of type Exact
-	Publish *byte `json:",omitempty"`
+	Publish *byte `json:"Publish,omitempty"`
 
 	// Type: Type of mailbox. Exact / Government / Manual
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// ValidFrom: Date that this mailbox became valid
-	ValidFrom *Date `json:",omitempty"`
+	ValidFrom *Date `json:"ValidFrom,omitempty"`
 
 	// ValidTo: Date that this mailbox will not be valid anymore
-	ValidTo *Date `json:",omitempty"`
+	ValidTo *Date `json:"ValidTo,omitempty"`
 }
 
 func (s *MailboxMailboxes) GetIdentifier() GUID {
@@ -93,3 +93,22 @@ func (s *MailboxMailboxesService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Mailboxes enitity, by ID.
+func (s *MailboxMailboxesService) Get(ctx context.Context, division int, id GUID) (*MailboxMailboxes, error) {
+	var entities []*MailboxMailboxes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/Mailboxes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Mailboxes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

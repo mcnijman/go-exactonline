@@ -23,91 +23,91 @@ type SalesOrderGoodsDeliveriesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesOrderGoodsDeliveries
 type SalesOrderGoodsDeliveries struct {
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DeliveryAccount:
-	DeliveryAccount *GUID `json:",omitempty"`
+	DeliveryAccount *GUID `json:"DeliveryAccount,omitempty"`
 
 	// DeliveryAccountCode:
-	DeliveryAccountCode *string `json:",omitempty"`
+	DeliveryAccountCode *string `json:"DeliveryAccountCode,omitempty"`
 
 	// DeliveryAccountName:
-	DeliveryAccountName *string `json:",omitempty"`
+	DeliveryAccountName *string `json:"DeliveryAccountName,omitempty"`
 
 	// DeliveryAddress:
-	DeliveryAddress *GUID `json:",omitempty"`
+	DeliveryAddress *GUID `json:"DeliveryAddress,omitempty"`
 
 	// DeliveryContact:
-	DeliveryContact *GUID `json:",omitempty"`
+	DeliveryContact *GUID `json:"DeliveryContact,omitempty"`
 
 	// DeliveryContactPersonFullName:
-	DeliveryContactPersonFullName *string `json:",omitempty"`
+	DeliveryContactPersonFullName *string `json:"DeliveryContactPersonFullName,omitempty"`
 
 	// DeliveryDate:
-	DeliveryDate *Date `json:",omitempty"`
+	DeliveryDate *Date `json:"DeliveryDate,omitempty"`
 
 	// DeliveryNumber:
-	DeliveryNumber *int `json:",omitempty"`
+	DeliveryNumber *int `json:"DeliveryNumber,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// GoodsDeliveryLines:
-	GoodsDeliveryLines *[]byte `json:",omitempty"`
+	GoodsDeliveryLines *[]byte `json:"GoodsDeliveryLines,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Remarks:
-	Remarks *string `json:",omitempty"`
+	Remarks *string `json:"Remarks,omitempty"`
 
 	// ShippingMethod:
-	ShippingMethod *GUID `json:",omitempty"`
+	ShippingMethod *GUID `json:"ShippingMethod,omitempty"`
 
 	// ShippingMethodCode:
-	ShippingMethodCode *string `json:",omitempty"`
+	ShippingMethodCode *string `json:"ShippingMethodCode,omitempty"`
 
 	// ShippingMethodDescription:
-	ShippingMethodDescription *string `json:",omitempty"`
+	ShippingMethodDescription *string `json:"ShippingMethodDescription,omitempty"`
 
 	// TrackingNumber:
-	TrackingNumber *string `json:",omitempty"`
+	TrackingNumber *string `json:"TrackingNumber,omitempty"`
 
 	// Warehouse:
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode:
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription:
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *SalesOrderGoodsDeliveries) GetIdentifier() GUID {
@@ -129,3 +129,22 @@ func (s *SalesOrderGoodsDeliveriesService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GoodsDeliveries enitity, by EntryID.
+func (s *SalesOrderGoodsDeliveriesService) Get(ctx context.Context, division int, id GUID) (*SalesOrderGoodsDeliveries, error) {
+	var entities []*SalesOrderGoodsDeliveries
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesorder/GoodsDeliveries?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GoodsDeliveries entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,139 +23,139 @@ type ProjectTimeTransactionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectTimeTransactions
 type ProjectTimeTransactions struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Activity:
-	Activity *GUID `json:",omitempty"`
+	Activity *GUID `json:"Activity,omitempty"`
 
 	// ActivityDescription:
-	ActivityDescription *string `json:",omitempty"`
+	ActivityDescription *string `json:"ActivityDescription,omitempty"`
 
 	// Amount:
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Attachment:
-	Attachment *GUID `json:",omitempty"`
+	Attachment *GUID `json:"Attachment,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Date:
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DivisionDescription:
-	DivisionDescription *string `json:",omitempty"`
+	DivisionDescription *string `json:"DivisionDescription,omitempty"`
 
 	// Employee:
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EndTime:
-	EndTime *Date `json:",omitempty"`
+	EndTime *Date `json:"EndTime,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// ErrorText:
-	ErrorText *string `json:",omitempty"`
+	ErrorText *string `json:"ErrorText,omitempty"`
 
 	// HourStatus:
-	HourStatus *int `json:",omitempty"`
+	HourStatus *int `json:"HourStatus,omitempty"`
 
 	// Item:
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription:
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemDivisable:
-	ItemDivisable *bool `json:",omitempty"`
+	ItemDivisable *bool `json:"ItemDivisable,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Price:
-	Price *float64 `json:",omitempty"`
+	Price *float64 `json:"Price,omitempty"`
 
 	// PriceFC:
-	PriceFC *float64 `json:",omitempty"`
+	PriceFC *float64 `json:"PriceFC,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectAccount:
-	ProjectAccount *GUID `json:",omitempty"`
+	ProjectAccount *GUID `json:"ProjectAccount,omitempty"`
 
 	// ProjectAccountCode:
-	ProjectAccountCode *string `json:",omitempty"`
+	ProjectAccountCode *string `json:"ProjectAccountCode,omitempty"`
 
 	// ProjectAccountName:
-	ProjectAccountName *string `json:",omitempty"`
+	ProjectAccountName *string `json:"ProjectAccountName,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// SkipValidation:
-	SkipValidation *bool `json:",omitempty"`
+	SkipValidation *bool `json:"SkipValidation,omitempty"`
 
 	// StartTime:
-	StartTime *Date `json:",omitempty"`
+	StartTime *Date `json:"StartTime,omitempty"`
 
 	// Subscription:
-	Subscription *GUID `json:",omitempty"`
+	Subscription *GUID `json:"Subscription,omitempty"`
 
 	// SubscriptionAccount:
-	SubscriptionAccount *GUID `json:",omitempty"`
+	SubscriptionAccount *GUID `json:"SubscriptionAccount,omitempty"`
 
 	// SubscriptionAccountCode:
-	SubscriptionAccountCode *string `json:",omitempty"`
+	SubscriptionAccountCode *string `json:"SubscriptionAccountCode,omitempty"`
 
 	// SubscriptionAccountName:
-	SubscriptionAccountName *string `json:",omitempty"`
+	SubscriptionAccountName *string `json:"SubscriptionAccountName,omitempty"`
 
 	// SubscriptionDescription:
-	SubscriptionDescription *string `json:",omitempty"`
+	SubscriptionDescription *string `json:"SubscriptionDescription,omitempty"`
 
 	// SubscriptionNumber:
-	SubscriptionNumber *int `json:",omitempty"`
+	SubscriptionNumber *int `json:"SubscriptionNumber,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *ProjectTimeTransactions) GetIdentifier() GUID {
@@ -177,3 +177,22 @@ func (s *ProjectTimeTransactionsService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TimeTransactions enitity, by ID.
+func (s *ProjectTimeTransactionsService) Get(ctx context.Context, division int, id GUID) (*ProjectTimeTransactions, error) {
+	var entities []*ProjectTimeTransactions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TimeTransactions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

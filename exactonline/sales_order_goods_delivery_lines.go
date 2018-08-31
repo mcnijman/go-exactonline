@@ -23,88 +23,88 @@ type SalesOrderGoodsDeliveryLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesOrderGoodsDeliveryLines
 type SalesOrderGoodsDeliveryLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BatchNumbers:
-	BatchNumbers *[]byte `json:",omitempty"`
+	BatchNumbers *[]byte `json:"BatchNumbers,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DeliveryDate:
-	DeliveryDate *Date `json:",omitempty"`
+	DeliveryDate *Date `json:"DeliveryDate,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// Item:
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode:
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription:
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// QuantityDelivered:
-	QuantityDelivered *float64 `json:",omitempty"`
+	QuantityDelivered *float64 `json:"QuantityDelivered,omitempty"`
 
 	// QuantityOrdered:
-	QuantityOrdered *float64 `json:",omitempty"`
+	QuantityOrdered *float64 `json:"QuantityOrdered,omitempty"`
 
 	// SalesOrderLineID:
-	SalesOrderLineID *GUID `json:",omitempty"`
+	SalesOrderLineID *GUID `json:"SalesOrderLineID,omitempty"`
 
 	// SalesOrderLineNumber:
-	SalesOrderLineNumber *int `json:",omitempty"`
+	SalesOrderLineNumber *int `json:"SalesOrderLineNumber,omitempty"`
 
 	// SalesOrderNumber:
-	SalesOrderNumber *int `json:",omitempty"`
+	SalesOrderNumber *int `json:"SalesOrderNumber,omitempty"`
 
 	// SerialNumbers:
-	SerialNumbers *[]byte `json:",omitempty"`
+	SerialNumbers *[]byte `json:"SerialNumbers,omitempty"`
 
 	// StorageLocation:
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode:
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription:
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// TrackingNumber:
-	TrackingNumber *string `json:",omitempty"`
+	TrackingNumber *string `json:"TrackingNumber,omitempty"`
 
 	// Unitcode:
-	Unitcode *string `json:",omitempty"`
+	Unitcode *string `json:"Unitcode,omitempty"`
 }
 
 func (s *SalesOrderGoodsDeliveryLines) GetIdentifier() GUID {
@@ -126,3 +126,22 @@ func (s *SalesOrderGoodsDeliveryLinesService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GoodsDeliveryLines enitity, by ID.
+func (s *SalesOrderGoodsDeliveryLinesService) Get(ctx context.Context, division int, id GUID) (*SalesOrderGoodsDeliveryLines, error) {
+	var entities []*SalesOrderGoodsDeliveryLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesorder/GoodsDeliveryLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GoodsDeliveryLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

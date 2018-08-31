@@ -23,40 +23,40 @@ type SubscriptionSubscriptionReasonCodesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionReasonCodes
 type SubscriptionSubscriptionReasonCodes struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Indicates if the reason code is active
-	Active *bool `json:",omitempty"`
+	Active *bool `json:"Active,omitempty"`
 
 	// Code: Subscription reason code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *SubscriptionSubscriptionReasonCodes) GetIdentifier() GUID {
@@ -78,3 +78,22 @@ func (s *SubscriptionSubscriptionReasonCodesService) List(ctx context.Context, d
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SubscriptionReasonCodes enitity, by ID.
+func (s *SubscriptionSubscriptionReasonCodesService) Get(ctx context.Context, division int, id GUID) (*SubscriptionSubscriptionReasonCodes, error) {
+	var entities []*SubscriptionSubscriptionReasonCodes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionReasonCodes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SubscriptionReasonCodes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

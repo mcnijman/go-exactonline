@@ -23,202 +23,202 @@ type PayrollEmployeesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmployees
 type PayrollEmployees struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// ActiveEmployment: Obsolete
-	ActiveEmployment *byte `json:",omitempty"`
+	ActiveEmployment *byte `json:"ActiveEmployment,omitempty"`
 
 	// AddressLine2: Second address line
-	AddressLine2 *string `json:",omitempty"`
+	AddressLine2 *string `json:"AddressLine2,omitempty"`
 
 	// AddressLine3: Third address line
-	AddressLine3 *string `json:",omitempty"`
+	AddressLine3 *string `json:"AddressLine3,omitempty"`
 
 	// AddressStreet: Street of address
-	AddressStreet *string `json:",omitempty"`
+	AddressStreet *string `json:"AddressStreet,omitempty"`
 
 	// AddressStreetNumber: Street number of address
-	AddressStreetNumber *string `json:",omitempty"`
+	AddressStreetNumber *string `json:"AddressStreetNumber,omitempty"`
 
 	// AddressStreetNumberSuffix: Street number suffix of address
-	AddressStreetNumberSuffix *string `json:",omitempty"`
+	AddressStreetNumberSuffix *string `json:"AddressStreetNumberSuffix,omitempty"`
 
 	// BirthDate: Birth date
-	BirthDate *Date `json:",omitempty"`
+	BirthDate *Date `json:"BirthDate,omitempty"`
 
 	// BirthName: Birth name
-	BirthName *string `json:",omitempty"`
+	BirthName *string `json:"BirthName,omitempty"`
 
 	// BirthNamePrefix: Birth middle name
-	BirthNamePrefix *string `json:",omitempty"`
+	BirthNamePrefix *string `json:"BirthNamePrefix,omitempty"`
 
 	// BirthPlace: Birth place
-	BirthPlace *string `json:",omitempty"`
+	BirthPlace *string `json:"BirthPlace,omitempty"`
 
 	// BusinessEmail: Email of the employee at the office
-	BusinessEmail *string `json:",omitempty"`
+	BusinessEmail *string `json:"BusinessEmail,omitempty"`
 
 	// BusinessFax: Fax number of the employee at the office
-	BusinessFax *string `json:",omitempty"`
+	BusinessFax *string `json:"BusinessFax,omitempty"`
 
 	// BusinessMobile: Office mobile number of the employee
-	BusinessMobile *string `json:",omitempty"`
+	BusinessMobile *string `json:"BusinessMobile,omitempty"`
 
 	// BusinessPhone: Phone number of the employee at the office
-	BusinessPhone *string `json:",omitempty"`
+	BusinessPhone *string `json:"BusinessPhone,omitempty"`
 
 	// BusinessPhoneExtension: Phone extension of the employee at the office
-	BusinessPhoneExtension *string `json:",omitempty"`
+	BusinessPhoneExtension *string `json:"BusinessPhoneExtension,omitempty"`
 
 	// CASONumber: Obsolete
-	CASONumber *string `json:",omitempty"`
+	CASONumber *string `json:"CASONumber,omitempty"`
 
 	// City: City
-	City *string `json:",omitempty"`
+	City *string `json:"City,omitempty"`
 
 	// Code: Code of the employee
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Country: Country code
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Customer: Customer ID
-	Customer *GUID `json:",omitempty"`
+	Customer *GUID `json:"Customer,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Email: Email address
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// EmployeeHID: Employee number
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// EndDate: End date of the employee
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// FirstName: First name of the employee
-	FirstName *string `json:",omitempty"`
+	FirstName *string `json:"FirstName,omitempty"`
 
 	// FullName: Full name of the employee
-	FullName *string `json:",omitempty"`
+	FullName *string `json:"FullName,omitempty"`
 
 	// Gender: Gender
-	Gender *string `json:",omitempty"`
+	Gender *string `json:"Gender,omitempty"`
 
 	// HID: Numeric ID of the employee
-	HID *int `json:",omitempty"`
+	HID *int `json:"HID,omitempty"`
 
 	// Initials: Initials
-	Initials *string `json:",omitempty"`
+	Initials *string `json:"Initials,omitempty"`
 
 	// IsActive: IsActive
-	IsActive *bool `json:",omitempty"`
+	IsActive *bool `json:"IsActive,omitempty"`
 
 	// IsAnonymised: Indicates whether the employee is anonymised.
-	IsAnonymised *byte `json:",omitempty"`
+	IsAnonymised *byte `json:"IsAnonymised,omitempty"`
 
 	// Language: Language code
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// LastName: Last name
-	LastName *string `json:",omitempty"`
+	LastName *string `json:"LastName,omitempty"`
 
 	// LocationDescription: Description of the location of the employee (where am I?)
-	LocationDescription *string `json:",omitempty"`
+	LocationDescription *string `json:"LocationDescription,omitempty"`
 
 	// Manager: Direct manager of the employee
-	Manager *GUID `json:",omitempty"`
+	Manager *GUID `json:"Manager,omitempty"`
 
 	// MaritalDate: Date of marriage
-	MaritalDate *Date `json:",omitempty"`
+	MaritalDate *Date `json:"MaritalDate,omitempty"`
 
 	// MaritalStatus: Marital status
-	MaritalStatus *int `json:",omitempty"`
+	MaritalStatus *int `json:"MaritalStatus,omitempty"`
 
 	// MiddleName: Middle name
-	MiddleName *string `json:",omitempty"`
+	MiddleName *string `json:"MiddleName,omitempty"`
 
 	// Mobile: Mobile phone
-	Mobile *string `json:",omitempty"`
+	Mobile *string `json:"Mobile,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Municipality: Municipality
-	Municipality *string `json:",omitempty"`
+	Municipality *string `json:"Municipality,omitempty"`
 
 	// NameComposition:
-	NameComposition *int `json:",omitempty"`
+	NameComposition *int `json:"NameComposition,omitempty"`
 
 	// Nationality: Nationality
-	Nationality *string `json:",omitempty"`
+	Nationality *string `json:"Nationality,omitempty"`
 
 	// NickName: Nick name
-	NickName *string `json:",omitempty"`
+	NickName *string `json:"NickName,omitempty"`
 
 	// Notes: Additional notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PartnerName: Name of partner
-	PartnerName *string `json:",omitempty"`
+	PartnerName *string `json:"PartnerName,omitempty"`
 
 	// PartnerNamePrefix: Middle name of partner
-	PartnerNamePrefix *string `json:",omitempty"`
+	PartnerNamePrefix *string `json:"PartnerNamePrefix,omitempty"`
 
 	// Person: Reference to the persons table in which the personal data of the employee is stored
-	Person *GUID `json:",omitempty"`
+	Person *GUID `json:"Person,omitempty"`
 
 	// Phone: Phone number
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension: Phone number extension
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// PictureFileName: Filename of picture
-	PictureFileName *string `json:",omitempty"`
+	PictureFileName *string `json:"PictureFileName,omitempty"`
 
 	// PictureUrl: Url of picture
-	PictureUrl *string `json:",omitempty"`
+	PictureUrl *string `json:"PictureUrl,omitempty"`
 
 	// Postcode: Postcode
-	Postcode *string `json:",omitempty"`
+	Postcode *string `json:"Postcode,omitempty"`
 
 	// PrivateEmail: Private email address
-	PrivateEmail *string `json:",omitempty"`
+	PrivateEmail *string `json:"PrivateEmail,omitempty"`
 
 	// SocialSecurityNumber: Social security number
-	SocialSecurityNumber *string `json:",omitempty"`
+	SocialSecurityNumber *string `json:"SocialSecurityNumber,omitempty"`
 
 	// StartDate: Start date of the employee
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// State: State
-	State *string `json:",omitempty"`
+	State *string `json:"State,omitempty"`
 
 	// Title: Title
-	Title *string `json:",omitempty"`
+	Title *string `json:"Title,omitempty"`
 
 	// User: User ID of employee
-	User *GUID `json:",omitempty"`
+	User *GUID `json:"User,omitempty"`
 
 	// UserFullName: Name of user
-	UserFullName *string `json:",omitempty"`
+	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
 func (s *PayrollEmployees) GetIdentifier() GUID {
@@ -240,3 +240,22 @@ func (s *PayrollEmployeesService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Employees enitity, by ID.
+func (s *PayrollEmployeesService) Get(ctx context.Context, division int, id GUID) (*PayrollEmployees, error) {
+	var entities []*PayrollEmployees
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/Employees?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Employees entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

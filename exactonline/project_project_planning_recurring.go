@@ -23,148 +23,148 @@ type ProjectProjectPlanningRecurringService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectPlanningRecurring
 type ProjectProjectPlanningRecurring struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Account linked to the recurring planning
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// BGTStatus: Status of the project planning process, 1 = To be processed, 2 = Processed, 3 = Failed
-	BGTStatus *int `json:",omitempty"`
+	BGTStatus *int `json:"BGTStatus,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DayOrThe: Indicates whether the recurring planning is day of the month or weekday of the month
-	DayOrThe *int `json:",omitempty"`
+	DayOrThe *int `json:"DayOrThe,omitempty"`
 
 	// Description: Description of recurring planning
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee linked to the recurring planning
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeCode: Code of employee
-	EmployeeCode *string `json:",omitempty"`
+	EmployeeCode *string `json:"EmployeeCode,omitempty"`
 
 	// EmployeeHID: Numeric ID of the employee
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// EndDate: End date of the recurring planning
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// EndDateOrAfter: Indicates whether the recurring planning is end on end date or end after number of times
-	EndDateOrAfter *int `json:",omitempty"`
+	EndDateOrAfter *int `json:"EndDateOrAfter,omitempty"`
 
 	// EndTime: End time for the recurring planning to be active
-	EndTime *Date `json:",omitempty"`
+	EndTime *Date `json:"EndTime,omitempty"`
 
 	// Hours: Number of hours for the recurring planning
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// HourType: Hour type of the recurring planning, item with &#39;Time&#39; type
-	HourType *GUID `json:",omitempty"`
+	HourType *GUID `json:"HourType,omitempty"`
 
 	// HourTypeCode: Code of the hour type
-	HourTypeCode *string `json:",omitempty"`
+	HourTypeCode *string `json:"HourTypeCode,omitempty"`
 
 	// HourTypeDescription: Description of the hour type
-	HourTypeDescription *string `json:",omitempty"`
+	HourTypeDescription *string `json:"HourTypeDescription,omitempty"`
 
 	// Modified: Date modified
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: Modifier user ID
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Modifier name
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// MonthPatternDay: Day of the monthly recurring
-	MonthPatternDay *byte `json:",omitempty"`
+	MonthPatternDay *byte `json:"MonthPatternDay,omitempty"`
 
 	// MonthPatternOrdinalDay: Ordinal number of week day for the monthly recurring planning, 1 = first, 2 = second, 3 = third, 4 = fourth, 31 = last
-	MonthPatternOrdinalDay *byte `json:",omitempty"`
+	MonthPatternOrdinalDay *byte `json:"MonthPatternOrdinalDay,omitempty"`
 
 	// MonthPatternOrdinalWeek: Ordinal week day of the monthly recurring planning, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday, 7 = Sunday
-	MonthPatternOrdinalWeek *byte `json:",omitempty"`
+	MonthPatternOrdinalWeek *byte `json:"MonthPatternOrdinalWeek,omitempty"`
 
 	// Notes: For additional information about recurring planning
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// NumberOfRecurrences: Number of times the planning recurs
-	NumberOfRecurrences *int `json:",omitempty"`
+	NumberOfRecurrences *int `json:"NumberOfRecurrences,omitempty"`
 
 	// OverAllocate: Indicates whether the entries can have over allocated planning hours
-	OverAllocate *bool `json:",omitempty"`
+	OverAllocate *bool `json:"OverAllocate,omitempty"`
 
 	// PatternFrequency: Number of planning times for weekly or monthly recurring planning
-	PatternFrequency *byte `json:",omitempty"`
+	PatternFrequency *byte `json:"PatternFrequency,omitempty"`
 
 	// Project: Project linked to the recurring planning
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode: Code of project
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Description of project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// ProjectPlanningRecurringType: Type of the recurring planning, 1 = weekly, 2 = monthly
-	ProjectPlanningRecurringType *byte `json:",omitempty"`
+	ProjectPlanningRecurringType *byte `json:"ProjectPlanningRecurringType,omitempty"`
 
 	// ProjectWBS: WBS linked to the recurring planning
-	ProjectWBS *GUID `json:",omitempty"`
+	ProjectWBS *GUID `json:"ProjectWBS,omitempty"`
 
 	// ProjectWBSDescription: Description of WBS
-	ProjectWBSDescription *string `json:",omitempty"`
+	ProjectWBSDescription *string `json:"ProjectWBSDescription,omitempty"`
 
 	// StartDate: Start date of the recurring planning
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// StartTime: Start time for the recurring planning to be active
-	StartTime *Date `json:",omitempty"`
+	StartTime *Date `json:"StartTime,omitempty"`
 
 	// Status: Status of the project planning, 1 = Reserved, 2 = Planned
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// WeekPatternDay: Week day for the weekly recurring planning
-	WeekPatternDay *byte `json:",omitempty"`
+	WeekPatternDay *byte `json:"WeekPatternDay,omitempty"`
 
 	// WeekPatternFriday: Create planning on Friday, apply to weekly pattern recurring planning only
-	WeekPatternFriday *bool `json:",omitempty"`
+	WeekPatternFriday *bool `json:"WeekPatternFriday,omitempty"`
 
 	// WeekPatternMonday: Create planning on Monday, apply to weekly pattern recurring planning only
-	WeekPatternMonday *bool `json:",omitempty"`
+	WeekPatternMonday *bool `json:"WeekPatternMonday,omitempty"`
 
 	// WeekPatternSaturday: Create planning on Saturday, apply to weekly pattern recurring planning only
-	WeekPatternSaturday *bool `json:",omitempty"`
+	WeekPatternSaturday *bool `json:"WeekPatternSaturday,omitempty"`
 
 	// WeekPatternSunday: Create planning on Sunday, apply to weekly pattern recurring planning only
-	WeekPatternSunday *bool `json:",omitempty"`
+	WeekPatternSunday *bool `json:"WeekPatternSunday,omitempty"`
 
 	// WeekPatternThursday: Create planning on Thursday, apply to weekly pattern recurring planning only
-	WeekPatternThursday *bool `json:",omitempty"`
+	WeekPatternThursday *bool `json:"WeekPatternThursday,omitempty"`
 
 	// WeekPatternTuesday: Create planning on Tuesday, apply to weekly pattern recurring planning only
-	WeekPatternTuesday *bool `json:",omitempty"`
+	WeekPatternTuesday *bool `json:"WeekPatternTuesday,omitempty"`
 
 	// WeekPatternWednesday: Create planning on Wednesday, apply to weekly pattern recurring planning only
-	WeekPatternWednesday *bool `json:",omitempty"`
+	WeekPatternWednesday *bool `json:"WeekPatternWednesday,omitempty"`
 }
 
 func (s *ProjectProjectPlanningRecurring) GetIdentifier() GUID {
@@ -186,3 +186,22 @@ func (s *ProjectProjectPlanningRecurringService) List(ctx context.Context, divis
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProjectPlanningRecurring enitity, by ID.
+func (s *ProjectProjectPlanningRecurringService) Get(ctx context.Context, division int, id GUID) (*ProjectProjectPlanningRecurring, error) {
+	var entities []*ProjectProjectPlanningRecurring
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanningRecurring?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProjectPlanningRecurring entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

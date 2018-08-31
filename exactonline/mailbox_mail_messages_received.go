@@ -23,100 +23,100 @@ type MailboxMailMessagesReceivedService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=MailboxMailMessagesReceived
 type MailboxMailMessagesReceived struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Bank:
-	Bank *GUID `json:",omitempty"`
+	Bank *GUID `json:"Bank,omitempty"`
 
 	// BankAccount:
-	BankAccount *string `json:",omitempty"`
+	BankAccount *string `json:"BankAccount,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// ForDivision:
-	ForDivision *int `json:",omitempty"`
+	ForDivision *int `json:"ForDivision,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Operation:
-	Operation *int `json:",omitempty"`
+	Operation *int `json:"Operation,omitempty"`
 
 	// OriginalMessage:
-	OriginalMessage *GUID `json:",omitempty"`
+	OriginalMessage *GUID `json:"OriginalMessage,omitempty"`
 
 	// OriginalMessageSubject:
-	OriginalMessageSubject *string `json:",omitempty"`
+	OriginalMessageSubject *string `json:"OriginalMessageSubject,omitempty"`
 
 	// PartnerKey:
-	PartnerKey *GUID `json:",omitempty"`
+	PartnerKey *GUID `json:"PartnerKey,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// RecipientAccount:
-	RecipientAccount *GUID `json:",omitempty"`
+	RecipientAccount *GUID `json:"RecipientAccount,omitempty"`
 
 	// RecipientDeleted:
-	RecipientDeleted *byte `json:",omitempty"`
+	RecipientDeleted *byte `json:"RecipientDeleted,omitempty"`
 
 	// RecipientMailbox:
-	RecipientMailbox *string `json:",omitempty"`
+	RecipientMailbox *string `json:"RecipientMailbox,omitempty"`
 
 	// RecipientMailboxDescription:
-	RecipientMailboxDescription *string `json:",omitempty"`
+	RecipientMailboxDescription *string `json:"RecipientMailboxDescription,omitempty"`
 
 	// RecipientMailboxID:
-	RecipientMailboxID *GUID `json:",omitempty"`
+	RecipientMailboxID *GUID `json:"RecipientMailboxID,omitempty"`
 
 	// RecipientStatus:
-	RecipientStatus *int `json:",omitempty"`
+	RecipientStatus *int `json:"RecipientStatus,omitempty"`
 
 	// RecipientStatusDescription:
-	RecipientStatusDescription *string `json:",omitempty"`
+	RecipientStatusDescription *string `json:"RecipientStatusDescription,omitempty"`
 
 	// SenderAccount:
-	SenderAccount *GUID `json:",omitempty"`
+	SenderAccount *GUID `json:"SenderAccount,omitempty"`
 
 	// SenderDateSent:
-	SenderDateSent *Date `json:",omitempty"`
+	SenderDateSent *Date `json:"SenderDateSent,omitempty"`
 
 	// SenderDeleted:
-	SenderDeleted *byte `json:",omitempty"`
+	SenderDeleted *byte `json:"SenderDeleted,omitempty"`
 
 	// SenderIPAddress:
-	SenderIPAddress *string `json:",omitempty"`
+	SenderIPAddress *string `json:"SenderIPAddress,omitempty"`
 
 	// SenderMailbox:
-	SenderMailbox *string `json:",omitempty"`
+	SenderMailbox *string `json:"SenderMailbox,omitempty"`
 
 	// SenderMailboxDescription:
-	SenderMailboxDescription *string `json:",omitempty"`
+	SenderMailboxDescription *string `json:"SenderMailboxDescription,omitempty"`
 
 	// SenderMailboxID:
-	SenderMailboxID *GUID `json:",omitempty"`
+	SenderMailboxID *GUID `json:"SenderMailboxID,omitempty"`
 
 	// Subject:
-	Subject *string `json:",omitempty"`
+	Subject *string `json:"Subject,omitempty"`
 
 	// SynchronizationCode:
-	SynchronizationCode *string `json:",omitempty"`
+	SynchronizationCode *string `json:"SynchronizationCode,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *MailboxMailMessagesReceived) GetIdentifier() GUID {
@@ -138,3 +138,22 @@ func (s *MailboxMailMessagesReceivedService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the MailMessagesReceived enitity, by ID.
+func (s *MailboxMailMessagesReceivedService) Get(ctx context.Context, division int, id GUID) (*MailboxMailMessagesReceived, error) {
+	var entities []*MailboxMailMessagesReceived
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessagesReceived?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d MailMessagesReceived entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

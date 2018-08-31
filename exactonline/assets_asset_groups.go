@@ -23,82 +23,82 @@ type AssetsAssetGroupsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AssetsAssetGroups
 type AssetsAssetGroups struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the asset group
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DepreciationMethod: Default depreciation method of the assets in this asset group
-	DepreciationMethod *GUID `json:",omitempty"`
+	DepreciationMethod *GUID `json:"DepreciationMethod,omitempty"`
 
 	// DepreciationMethodCode: Code of the depreciation method
-	DepreciationMethodCode *string `json:",omitempty"`
+	DepreciationMethodCode *string `json:"DepreciationMethodCode,omitempty"`
 
 	// DepreciationMethodDescription: Description of the depreciation method
-	DepreciationMethodDescription *string `json:",omitempty"`
+	DepreciationMethodDescription *string `json:"DepreciationMethodDescription,omitempty"`
 
 	// Description: Description of the asset group
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccountAssets: GLAccount for the assets
-	GLAccountAssets *GUID `json:",omitempty"`
+	GLAccountAssets *GUID `json:"GLAccountAssets,omitempty"`
 
 	// GLAccountAssetsCode: Code of the GLAccount for the assets
-	GLAccountAssetsCode *string `json:",omitempty"`
+	GLAccountAssetsCode *string `json:"GLAccountAssetsCode,omitempty"`
 
 	// GLAccountAssetsDescription: Description of the GLAccount for the assets
-	GLAccountAssetsDescription *string `json:",omitempty"`
+	GLAccountAssetsDescription *string `json:"GLAccountAssetsDescription,omitempty"`
 
 	// GLAccountDepreciationBS: GLAccount for depreciation (Balance sheet)
-	GLAccountDepreciationBS *GUID `json:",omitempty"`
+	GLAccountDepreciationBS *GUID `json:"GLAccountDepreciationBS,omitempty"`
 
 	// GLAccountDepreciationBSCode: Code of the GLAccount for depreciation (Balance sheet)
-	GLAccountDepreciationBSCode *string `json:",omitempty"`
+	GLAccountDepreciationBSCode *string `json:"GLAccountDepreciationBSCode,omitempty"`
 
 	// GLAccountDepreciationBSDescription: Description of the GLAccount for depreciation (Balance sheet)
-	GLAccountDepreciationBSDescription *string `json:",omitempty"`
+	GLAccountDepreciationBSDescription *string `json:"GLAccountDepreciationBSDescription,omitempty"`
 
 	// GLAccountDepreciationPL: GLAccount for depreciation (Profit &amp; Loss)
-	GLAccountDepreciationPL *GUID `json:",omitempty"`
+	GLAccountDepreciationPL *GUID `json:"GLAccountDepreciationPL,omitempty"`
 
 	// GLAccountDepreciationPLCode: Code of the GLAccount for depreciation (Profit &amp; Loss)
-	GLAccountDepreciationPLCode *string `json:",omitempty"`
+	GLAccountDepreciationPLCode *string `json:"GLAccountDepreciationPLCode,omitempty"`
 
 	// GLAccountDepreciationPLDescription: Description of the GLAccount for depreciation (Profit &amp; Loss)
-	GLAccountDepreciationPLDescription *string `json:",omitempty"`
+	GLAccountDepreciationPLDescription *string `json:"GLAccountDepreciationPLDescription,omitempty"`
 
 	// GLAccountRevaluationBS: GLAccount for revaluation (Balance sheet)
-	GLAccountRevaluationBS *GUID `json:",omitempty"`
+	GLAccountRevaluationBS *GUID `json:"GLAccountRevaluationBS,omitempty"`
 
 	// GLAccountRevaluationBSCode: Code of the GLAccount for revaluation (Balance sheet)
-	GLAccountRevaluationBSCode *string `json:",omitempty"`
+	GLAccountRevaluationBSCode *string `json:"GLAccountRevaluationBSCode,omitempty"`
 
 	// GLAccountRevaluationBSDescription: Description of the GLAccount for revaluation (Balance sheet)
-	GLAccountRevaluationBSDescription *string `json:",omitempty"`
+	GLAccountRevaluationBSDescription *string `json:"GLAccountRevaluationBSDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *AssetsAssetGroups) GetIdentifier() GUID {
@@ -120,3 +120,22 @@ func (s *AssetsAssetGroupsService) List(ctx context.Context, division int, all b
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AssetGroups enitity, by ID.
+func (s *AssetsAssetGroupsService) Get(ctx context.Context, division int, id GUID) (*AssetsAssetGroups, error) {
+	var entities []*AssetsAssetGroups
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/AssetGroups?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AssetGroups entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

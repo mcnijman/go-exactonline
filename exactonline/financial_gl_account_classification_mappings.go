@@ -23,37 +23,37 @@ type FinancialGLAccountClassificationMappingsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLAccountClassificationMappings
 type FinancialGLAccountClassificationMappings struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Classification: ID of the classification
-	Classification *GUID `json:",omitempty"`
+	Classification *GUID `json:"Classification,omitempty"`
 
 	// ClassificationCode: Code of the classification
-	ClassificationCode *string `json:",omitempty"`
+	ClassificationCode *string `json:"ClassificationCode,omitempty"`
 
 	// ClassificationDescription: Description of the classification
-	ClassificationDescription *string `json:",omitempty"`
+	ClassificationDescription *string `json:"ClassificationDescription,omitempty"`
 
 	// Division: Division of the classification mapping
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: ID of the general ledger account
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode: Code of the general ledger account
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: Description of the general ledger account
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// GLSchemeCode: Code of the general ledger scheme
-	GLSchemeCode *string `json:",omitempty"`
+	GLSchemeCode *string `json:"GLSchemeCode,omitempty"`
 
 	// GLSchemeDescription: Description of the general ledger scheme
-	GLSchemeDescription *string `json:",omitempty"`
+	GLSchemeDescription *string `json:"GLSchemeDescription,omitempty"`
 
 	// GLSchemeID: General ledger scheme ID of the element
-	GLSchemeID *GUID `json:",omitempty"`
+	GLSchemeID *GUID `json:"GLSchemeID,omitempty"`
 }
 
 func (s *FinancialGLAccountClassificationMappings) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *FinancialGLAccountClassificationMappingsService) List(ctx context.Conte
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GLAccountClassificationMappings enitity, by ID.
+func (s *FinancialGLAccountClassificationMappingsService) Get(ctx context.Context, division int, id GUID) (*FinancialGLAccountClassificationMappings, error) {
+	var entities []*FinancialGLAccountClassificationMappings
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GLAccountClassificationMappings entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

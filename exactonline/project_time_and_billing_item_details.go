@@ -23,25 +23,25 @@ type ProjectTimeAndBillingItemDetailsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingItemDetails
 type ProjectTimeAndBillingItemDetails struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Item code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Description: Description of the item code
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions are allowed for quantities of this item
-	IsFractionAllowedItem *bool `json:",omitempty"`
+	IsFractionAllowedItem *bool `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsSalesItem: Indicates if the item can be sold
-	IsSalesItem *bool `json:",omitempty"`
+	IsSalesItem *bool `json:"IsSalesItem,omitempty"`
 
 	// SalesCurrency: Sales currency code
-	SalesCurrency *string `json:",omitempty"`
+	SalesCurrency *string `json:"SalesCurrency,omitempty"`
 
 	// SalesPrice: Sales price
-	SalesPrice *float64 `json:",omitempty"`
+	SalesPrice *float64 `json:"SalesPrice,omitempty"`
 }
 
 func (s *ProjectTimeAndBillingItemDetails) GetIdentifier() GUID {
@@ -63,3 +63,22 @@ func (s *ProjectTimeAndBillingItemDetailsService) List(ctx context.Context, divi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TimeAndBillingItemDetails enitity, by ID.
+func (s *ProjectTimeAndBillingItemDetailsService) Get(ctx context.Context, division int, id GUID) (*ProjectTimeAndBillingItemDetails, error) {
+	var entities []*ProjectTimeAndBillingItemDetails
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingItemDetails?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TimeAndBillingItemDetails entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

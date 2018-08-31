@@ -23,28 +23,28 @@ type DocumentsDocumentTypeFoldersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentTypeFolders
 type DocumentsDocumentTypeFolders struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Date created
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User id of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// DocumentFolder: Folder to which document type is linked
-	DocumentFolder *GUID `json:",omitempty"`
+	DocumentFolder *GUID `json:"DocumentFolder,omitempty"`
 
 	// DocumentType: Code of document type which is linked to folder
-	DocumentType *int `json:",omitempty"`
+	DocumentType *int `json:"DocumentType,omitempty"`
 
 	// Modified: Date Modified
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User id of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 }
 
 func (s *DocumentsDocumentTypeFolders) GetIdentifier() GUID {
@@ -66,3 +66,22 @@ func (s *DocumentsDocumentTypeFoldersService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentTypeFolders enitity, by ID.
+func (s *DocumentsDocumentTypeFoldersService) Get(ctx context.Context, division int, id GUID) (*DocumentsDocumentTypeFolders, error) {
+	var entities []*DocumentsDocumentTypeFolders
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeFolders?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentTypeFolders entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

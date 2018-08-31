@@ -23,94 +23,94 @@ type InventoryItemWarehousesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehouses
 type InventoryItemWarehouses struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// CurrentStock: Quantity that is currently on stock, sales/purchase orders excluded
-	CurrentStock *float64 `json:",omitempty"`
+	CurrentStock *float64 `json:"CurrentStock,omitempty"`
 
 	// DefaultStorageLocation: This is a default storage location
-	DefaultStorageLocation *GUID `json:",omitempty"`
+	DefaultStorageLocation *GUID `json:"DefaultStorageLocation,omitempty"`
 
 	// DefaultStorageLocationCode: Default storage location&#39;s code
-	DefaultStorageLocationCode *string `json:",omitempty"`
+	DefaultStorageLocationCode *string `json:"DefaultStorageLocationCode,omitempty"`
 
 	// DefaultStorageLocationDescription: Default storage location&#39;s description
-	DefaultStorageLocationDescription *string `json:",omitempty"`
+	DefaultStorageLocationDescription *string `json:"DefaultStorageLocationDescription,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Item ID
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemIsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of this item
-	ItemIsFractionAllowedItem *bool `json:",omitempty"`
+	ItemIsFractionAllowedItem *bool `json:"ItemIsFractionAllowedItem,omitempty"`
 
 	// ItemUnit: The standard unit code of this item
-	ItemUnit *string `json:",omitempty"`
+	ItemUnit *string `json:"ItemUnit,omitempty"`
 
 	// ItemUnitDescription: Description of item&#39;s unit
-	ItemUnitDescription *string `json:",omitempty"`
+	ItemUnitDescription *string `json:"ItemUnitDescription,omitempty"`
 
 	// MaximumStock: Maximum number of stock could enter warehouse
-	MaximumStock *float64 `json:",omitempty"`
+	MaximumStock *float64 `json:"MaximumStock,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PlannedStockIn: The quantity still open to be received based on i.e. purchase orders and assembly orders.
-	PlannedStockIn *float64 `json:",omitempty"`
+	PlannedStockIn *float64 `json:"PlannedStockIn,omitempty"`
 
 	// PlannedStockOut: The quantity still open to be delivered based on i.e. sales orders and assembly orders.
-	PlannedStockOut *float64 `json:",omitempty"`
+	PlannedStockOut *float64 `json:"PlannedStockOut,omitempty"`
 
 	// PlanningDetailsUrl: URL of the stock planning details of this record
-	PlanningDetailsUrl *string `json:",omitempty"`
+	PlanningDetailsUrl *string `json:"PlanningDetailsUrl,omitempty"`
 
 	// ProjectedStock: The quantity of stock projected given all planned future stock changes
-	ProjectedStock *float64 `json:",omitempty"`
+	ProjectedStock *float64 `json:"ProjectedStock,omitempty"`
 
 	// ReorderPoint: Reorder point when stock depletes
-	ReorderPoint *float64 `json:",omitempty"`
+	ReorderPoint *float64 `json:"ReorderPoint,omitempty"`
 
 	// ReservedStock: The quantity in a back to back order process which is already received from the purchase order, but not yet delivered for the sales order.
-	ReservedStock *float64 `json:",omitempty"`
+	ReservedStock *float64 `json:"ReservedStock,omitempty"`
 
 	// SafetyStock: Safety stock
-	SafetyStock *float64 `json:",omitempty"`
+	SafetyStock *float64 `json:"SafetyStock,omitempty"`
 
 	// StorageLocationUrl: URL pointing to details of which storage locations this ItemWarehouse&#39;s stock is located
-	StorageLocationUrl *string `json:",omitempty"`
+	StorageLocationUrl *string `json:"StorageLocationUrl,omitempty"`
 
 	// Warehouse: Warehouse ID
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryItemWarehouses) GetIdentifier() GUID {
@@ -132,3 +132,22 @@ func (s *InventoryItemWarehousesService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ItemWarehouses enitity, by ID.
+func (s *InventoryItemWarehousesService) Get(ctx context.Context, division int, id GUID) (*InventoryItemWarehouses, error) {
+	var entities []*InventoryItemWarehouses
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouses?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ItemWarehouses entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,25 +23,25 @@ type OpeningBalanceCurrentYearProcessedService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=OpeningBalanceCurrentYearProcessed
 type OpeningBalanceCurrentYearProcessed struct {
 	// Division: Division code.
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: The balance sheet account.
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// ReportingYear: The reporting year of the opening balance.
-	ReportingYear *int `json:",omitempty"`
+	ReportingYear *int `json:"ReportingYear,omitempty"`
 
 	// Amount: The opening balance amount of the G/L account.
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// BalanceSide: Indicates whether the G/L account is a debit or credit account. D = Debit, C = Credit.
-	BalanceSide *string `json:",omitempty"`
+	BalanceSide *string `json:"BalanceSide,omitempty"`
 
 	// GLAccountCode: The code of the G/L account.
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: The description of the G/L account.
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 }
 
 func (s *OpeningBalanceCurrentYearProcessed) GetIdentifier() int {
@@ -63,3 +63,22 @@ func (s *OpeningBalanceCurrentYearProcessedService) List(ctx context.Context, di
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the CurrentYearProcessed enitity, by Division.
+func (s *OpeningBalanceCurrentYearProcessedService) Get(ctx context.Context, division int, id int) (*OpeningBalanceCurrentYearProcessed, error) {
+	var entities []*OpeningBalanceCurrentYearProcessed
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d CurrentYearProcessed entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

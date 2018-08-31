@@ -23,37 +23,37 @@ type MailboxMailMessageAttachmentsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=MailboxMailMessageAttachments
 type MailboxMailMessageAttachments struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Attachment:
-	Attachment *[]byte `json:",omitempty"`
+	Attachment *[]byte `json:"Attachment,omitempty"`
 
 	// AttachmentFileExtension:
-	AttachmentFileExtension *string `json:",omitempty"`
+	AttachmentFileExtension *string `json:"AttachmentFileExtension,omitempty"`
 
 	// AttachmentFileName:
-	AttachmentFileName *string `json:",omitempty"`
+	AttachmentFileName *string `json:"AttachmentFileName,omitempty"`
 
 	// FileSize:
-	FileSize *int64 `json:",omitempty"`
+	FileSize *int64 `json:"FileSize,omitempty"`
 
 	// MailMessageID:
-	MailMessageID *GUID `json:",omitempty"`
+	MailMessageID *GUID `json:"MailMessageID,omitempty"`
 
 	// RecipientAccount:
-	RecipientAccount *GUID `json:",omitempty"`
+	RecipientAccount *GUID `json:"RecipientAccount,omitempty"`
 
 	// SenderAccount:
-	SenderAccount *GUID `json:",omitempty"`
+	SenderAccount *GUID `json:"SenderAccount,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// Url:
-	Url *string `json:",omitempty"`
+	Url *string `json:"Url,omitempty"`
 }
 
 func (s *MailboxMailMessageAttachments) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *MailboxMailMessageAttachmentsService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the MailMessageAttachments enitity, by ID.
+func (s *MailboxMailMessageAttachmentsService) Get(ctx context.Context, division int, id GUID) (*MailboxMailMessageAttachments, error) {
+	var entities []*MailboxMailMessageAttachments
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d MailMessageAttachments entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

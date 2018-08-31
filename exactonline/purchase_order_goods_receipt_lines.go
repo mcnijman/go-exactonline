@@ -23,94 +23,94 @@ type PurchaseOrderGoodsReceiptLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchaseOrderGoodsReceiptLines
 type PurchaseOrderGoodsReceiptLines struct {
 	// ID: The unique identifier of a stock transaction for a goods receipt line. A goods receipt line can be split into multiple storage locations. In this case, multiple storage locations will have the same stock transaction ID.
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BatchNumbers: Collection of batch numbers
-	BatchNumbers *[]byte `json:",omitempty"`
+	BatchNumbers *[]byte `json:"BatchNumbers,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Goods receipt line description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GoodsReceiptID: All the lines of a goods receipt have the same GoodsReceiptID
-	GoodsReceiptID *GUID `json:",omitempty"`
+	GoodsReceiptID *GUID `json:"GoodsReceiptID,omitempty"`
 
 	// Item: ID of the received item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of the received item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Item description
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemUnitCode: Unit code of the purchase
-	ItemUnitCode *string `json:",omitempty"`
+	ItemUnitCode *string `json:"ItemUnitCode,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Location: ID of the storage location in the warehouse where the item is received
-	Location *GUID `json:",omitempty"`
+	Location *GUID `json:"Location,omitempty"`
 
 	// LocationCode: Code of the storage location in the warehouse where the item is received
-	LocationCode *string `json:",omitempty"`
+	LocationCode *string `json:"LocationCode,omitempty"`
 
 	// LocationDescription: Description of the storage location in the warehouse where the item is received
-	LocationDescription *string `json:",omitempty"`
+	LocationDescription *string `json:"LocationDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Project: Reference to project
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode: Project code
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription: Project description
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// PurchaseOrderID: Reference to purchase order
-	PurchaseOrderID *GUID `json:",omitempty"`
+	PurchaseOrderID *GUID `json:"PurchaseOrderID,omitempty"`
 
 	// PurchaseOrderLineID: ID of the purchase order line that is received
-	PurchaseOrderLineID *GUID `json:",omitempty"`
+	PurchaseOrderLineID *GUID `json:"PurchaseOrderLineID,omitempty"`
 
 	// PurchaseOrderNumber: Order number of the purchase order that is received
-	PurchaseOrderNumber *int `json:",omitempty"`
+	PurchaseOrderNumber *int `json:"PurchaseOrderNumber,omitempty"`
 
 	// QuantityOrdered: Quantity ordered
-	QuantityOrdered *float64 `json:",omitempty"`
+	QuantityOrdered *float64 `json:"QuantityOrdered,omitempty"`
 
 	// QuantityReceived: Quantity received
-	QuantityReceived *float64 `json:",omitempty"`
+	QuantityReceived *float64 `json:"QuantityReceived,omitempty"`
 
 	// SerialNumbers: Collection of serial numbers
-	SerialNumbers *[]byte `json:",omitempty"`
+	SerialNumbers *[]byte `json:"SerialNumbers,omitempty"`
 
 	// SupplierItemCode: Supplier item code
-	SupplierItemCode *string `json:",omitempty"`
+	SupplierItemCode *string `json:"SupplierItemCode,omitempty"`
 }
 
 func (s *PurchaseOrderGoodsReceiptLines) GetIdentifier() GUID {
@@ -132,3 +132,22 @@ func (s *PurchaseOrderGoodsReceiptLinesService) List(ctx context.Context, divisi
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GoodsReceiptLines enitity, by ID.
+func (s *PurchaseOrderGoodsReceiptLinesService) Get(ctx context.Context, division int, id GUID) (*PurchaseOrderGoodsReceiptLines, error) {
+	var entities []*PurchaseOrderGoodsReceiptLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/GoodsReceiptLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GoodsReceiptLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

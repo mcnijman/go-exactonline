@@ -23,22 +23,22 @@ type DocumentsDocumentAttachmentsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentAttachments
 type DocumentsDocumentAttachments struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Attachment:
-	Attachment *[]byte `json:",omitempty"`
+	Attachment *[]byte `json:"Attachment,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// FileName:
-	FileName *string `json:",omitempty"`
+	FileName *string `json:"FileName,omitempty"`
 
 	// FileSize:
-	FileSize *float64 `json:",omitempty"`
+	FileSize *float64 `json:"FileSize,omitempty"`
 
 	// Url:
-	Url *string `json:",omitempty"`
+	Url *string `json:"Url,omitempty"`
 }
 
 func (s *DocumentsDocumentAttachments) GetIdentifier() GUID {
@@ -60,3 +60,22 @@ func (s *DocumentsDocumentAttachmentsService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentAttachments enitity, by ID.
+func (s *DocumentsDocumentAttachmentsService) Get(ctx context.Context, division int, id GUID) (*DocumentsDocumentAttachments, error) {
+	var entities []*DocumentsDocumentAttachments
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentAttachments entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

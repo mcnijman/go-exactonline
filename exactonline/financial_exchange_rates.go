@@ -23,46 +23,46 @@ type FinancialExchangeRatesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialExchangeRates
 type FinancialExchangeRates struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Rate: The exchange rate is stored as 1 TARGET CURRENCY = x SOURCE CURRENCY
-	Rate *float64 `json:",omitempty"`
+	Rate *float64 `json:"Rate,omitempty"`
 
 	// SourceCurrency: The foreign currency
-	SourceCurrency *string `json:",omitempty"`
+	SourceCurrency *string `json:"SourceCurrency,omitempty"`
 
 	// SourceCurrencyDescription: Description of SourceCurrency
-	SourceCurrencyDescription *string `json:",omitempty"`
+	SourceCurrencyDescription *string `json:"SourceCurrencyDescription,omitempty"`
 
 	// StartDate: The date as of which the rate is valid. The rate is valid until a next rate is defined
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// TargetCurrency: The default currency of the division
-	TargetCurrency *string `json:",omitempty"`
+	TargetCurrency *string `json:"TargetCurrency,omitempty"`
 
 	// TargetCurrencyDescription: Description of TargetCurrency
-	TargetCurrencyDescription *string `json:",omitempty"`
+	TargetCurrencyDescription *string `json:"TargetCurrencyDescription,omitempty"`
 }
 
 func (s *FinancialExchangeRates) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *FinancialExchangeRatesService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ExchangeRates enitity, by ID.
+func (s *FinancialExchangeRatesService) Get(ctx context.Context, division int, id GUID) (*FinancialExchangeRates, error) {
+	var entities []*FinancialExchangeRates
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ExchangeRates?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ExchangeRates entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

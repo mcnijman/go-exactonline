@@ -23,106 +23,106 @@ type ProjectProjectPlanningService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectPlanning
 type ProjectProjectPlanning struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode:
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// BGTStatus:
-	BGTStatus *int `json:",omitempty"`
+	BGTStatus *int `json:"BGTStatus,omitempty"`
 
 	// CommunicationErrorStatus:
-	CommunicationErrorStatus *int `json:",omitempty"`
+	CommunicationErrorStatus *int `json:"CommunicationErrorStatus,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee:
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// EmployeeCode:
-	EmployeeCode *string `json:",omitempty"`
+	EmployeeCode *string `json:"EmployeeCode,omitempty"`
 
 	// EmployeeHID:
-	EmployeeHID *int `json:",omitempty"`
+	EmployeeHID *int `json:"EmployeeHID,omitempty"`
 
 	// EndDate:
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// Hours:
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// HourType:
-	HourType *GUID `json:",omitempty"`
+	HourType *GUID `json:"HourType,omitempty"`
 
 	// HourTypeCode:
-	HourTypeCode *string `json:",omitempty"`
+	HourTypeCode *string `json:"HourTypeCode,omitempty"`
 
 	// HourTypeDescription:
-	HourTypeDescription *string `json:",omitempty"`
+	HourTypeDescription *string `json:"HourTypeDescription,omitempty"`
 
 	// IsBrokenRecurrence:
-	IsBrokenRecurrence *bool `json:",omitempty"`
+	IsBrokenRecurrence *bool `json:"IsBrokenRecurrence,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OverAllocate:
-	OverAllocate *bool `json:",omitempty"`
+	OverAllocate *bool `json:"OverAllocate,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// ProjectPlanningRecurring:
-	ProjectPlanningRecurring *GUID `json:",omitempty"`
+	ProjectPlanningRecurring *GUID `json:"ProjectPlanningRecurring,omitempty"`
 
 	// ProjectWBS:
-	ProjectWBS *GUID `json:",omitempty"`
+	ProjectWBS *GUID `json:"ProjectWBS,omitempty"`
 
 	// ProjectWBSDescription:
-	ProjectWBSDescription *string `json:",omitempty"`
+	ProjectWBSDescription *string `json:"ProjectWBSDescription,omitempty"`
 
 	// StartDate:
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *ProjectProjectPlanning) GetIdentifier() GUID {
@@ -144,3 +144,22 @@ func (s *ProjectProjectPlanningService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProjectPlanning enitity, by ID.
+func (s *ProjectProjectPlanningService) Get(ctx context.Context, division int, id GUID) (*ProjectProjectPlanning, error) {
+	var entities []*ProjectProjectPlanning
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProjectPlanning entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,127 +23,127 @@ type VATVATCodesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=VATVATCodes
 type VATVATCodes struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: Tax account
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode: Code of Account
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName: Name of Account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// CalculationBasis: Indicates how to calculate the tax. 0 = based on the gross amount, 1 = based on the gross amount &#43; another tax
-	CalculationBasis *byte `json:",omitempty"`
+	CalculationBasis *byte `json:"CalculationBasis,omitempty"`
 
 	// Charged: Indicates if transactions using the VAT code are transactions of the domestic VAT charging regulation (such as those for subcontractors) or transactions that are registered within the EU. If Charged=1 and linked to a purchase invoice, both a line for the VAT to pay and a line for the VAT to claim are being created
-	Charged *bool `json:",omitempty"`
+	Charged *bool `json:"Charged,omitempty"`
 
 	// Code: VAT code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Country: Obsolete
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the VAT code
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EUSalesListing: Used in all legislations except France. Indicates if and how transactions using the VAT code appear on the ICT return (EU sales list). L = Listing goods, N = No listing, S = Listing services, T = Triangulation
-	EUSalesListing *string `json:",omitempty"`
+	EUSalesListing *string `json:"EUSalesListing,omitempty"`
 
 	// GLDiscountPurchase: Indicates the purchase discount GL account linked to the VAT codes for German legislation
-	GLDiscountPurchase *GUID `json:",omitempty"`
+	GLDiscountPurchase *GUID `json:"GLDiscountPurchase,omitempty"`
 
 	// GLDiscountPurchaseCode: Code of GLDiscountPurchase
-	GLDiscountPurchaseCode *string `json:",omitempty"`
+	GLDiscountPurchaseCode *string `json:"GLDiscountPurchaseCode,omitempty"`
 
 	// GLDiscountPurchaseDescription: Description of GLDiscountPurchase
-	GLDiscountPurchaseDescription *string `json:",omitempty"`
+	GLDiscountPurchaseDescription *string `json:"GLDiscountPurchaseDescription,omitempty"`
 
 	// GLDiscountSales: Indicates the sales discount GL account linked to the VAT codes for German legislation
-	GLDiscountSales *GUID `json:",omitempty"`
+	GLDiscountSales *GUID `json:"GLDiscountSales,omitempty"`
 
 	// GLDiscountSalesCode: Code of GLDiscountSales
-	GLDiscountSalesCode *string `json:",omitempty"`
+	GLDiscountSalesCode *string `json:"GLDiscountSalesCode,omitempty"`
 
 	// GLDiscountSalesDescription: Description of GLDiscountSales
-	GLDiscountSalesDescription *string `json:",omitempty"`
+	GLDiscountSalesDescription *string `json:"GLDiscountSalesDescription,omitempty"`
 
 	// GLToClaim: G/L account that is used to book the VAT to claim. If you enter purchases with a VAT code, the VAT amount to be claimed is entered to this VAT account. Must be of type VAT
-	GLToClaim *GUID `json:",omitempty"`
+	GLToClaim *GUID `json:"GLToClaim,omitempty"`
 
 	// GLToClaimCode: Code of GLToClaim
-	GLToClaimCode *string `json:",omitempty"`
+	GLToClaimCode *string `json:"GLToClaimCode,omitempty"`
 
 	// GLToClaimDescription: Description of GLToClaim
-	GLToClaimDescription *string `json:",omitempty"`
+	GLToClaimDescription *string `json:"GLToClaimDescription,omitempty"`
 
 	// GLToPay: G/L account that is used to book the VAT to pay. If you enter sales with a VAT code, the VAT amount to be paid is entered to this VAT account. Must be of type VAT
-	GLToPay *GUID `json:",omitempty"`
+	GLToPay *GUID `json:"GLToPay,omitempty"`
 
 	// GLToPayCode: Code of GLToPay
-	GLToPayCode *string `json:",omitempty"`
+	GLToPayCode *string `json:"GLToPayCode,omitempty"`
 
 	// GLToPayDescription: Description of GLToPay
-	GLToPayDescription *string `json:",omitempty"`
+	GLToPayDescription *string `json:"GLToPayDescription,omitempty"`
 
 	// IntraStat: Used in all legislations except France. Indicates if intrastat is used
-	IntraStat *bool `json:",omitempty"`
+	IntraStat *bool `json:"IntraStat,omitempty"`
 
 	// IntrastatType: Used in France legislation only. Indicates if and how transactions using the VAT code appear on the DEB/DES return. L = Goods, N = Empty, S = Services
-	IntrastatType *string `json:",omitempty"`
+	IntrastatType *string `json:"IntrastatType,omitempty"`
 
 	// IsBlocked: Indicates if the VAT code may still be used
-	IsBlocked *bool `json:",omitempty"`
+	IsBlocked *bool `json:"IsBlocked,omitempty"`
 
 	// LegalText: Legal description for VAT code to print in the total block of the invoice
-	LegalText *string `json:",omitempty"`
+	LegalText *string `json:"LegalText,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: User name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Percentage: Percentage of the VAT code
-	Percentage *float64 `json:",omitempty"`
+	Percentage *float64 `json:"Percentage,omitempty"`
 
 	// TaxReturnType: Indicates what type of Taxcode it is: can be VAT, IncomeTax
-	TaxReturnType *int `json:",omitempty"`
+	TaxReturnType *int `json:"TaxReturnType,omitempty"`
 
 	// Type: Indicates how the VAT amount should be calculated in relation to the invoice amount. B = VAT 0% (Only base amount), E = Excluding, I = Including, N = No VAT
-	Type *string `json:",omitempty"`
+	Type *string `json:"Type,omitempty"`
 
 	// VatDocType: Field in VAT code maintenance to calculate different VATs depending on the selected document type. P = purchase invoice, F = freelance invoice, E = expense voucher. The field is valid for witholding tax type
-	VatDocType *string `json:",omitempty"`
+	VatDocType *string `json:"VatDocType,omitempty"`
 
 	// VatMargin: The VAT margin scheme is used for the trade of secondhand goods which are purchased without VAT (for example when a company buys a secondhand good from a private person). In the VAT margin scheme, the VAT is not calculated based on the sales price. Instead of that, the VAT is calculated based on the margin (gross sales price minus the gross purchase price)
-	VatMargin *byte `json:",omitempty"`
+	VatMargin *byte `json:"VatMargin,omitempty"`
 
 	// VATPartialRatio: Partial ratio explains which part of the VAT the company has to pay. Used in some branches where the sellers have a bad reputation, so the buyers have to take over the VAT-liability
-	VATPartialRatio *int `json:",omitempty"`
+	VATPartialRatio *int `json:"VATPartialRatio,omitempty"`
 
 	// VATPercentages: VAT percentages. You can have several VAT percentages, with start and end dates
-	VATPercentages *[]byte `json:",omitempty"`
+	VATPercentages *[]byte `json:"VATPercentages,omitempty"`
 
 	// VATTransactionType: Indicates the type of transactions for which the VAT code may be used. B = Both, P = Purchase, S = Sales
-	VATTransactionType *string `json:",omitempty"`
+	VATTransactionType *string `json:"VATTransactionType,omitempty"`
 }
 
 func (s *VATVATCodes) GetIdentifier() GUID {
@@ -165,3 +165,22 @@ func (s *VATVATCodesService) List(ctx context.Context, division int, all bool) (
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the VATCodes enitity, by ID.
+func (s *VATVATCodesService) Get(ctx context.Context, division int, id GUID) (*VATVATCodes, error) {
+	var entities []*VATVATCodes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d VATCodes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

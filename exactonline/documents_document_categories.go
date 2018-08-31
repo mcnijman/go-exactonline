@@ -23,16 +23,16 @@ type DocumentsDocumentCategoriesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentCategories
 type DocumentsDocumentCategories struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Description: Document category description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 }
 
 func (s *DocumentsDocumentCategories) GetIdentifier() GUID {
@@ -54,3 +54,22 @@ func (s *DocumentsDocumentCategoriesService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentCategories enitity, by ID.
+func (s *DocumentsDocumentCategoriesService) Get(ctx context.Context, division int, id GUID) (*DocumentsDocumentCategories, error) {
+	var entities []*DocumentsDocumentCategories
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentCategories?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentCategories entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,34 +23,34 @@ type AccountancyTaskTypesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AccountancyTaskTypes
 type AccountancyTaskTypes struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Name of the task type
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DescriptionTermID: Term ID of the task type
-	DescriptionTermID *int `json:",omitempty"`
+	DescriptionTermID *int `json:"DescriptionTermID,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
 func (s *AccountancyTaskTypes) GetIdentifier() GUID {
@@ -72,3 +72,22 @@ func (s *AccountancyTaskTypesService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TaskTypes enitity, by ID.
+func (s *AccountancyTaskTypesService) Get(ctx context.Context, division int, id GUID) (*AccountancyTaskTypes, error) {
+	var entities []*AccountancyTaskTypes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/TaskTypes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TaskTypes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

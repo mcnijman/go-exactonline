@@ -23,25 +23,25 @@ type CRMAddressStatesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMAddressStates
 type CRMAddressStates struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Country: Country code
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// DisplayValue: Description of state prefixed with the code
-	DisplayValue *string `json:",omitempty"`
+	DisplayValue *string `json:"DisplayValue,omitempty"`
 
 	// Latitude: Latitude
-	Latitude *float64 `json:",omitempty"`
+	Latitude *float64 `json:"Latitude,omitempty"`
 
 	// Longitude: Longitude
-	Longitude *float64 `json:",omitempty"`
+	Longitude *float64 `json:"Longitude,omitempty"`
 
 	// Name: State name
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// State: State code
-	State *string `json:",omitempty"`
+	State *string `json:"State,omitempty"`
 }
 
 func (s *CRMAddressStates) GetIdentifier() GUID {
@@ -63,3 +63,22 @@ func (s *CRMAddressStatesService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AddressStates enitity, by ID.
+func (s *CRMAddressStatesService) Get(ctx context.Context, division int, id GUID) (*CRMAddressStates, error) {
+	var entities []*CRMAddressStates
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/AddressStates?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AddressStates entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

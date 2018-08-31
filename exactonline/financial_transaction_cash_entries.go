@@ -23,49 +23,49 @@ type FinancialTransactionCashEntriesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialTransactionCashEntries
 type FinancialTransactionCashEntries struct {
 	// EntryID:
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// CashEntryLines:
-	CashEntryLines *[]byte `json:",omitempty"`
+	CashEntryLines *[]byte `json:"CashEntryLines,omitempty"`
 
 	// ClosingBalanceFC:
-	ClosingBalanceFC *float64 `json:",omitempty"`
+	ClosingBalanceFC *float64 `json:"ClosingBalanceFC,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryNumber:
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// FinancialPeriod:
-	FinancialPeriod *int `json:",omitempty"`
+	FinancialPeriod *int `json:"FinancialPeriod,omitempty"`
 
 	// FinancialYear:
-	FinancialYear *int `json:",omitempty"`
+	FinancialYear *int `json:"FinancialYear,omitempty"`
 
 	// JournalCode:
-	JournalCode *string `json:",omitempty"`
+	JournalCode *string `json:"JournalCode,omitempty"`
 
 	// JournalDescription:
-	JournalDescription *string `json:",omitempty"`
+	JournalDescription *string `json:"JournalDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// OpeningBalanceFC:
-	OpeningBalanceFC *float64 `json:",omitempty"`
+	OpeningBalanceFC *float64 `json:"OpeningBalanceFC,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
 func (s *FinancialTransactionCashEntries) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *FinancialTransactionCashEntriesService) List(ctx context.Context, divis
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the CashEntries enitity, by EntryID.
+func (s *FinancialTransactionCashEntriesService) Get(ctx context.Context, division int, id GUID) (*FinancialTransactionCashEntries, error) {
+	var entities []*FinancialTransactionCashEntries
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntries?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d CashEntries entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

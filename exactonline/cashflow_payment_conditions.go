@@ -23,70 +23,70 @@ type CashflowPaymentConditionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowPaymentConditions
 type CashflowPaymentConditions struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the payment condition
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// CreditManagementScenario: Default credit management scenario to be used for new payment terms
-	CreditManagementScenario *GUID `json:",omitempty"`
+	CreditManagementScenario *GUID `json:"CreditManagementScenario,omitempty"`
 
 	// CreditManagementScenarioCode: Code of CreditManagementScenario
-	CreditManagementScenarioCode *string `json:",omitempty"`
+	CreditManagementScenarioCode *string `json:"CreditManagementScenarioCode,omitempty"`
 
 	// CreditManagementScenarioDescription: Description of CreditManagementScenario
-	CreditManagementScenarioDescription *string `json:",omitempty"`
+	CreditManagementScenarioDescription *string `json:"CreditManagementScenarioDescription,omitempty"`
 
 	// Description: Description of the payment condition
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DiscountCalculation: Indicates how the discount amount is calculated. Values: E = Excluding VAT, I = Including VAT
-	DiscountCalculation *string `json:",omitempty"`
+	DiscountCalculation *string `json:"DiscountCalculation,omitempty"`
 
 	// DiscountPaymentDays: Number of days to pay within, to have the right to take the discount
-	DiscountPaymentDays *int `json:",omitempty"`
+	DiscountPaymentDays *int `json:"DiscountPaymentDays,omitempty"`
 
 	// DiscountPercentage: Discount percentage
-	DiscountPercentage *float64 `json:",omitempty"`
+	DiscountPercentage *float64 `json:"DiscountPercentage,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PaymentDays: Number of days to be included in the due date calculation. Example: invoice date = 17/01 PaymentEndOfMonths = 2 =&gt; 31/03 PaymentDays = 15 =&gt; 15/04
-	PaymentDays *int `json:",omitempty"`
+	PaymentDays *int `json:"PaymentDays,omitempty"`
 
 	// PaymentDiscountType: Type of payment discount. Values: B = Settlement discount, K = Credit surcharge
-	PaymentDiscountType *string `json:",omitempty"`
+	PaymentDiscountType *string `json:"PaymentDiscountType,omitempty"`
 
 	// PaymentEndOfMonths: Number of month endings to be included in the due date calculation
-	PaymentEndOfMonths *int `json:",omitempty"`
+	PaymentEndOfMonths *int `json:"PaymentEndOfMonths,omitempty"`
 
 	// PaymentMethod: Method of payment. Values: B = On credit, I = Collection, K = Cash
-	PaymentMethod *string `json:",omitempty"`
+	PaymentMethod *string `json:"PaymentMethod,omitempty"`
 
 	// Percentage: Percentage (stored as fraction) of total invoice amount
-	Percentage *float64 `json:",omitempty"`
+	Percentage *float64 `json:"Percentage,omitempty"`
 
 	// VATCalculation: Indicates how the VAT amount is calculated Values: E = Excluding discount, I = Including discount
-	VATCalculation *string `json:",omitempty"`
+	VATCalculation *string `json:"VATCalculation,omitempty"`
 }
 
 func (s *CashflowPaymentConditions) GetIdentifier() GUID {
@@ -108,3 +108,22 @@ func (s *CashflowPaymentConditionsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the PaymentConditions enitity, by ID.
+func (s *CashflowPaymentConditionsService) Get(ctx context.Context, division int, id GUID) (*CashflowPaymentConditions, error) {
+	var entities []*CashflowPaymentConditions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/PaymentConditions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d PaymentConditions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

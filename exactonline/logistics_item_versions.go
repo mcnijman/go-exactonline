@@ -23,67 +23,67 @@ type LogisticsItemVersionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsItemVersions
 type LogisticsItemVersions struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BatchQuantity: Batch Quantity of Item Version
-	BatchQuantity *float64 `json:",omitempty"`
+	BatchQuantity *float64 `json:"BatchQuantity,omitempty"`
 
 	// CalculatedCostPrice: Calculated Cost Price of Item Version
-	CalculatedCostPrice *float64 `json:",omitempty"`
+	CalculatedCostPrice *float64 `json:"CalculatedCostPrice,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the item version
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// IsDefault: Indicates if this is the default item version that will be assigned when a item is selected
-	IsDefault *byte `json:",omitempty"`
+	IsDefault *byte `json:"IsDefault,omitempty"`
 
 	// Item: Reference to Items table
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// LeadTime: Lead time of Item version
-	LeadTime *int `json:",omitempty"`
+	LeadTime *int `json:"LeadTime,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Line notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Status: Statuses of Item version: 10-Engineering change pending, 20-Engineering change approved, 30-Active &amp; 40-Historic
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription: Description of Status
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// Type: Type of Item version: 10-Sales bill of material, 20-Manufacturing recipe
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription: Description of Type
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// VersionNumber: Version Number
-	VersionNumber *int `json:",omitempty"`
+	VersionNumber *int `json:"VersionNumber,omitempty"`
 }
 
 func (s *LogisticsItemVersions) GetIdentifier() GUID {
@@ -105,3 +105,22 @@ func (s *LogisticsItemVersionsService) List(ctx context.Context, division int, a
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ItemVersions enitity, by ID.
+func (s *LogisticsItemVersionsService) Get(ctx context.Context, division int, id GUID) (*LogisticsItemVersions, error) {
+	var entities []*LogisticsItemVersions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/ItemVersions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ItemVersions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

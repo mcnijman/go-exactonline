@@ -23,79 +23,79 @@ type BudgetBudgetsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BudgetBudgets
 type BudgetBudgets struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AmountDC: Budget amount (always in the default currency of the company)
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// BudgetScenario: Budget scenario
-	BudgetScenario *GUID `json:",omitempty"`
+	BudgetScenario *GUID `json:"BudgetScenario,omitempty"`
 
 	// BudgetScenarioCode: Code of BudgetScenario
-	BudgetScenarioCode *string `json:",omitempty"`
+	BudgetScenarioCode *string `json:"BudgetScenarioCode,omitempty"`
 
 	// BudgetScenarioDescription: Description of BudgetScenario
-	BudgetScenarioDescription *string `json:",omitempty"`
+	BudgetScenarioDescription *string `json:"BudgetScenarioDescription,omitempty"`
 
 	// Costcenter: Used for cost center-specific budgets - NULL otherwise
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription: Description of Costcenter
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit: Used for cost unit-specific budgets - NULL otherwise
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription: Description of Costunit
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: G/L account
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode: Code of GLAccount
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: Description of GLAccount
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// HID: Numerical ID. Never displayed to the user, but it may have its use for performance reasons
-	HID *int64 `json:",omitempty"`
+	HID *int64 `json:"HID,omitempty"`
 
 	// Item: Used for item-specific budgets - NULL otherwise
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of Item
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// ReportingPeriod: Period (combined with financial year)
-	ReportingPeriod *int `json:",omitempty"`
+	ReportingPeriod *int `json:"ReportingPeriod,omitempty"`
 
 	// ReportingYear: Financial year
-	ReportingYear *int `json:",omitempty"`
+	ReportingYear *int `json:"ReportingYear,omitempty"`
 }
 
 func (s *BudgetBudgets) GetIdentifier() GUID {
@@ -117,3 +117,22 @@ func (s *BudgetBudgetsService) List(ctx context.Context, division int, all bool)
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Budgets enitity, by ID.
+func (s *BudgetBudgetsService) Get(ctx context.Context, division int, id GUID) (*BudgetBudgets, error) {
+	var entities []*BudgetBudgets
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/budget/Budgets?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Budgets entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

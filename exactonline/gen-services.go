@@ -45,6 +45,7 @@ var (
 
 type property struct {
 	Name         string
+	OriginalName string
 	Description  []string
 	OriginalType string
 	Type         string
@@ -160,7 +161,8 @@ func getEndpointProperties(endpoint *endpoint) {
 
 		desc := strings.TrimSpace(s.Parent().Parent().Children().Eq(5).Text())
 		properties = append(properties, property{
-			Name:         name,
+			OriginalName: name,
+			Name:         strings.Title(name),
 			OriginalType: t,
 			Type:         nt,
 			Description:  strings.Split(desc, "\n"),
@@ -299,7 +301,7 @@ type {{.EntityName}} struct {
 	{{- range $i, $e := .Description -}}
 	{{if $i}} //{{end}} {{ $e }}
 	{{- end}}
-	{{.Name}} *{{.Type}}  ` + "`" + `json:",omitempty"` + "`" + `
+	{{.Name}} *{{.Type}}  ` + "`" + `json:"{{.OriginalName}},omitempty"` + "`" + `
 	{{end -}}
 {{end}}
 }

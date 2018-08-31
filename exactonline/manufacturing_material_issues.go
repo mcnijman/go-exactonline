@@ -23,94 +23,94 @@ type ManufacturingMaterialIssuesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingMaterialIssues
 type ManufacturingMaterialIssues struct {
 	// StockTransactionId: ID of stock transaction related to this material issue
-	StockTransactionId *GUID `json:",omitempty"`
+	StockTransactionId *GUID `json:"StockTransactionId,omitempty"`
 
 	// CreatedBy: ID of creating user
-	CreatedBy *GUID `json:",omitempty"`
+	CreatedBy *GUID `json:"CreatedBy,omitempty"`
 
 	// CreatedByFullName: Name of the creating user
-	CreatedByFullName *string `json:",omitempty"`
+	CreatedByFullName *string `json:"CreatedByFullName,omitempty"`
 
 	// CreatedDate: Date this material issue was created
-	CreatedDate *Date `json:",omitempty"`
+	CreatedDate *Date `json:"CreatedDate,omitempty"`
 
 	// DraftStockTransactionID: Serial or batch numbers are reserved prior to a POST to MaterialIssues. This DraftStockTransactionID represents the group of serial or batch numbers to be used in this transaction.
-	DraftStockTransactionID *GUID `json:",omitempty"`
+	DraftStockTransactionID *GUID `json:"DraftStockTransactionID,omitempty"`
 
 	// HasReversibleQuantity: Indicates if this MaterialIssue has a quantity eligible to be reversed via MaterialReversals
-	HasReversibleQuantity *bool `json:",omitempty"`
+	HasReversibleQuantity *bool `json:"HasReversibleQuantity,omitempty"`
 
 	// IsBackflush: Boolean indicating if this material issue was the result of shop order backflushing
-	IsBackflush *byte `json:",omitempty"`
+	IsBackflush *byte `json:"IsBackflush,omitempty"`
 
 	// IsBatch: Does the material issue&#39;s item use batch numbers
-	IsBatch *byte `json:",omitempty"`
+	IsBatch *byte `json:"IsBatch,omitempty"`
 
 	// IsFractionAllowedItem: Indicates if fractions (for example 0.35) are allowed for quantities of the material issue&#39;s item
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsIssueFromChild: Boolean indicating if this material issue was an issue to a parent shop order
-	IsIssueFromChild *byte `json:",omitempty"`
+	IsIssueFromChild *byte `json:"IsIssueFromChild,omitempty"`
 
 	// IsSerial: Does the material issue&#39;s item use serial numbers
-	IsSerial *byte `json:",omitempty"`
+	IsSerial *byte `json:"IsSerial,omitempty"`
 
 	// Item: Item issued
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of item issued
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of item issued
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: Picture url of item issued
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// Note: Notes logged with this material issue
-	Note *string `json:",omitempty"`
+	Note *string `json:"Note,omitempty"`
 
 	// Quantity: Quantity of this material issue
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// RelatedStockTransaction: If this transaction was part of a SubOrderReceipt, this ID is the related ShopOrderReceipt.StockTransactionID.
-	RelatedStockTransaction *GUID `json:",omitempty"`
+	RelatedStockTransaction *GUID `json:"RelatedStockTransaction,omitempty"`
 
 	// ShopOrder: ID of shop order issued to
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// ShopOrderMaterialPlan: ID of shop order material plan
-	ShopOrderMaterialPlan *GUID `json:",omitempty"`
+	ShopOrderMaterialPlan *GUID `json:"ShopOrderMaterialPlan,omitempty"`
 
 	// ShopOrderNumber: Number of shop order issued to
-	ShopOrderNumber *int `json:",omitempty"`
+	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
 
 	// StorageLocation: ID of storage location issued from
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Code of storage location issued from
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Description of storage location issued from
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// TransactionDate: Effective date of this material issue
-	TransactionDate *Date `json:",omitempty"`
+	TransactionDate *Date `json:"TransactionDate,omitempty"`
 
 	// Unit: Unit of measurement abbreviation of item issued
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit of measurement of item issued
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// Warehouse: ID of warehouse issued from
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of warehouse issued from
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of warehouse issued from
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *ManufacturingMaterialIssues) GetIdentifier() GUID {
@@ -132,3 +132,22 @@ func (s *ManufacturingMaterialIssuesService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the MaterialIssues enitity, by StockTransactionId.
+func (s *ManufacturingMaterialIssuesService) Get(ctx context.Context, division int, id GUID) (*ManufacturingMaterialIssues, error) {
+	var entities []*ManufacturingMaterialIssues
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/MaterialIssues?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d MaterialIssues entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

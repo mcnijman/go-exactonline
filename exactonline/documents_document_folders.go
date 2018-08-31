@@ -23,37 +23,37 @@ type DocumentsDocumentFoldersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentFolders
 type DocumentsDocumentFolders struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Document folder code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Document folder description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// ParentFolder: Document folder parent folder ID
-	ParentFolder *GUID `json:",omitempty"`
+	ParentFolder *GUID `json:"ParentFolder,omitempty"`
 }
 
 func (s *DocumentsDocumentFolders) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *DocumentsDocumentFoldersService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the DocumentFolders enitity, by ID.
+func (s *DocumentsDocumentFoldersService) Get(ctx context.Context, division int, id GUID) (*DocumentsDocumentFolders, error) {
+	var entities []*DocumentsDocumentFolders
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d DocumentFolders entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

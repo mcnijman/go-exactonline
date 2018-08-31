@@ -23,46 +23,46 @@ type InventoryItemWarehouseStorageLocationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehouseStorageLocations
 type InventoryItemWarehouseStorageLocations struct {
 	// ID: Uniquely identifies the item, warehouse, storage location combination
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// IsFractionAllowedItem: Does the item allow partial quantities (1.75 meters)
-	IsFractionAllowedItem *byte `json:",omitempty"`
+	IsFractionAllowedItem *byte `json:"IsFractionAllowedItem,omitempty"`
 
 	// Item: Item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Code of the item of this stock quantity
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of the item of this stock quantity
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemUnit: Unit of the item
-	ItemUnit *string `json:",omitempty"`
+	ItemUnit *string `json:"ItemUnit,omitempty"`
 
 	// ItemUnitDescription: Unit description of the item
-	ItemUnitDescription *string `json:",omitempty"`
+	ItemUnitDescription *string `json:"ItemUnitDescription,omitempty"`
 
 	// Stock: Number of items in stock
-	Stock *float64 `json:",omitempty"`
+	Stock *float64 `json:"Stock,omitempty"`
 
 	// StorageLocation: Storage location of this stock
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Code of the storage location of this stock quantity
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Description of the storage location of this stock quantity
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 
 	// Warehouse: ID of Warehouse
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of the warehouse of this stock quantity
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of the warehouse of this stock quantity
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryItemWarehouseStorageLocations) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *InventoryItemWarehouseStorageLocationsService) List(ctx context.Context
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ItemWarehouseStorageLocations enitity, by ID.
+func (s *InventoryItemWarehouseStorageLocationsService) Get(ctx context.Context, division int, id GUID) (*InventoryItemWarehouseStorageLocations, error) {
+	var entities []*InventoryItemWarehouseStorageLocations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouseStorageLocations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ItemWarehouseStorageLocations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

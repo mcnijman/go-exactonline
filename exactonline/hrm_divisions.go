@@ -23,94 +23,94 @@ type HRMDivisionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMDivisions
 type HRMDivisions struct {
 	// Code: Primary key
-	Code *int `json:",omitempty"`
+	Code *int `json:"Code,omitempty"`
 
 	// BlockingStatus: Values: 0 = Not blocked 1 = Backup 2 = Conversion busy 3 = Conversion shadow 4 = Conversion waiting 5 = Copy data waiting 6 = Copy data buzy 100 = Wait for deletion 101 = Deleted 102 = Deletion failed
-	BlockingStatus *int `json:",omitempty"`
+	BlockingStatus *int `json:"BlockingStatus,omitempty"`
 
 	// Class_01: First division classification. User should have access rights to view division classifications.
-	Class_01 *[]byte `json:",omitempty"`
+	Class_01 *[]byte `json:"Class_01,omitempty"`
 
 	// Class_02: Second division classification. User should have access rights to view division classifications.
-	Class_02 *[]byte `json:",omitempty"`
+	Class_02 *[]byte `json:"Class_02,omitempty"`
 
 	// Class_03: Third division classification. User should have access rights to view division classifications.
-	Class_03 *[]byte `json:",omitempty"`
+	Class_03 *[]byte `json:"Class_03,omitempty"`
 
 	// Class_04: Fourth division classification. User should have access rights to view division classifications.
-	Class_04 *[]byte `json:",omitempty"`
+	Class_04 *[]byte `json:"Class_04,omitempty"`
 
 	// Class_05: Fifth division classification. User should have access rights to view division classifications.
-	Class_05 *[]byte `json:",omitempty"`
+	Class_05 *[]byte `json:"Class_05,omitempty"`
 
 	// Country: Country of the division. Is used for determination of legislation
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// CountryDescription: Description of Country
-	CountryDescription *string `json:",omitempty"`
+	CountryDescription *string `json:"CountryDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Default currency of the division
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// CurrencyDescription: Description of Currency
-	CurrencyDescription *string `json:",omitempty"`
+	CurrencyDescription *string `json:"CurrencyDescription,omitempty"`
 
 	// Customer: Owner account of the division
-	Customer *GUID `json:",omitempty"`
+	Customer *GUID `json:"Customer,omitempty"`
 
 	// CustomerCode: Owner account code of the division
-	CustomerCode *string `json:",omitempty"`
+	CustomerCode *string `json:"CustomerCode,omitempty"`
 
 	// CustomerName: Owner account name of the division
-	CustomerName *string `json:",omitempty"`
+	CustomerName *string `json:"CustomerName,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// HID: Number that customers give to the division
-	HID *int64 `json:",omitempty"`
+	HID *int64 `json:"HID,omitempty"`
 
 	// Main: True for the main (hosting) division
-	Main *bool `json:",omitempty"`
+	Main *bool `json:"Main,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// SiretNumber: Siret Number of the division (France)
-	SiretNumber *string `json:",omitempty"`
+	SiretNumber *string `json:"SiretNumber,omitempty"`
 
 	// StartDate: Date on which the division becomes active
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Status: Regular administrations will have status 0.  Currently, the only other possibility is &#39;archived&#39; (1), which means the administration is not actively used, but still needs to be accessible for the customer/accountant to meet legal obligations
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// TaxOfficeNumber: Number of your local tax authority (Germany)
-	TaxOfficeNumber *string `json:",omitempty"`
+	TaxOfficeNumber *string `json:"TaxOfficeNumber,omitempty"`
 
 	// TaxReferenceNumber: Local tax reference number (Germany)
-	TaxReferenceNumber *string `json:",omitempty"`
+	TaxReferenceNumber *string `json:"TaxReferenceNumber,omitempty"`
 
 	// VATNumber: VAT number
-	VATNumber *string `json:",omitempty"`
+	VATNumber *string `json:"VATNumber,omitempty"`
 
 	// Website: Customer value, hyperlink to external website
-	Website *string `json:",omitempty"`
+	Website *string `json:"Website,omitempty"`
 }
 
 func (s *HRMDivisions) GetIdentifier() int {
@@ -132,3 +132,22 @@ func (s *HRMDivisionsService) List(ctx context.Context, division int, all bool) 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Divisions enitity, by Code.
+func (s *HRMDivisionsService) Get(ctx context.Context, division int, id int) (*HRMDivisions, error) {
+	var entities []*HRMDivisions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Divisions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Divisions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

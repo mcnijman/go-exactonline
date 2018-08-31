@@ -23,52 +23,52 @@ type ContinuousMonitoringIndicatorDifferentVatCodesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorDifferentVatCodes
 type ContinuousMonitoringIndicatorDifferentVatCodes struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Indicates if this indicator is active or inactive
-	Active *byte `json:",omitempty"`
+	Active *byte `json:"Active,omitempty"`
 
 	// Classification: Indicator classification (1 = Quality, 2 = Advice). Default = 1
-	Classification *int `json:",omitempty"`
+	Classification *int `json:"Classification,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// CreateSignal: Indicates whether a signal is created
-	CreateSignal *byte `json:",omitempty"`
+	CreateSignal *byte `json:"CreateSignal,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of indicator
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ExternalCode: External code
-	ExternalCode *string `json:",omitempty"`
+	ExternalCode *string `json:"ExternalCode,omitempty"`
 
 	// IndicatorGLAccounts: Collection of GL accounts
-	IndicatorGLAccounts *[]byte `json:",omitempty"`
+	IndicatorGLAccounts *[]byte `json:"IndicatorGLAccounts,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Severity: Severity of the indicators (1 = Low, 2 = Medium, 3 = High, 4 = Critical)
-	Severity *int `json:",omitempty"`
+	Severity *int `json:"Severity,omitempty"`
 
 	// Type: Indicator type (1 = Balance G/L account per financial year, 2 = Usage of journals, 3 = Deviating amount entered, 4 = Liquidity, 5 = VAT Return deadline, 6 = Difference result in percentage, 7 = Different VAT code used)
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *ContinuousMonitoringIndicatorDifferentVatCodes) GetIdentifier() GUID {
@@ -90,3 +90,22 @@ func (s *ContinuousMonitoringIndicatorDifferentVatCodesService) List(ctx context
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the IndicatorDifferentVatCodes enitity, by ID.
+func (s *ContinuousMonitoringIndicatorDifferentVatCodesService) Get(ctx context.Context, division int, id GUID) (*ContinuousMonitoringIndicatorDifferentVatCodes, error) {
+	var entities []*ContinuousMonitoringIndicatorDifferentVatCodes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorDifferentVatCodes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d IndicatorDifferentVatCodes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

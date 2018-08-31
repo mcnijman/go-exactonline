@@ -23,73 +23,73 @@ type ProjectInvoiceTermsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectInvoiceTerms
 type ProjectInvoiceTerms struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Amount: Amount in the currency of the transaction
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Deliverable: WBS&#39;s deliverable linked to invoice term
-	Deliverable *string `json:",omitempty"`
+	Deliverable *string `json:"Deliverable,omitempty"`
 
 	// Description: Description of invoice term
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division number
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ExecutionFromDate: Execution date: From
-	ExecutionFromDate *Date `json:",omitempty"`
+	ExecutionFromDate *Date `json:"ExecutionFromDate,omitempty"`
 
 	// ExecutionToDate: Execution date: To
-	ExecutionToDate *Date `json:",omitempty"`
+	ExecutionToDate *Date `json:"ExecutionToDate,omitempty"`
 
 	// InvoiceDate: Invoice date
-	InvoiceDate *Date `json:",omitempty"`
+	InvoiceDate *Date `json:"InvoiceDate,omitempty"`
 
 	// Item: Reference to item
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Percentage: Percentage of amount per project&#39;s budgeted amount
-	Percentage *float64 `json:",omitempty"`
+	Percentage *float64 `json:"Percentage,omitempty"`
 
 	// Project: Reference to project
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectDescription: Description of project
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// VATCode: Reference to VATCode
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription: Description of VATCode
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 
 	// VATPercentage: VATCode percentage
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 }
 
 func (s *ProjectInvoiceTerms) GetIdentifier() GUID {
@@ -111,3 +111,22 @@ func (s *ProjectInvoiceTermsService) List(ctx context.Context, division int, all
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the InvoiceTerms enitity, by ID.
+func (s *ProjectInvoiceTermsService) Get(ctx context.Context, division int, id GUID) (*ProjectInvoiceTerms, error) {
+	var entities []*ProjectInvoiceTerms
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d InvoiceTerms entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

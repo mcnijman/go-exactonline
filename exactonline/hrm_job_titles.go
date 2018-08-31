@@ -23,55 +23,55 @@ type HRMJobTitlesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMJobTitles
 type HRMJobTitles struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Job title code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Job title description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// JobCode: Reference job code
-	JobCode *string `json:",omitempty"`
+	JobCode *string `json:"JobCode,omitempty"`
 
 	// JobGroup: Group this job title belongs to
-	JobGroup *GUID `json:",omitempty"`
+	JobGroup *GUID `json:"JobGroup,omitempty"`
 
 	// JobGroupCode: Job group code
-	JobGroupCode *string `json:",omitempty"`
+	JobGroupCode *string `json:"JobGroupCode,omitempty"`
 
 	// JobGroupDescription: Job group description
-	JobGroupDescription *string `json:",omitempty"`
+	JobGroupDescription *string `json:"JobGroupDescription,omitempty"`
 
 	// JobLevelFrom: Job title represents job level from
-	JobLevelFrom *int `json:",omitempty"`
+	JobLevelFrom *int `json:"JobLevelFrom,omitempty"`
 
 	// JobLevelTo: Job title represents job level to
-	JobLevelTo *int `json:",omitempty"`
+	JobLevelTo *int `json:"JobLevelTo,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Explanation or extra information can be stored in the notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 }
 
 func (s *HRMJobTitles) GetIdentifier() GUID {
@@ -93,3 +93,22 @@ func (s *HRMJobTitlesService) List(ctx context.Context, division int, all bool) 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the JobTitles enitity, by ID.
+func (s *HRMJobTitlesService) Get(ctx context.Context, division int, id GUID) (*HRMJobTitles, error) {
+	var entities []*HRMJobTitles
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/JobTitles?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d JobTitles entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

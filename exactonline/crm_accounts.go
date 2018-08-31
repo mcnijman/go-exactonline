@@ -23,442 +23,442 @@ type CRMAccountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMAccounts
 type CRMAccounts struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Accountant:
-	Accountant *GUID `json:",omitempty"`
+	Accountant *GUID `json:"Accountant,omitempty"`
 
 	// AccountManager:
-	AccountManager *GUID `json:",omitempty"`
+	AccountManager *GUID `json:"AccountManager,omitempty"`
 
 	// AccountManagerFullName:
-	AccountManagerFullName *string `json:",omitempty"`
+	AccountManagerFullName *string `json:"AccountManagerFullName,omitempty"`
 
 	// AccountManagerHID:
-	AccountManagerHID *int `json:",omitempty"`
+	AccountManagerHID *int `json:"AccountManagerHID,omitempty"`
 
 	// ActivitySector:
-	ActivitySector *GUID `json:",omitempty"`
+	ActivitySector *GUID `json:"ActivitySector,omitempty"`
 
 	// ActivitySubSector:
-	ActivitySubSector *GUID `json:",omitempty"`
+	ActivitySubSector *GUID `json:"ActivitySubSector,omitempty"`
 
 	// AddressLine1:
-	AddressLine1 *string `json:",omitempty"`
+	AddressLine1 *string `json:"AddressLine1,omitempty"`
 
 	// AddressLine2:
-	AddressLine2 *string `json:",omitempty"`
+	AddressLine2 *string `json:"AddressLine2,omitempty"`
 
 	// AddressLine3:
-	AddressLine3 *string `json:",omitempty"`
+	AddressLine3 *string `json:"AddressLine3,omitempty"`
 
 	// BankAccounts:
-	BankAccounts *[]byte `json:",omitempty"`
+	BankAccounts *[]byte `json:"BankAccounts,omitempty"`
 
 	// Blocked:
-	Blocked *bool `json:",omitempty"`
+	Blocked *bool `json:"Blocked,omitempty"`
 
 	// BRIN:
-	BRIN *GUID `json:",omitempty"`
+	BRIN *GUID `json:"BRIN,omitempty"`
 
 	// BusinessType:
-	BusinessType *GUID `json:",omitempty"`
+	BusinessType *GUID `json:"BusinessType,omitempty"`
 
 	// CanDropShip:
-	CanDropShip *bool `json:",omitempty"`
+	CanDropShip *bool `json:"CanDropShip,omitempty"`
 
 	// ChamberOfCommerce:
-	ChamberOfCommerce *string `json:",omitempty"`
+	ChamberOfCommerce *string `json:"ChamberOfCommerce,omitempty"`
 
 	// City:
-	City *string `json:",omitempty"`
+	City *string `json:"City,omitempty"`
 
 	// Classification:
-	Classification *string `json:",omitempty"`
+	Classification *string `json:"Classification,omitempty"`
 
 	// Classification1:
-	Classification1 *GUID `json:",omitempty"`
+	Classification1 *GUID `json:"Classification1,omitempty"`
 
 	// Classification2:
-	Classification2 *GUID `json:",omitempty"`
+	Classification2 *GUID `json:"Classification2,omitempty"`
 
 	// Classification3:
-	Classification3 *GUID `json:",omitempty"`
+	Classification3 *GUID `json:"Classification3,omitempty"`
 
 	// Classification4:
-	Classification4 *GUID `json:",omitempty"`
+	Classification4 *GUID `json:"Classification4,omitempty"`
 
 	// Classification5:
-	Classification5 *GUID `json:",omitempty"`
+	Classification5 *GUID `json:"Classification5,omitempty"`
 
 	// Classification6:
-	Classification6 *GUID `json:",omitempty"`
+	Classification6 *GUID `json:"Classification6,omitempty"`
 
 	// Classification7:
-	Classification7 *GUID `json:",omitempty"`
+	Classification7 *GUID `json:"Classification7,omitempty"`
 
 	// Classification8:
-	Classification8 *GUID `json:",omitempty"`
+	Classification8 *GUID `json:"Classification8,omitempty"`
 
 	// ClassificationDescription:
-	ClassificationDescription *string `json:",omitempty"`
+	ClassificationDescription *string `json:"ClassificationDescription,omitempty"`
 
 	// Code:
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// CodeAtSupplier:
-	CodeAtSupplier *string `json:",omitempty"`
+	CodeAtSupplier *string `json:"CodeAtSupplier,omitempty"`
 
 	// CompanySize:
-	CompanySize *GUID `json:",omitempty"`
+	CompanySize *GUID `json:"CompanySize,omitempty"`
 
 	// ConsolidationScenario:
-	ConsolidationScenario *byte `json:",omitempty"`
+	ConsolidationScenario *byte `json:"ConsolidationScenario,omitempty"`
 
 	// ControlledDate:
-	ControlledDate *Date `json:",omitempty"`
+	ControlledDate *Date `json:"ControlledDate,omitempty"`
 
 	// Costcenter:
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription:
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// CostPaid:
-	CostPaid *byte `json:",omitempty"`
+	CostPaid *byte `json:"CostPaid,omitempty"`
 
 	// Country:
-	Country *string `json:",omitempty"`
+	Country *string `json:"Country,omitempty"`
 
 	// CountryName:
-	CountryName *string `json:",omitempty"`
+	CountryName *string `json:"CountryName,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// CreditLinePurchase:
-	CreditLinePurchase *float64 `json:",omitempty"`
+	CreditLinePurchase *float64 `json:"CreditLinePurchase,omitempty"`
 
 	// CreditLineSales:
-	CreditLineSales *float64 `json:",omitempty"`
+	CreditLineSales *float64 `json:"CreditLineSales,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// CustomerSince:
-	CustomerSince *Date `json:",omitempty"`
+	CustomerSince *Date `json:"CustomerSince,omitempty"`
 
 	// DatevCreditorCode:
-	DatevCreditorCode *string `json:",omitempty"`
+	DatevCreditorCode *string `json:"DatevCreditorCode,omitempty"`
 
 	// DatevDebtorCode:
-	DatevDebtorCode *string `json:",omitempty"`
+	DatevDebtorCode *string `json:"DatevDebtorCode,omitempty"`
 
 	// DiscountPurchase:
-	DiscountPurchase *float64 `json:",omitempty"`
+	DiscountPurchase *float64 `json:"DiscountPurchase,omitempty"`
 
 	// DiscountSales:
-	DiscountSales *float64 `json:",omitempty"`
+	DiscountSales *float64 `json:"DiscountSales,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DunsNumber:
-	DunsNumber *string `json:",omitempty"`
+	DunsNumber *string `json:"DunsNumber,omitempty"`
 
 	// Email:
-	Email *string `json:",omitempty"`
+	Email *string `json:"Email,omitempty"`
 
 	// EndDate:
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// EstablishedDate:
-	EstablishedDate *Date `json:",omitempty"`
+	EstablishedDate *Date `json:"EstablishedDate,omitempty"`
 
 	// Fax:
-	Fax *string `json:",omitempty"`
+	Fax *string `json:"Fax,omitempty"`
 
 	// GLAccountPurchase:
-	GLAccountPurchase *GUID `json:",omitempty"`
+	GLAccountPurchase *GUID `json:"GLAccountPurchase,omitempty"`
 
 	// GLAccountSales:
-	GLAccountSales *GUID `json:",omitempty"`
+	GLAccountSales *GUID `json:"GLAccountSales,omitempty"`
 
 	// GLAP:
-	GLAP *GUID `json:",omitempty"`
+	GLAP *GUID `json:"GLAP,omitempty"`
 
 	// GLAR:
-	GLAR *GUID `json:",omitempty"`
+	GLAR *GUID `json:"GLAR,omitempty"`
 
 	// HasWithholdingTaxSales:
-	HasWithholdingTaxSales *bool `json:",omitempty"`
+	HasWithholdingTaxSales *bool `json:"HasWithholdingTaxSales,omitempty"`
 
 	// IgnoreDatevWarningMessage:
-	IgnoreDatevWarningMessage *bool `json:",omitempty"`
+	IgnoreDatevWarningMessage *bool `json:"IgnoreDatevWarningMessage,omitempty"`
 
 	// IntraStatArea:
-	IntraStatArea *string `json:",omitempty"`
+	IntraStatArea *string `json:"IntraStatArea,omitempty"`
 
 	// IntraStatDeliveryTerm:
-	IntraStatDeliveryTerm *string `json:",omitempty"`
+	IntraStatDeliveryTerm *string `json:"IntraStatDeliveryTerm,omitempty"`
 
 	// IntraStatSystem:
-	IntraStatSystem *string `json:",omitempty"`
+	IntraStatSystem *string `json:"IntraStatSystem,omitempty"`
 
 	// IntraStatTransactionA:
-	IntraStatTransactionA *string `json:",omitempty"`
+	IntraStatTransactionA *string `json:"IntraStatTransactionA,omitempty"`
 
 	// IntraStatTransactionB:
-	IntraStatTransactionB *string `json:",omitempty"`
+	IntraStatTransactionB *string `json:"IntraStatTransactionB,omitempty"`
 
 	// IntraStatTransportMethod:
-	IntraStatTransportMethod *string `json:",omitempty"`
+	IntraStatTransportMethod *string `json:"IntraStatTransportMethod,omitempty"`
 
 	// InvoiceAccount:
-	InvoiceAccount *GUID `json:",omitempty"`
+	InvoiceAccount *GUID `json:"InvoiceAccount,omitempty"`
 
 	// InvoiceAccountCode:
-	InvoiceAccountCode *string `json:",omitempty"`
+	InvoiceAccountCode *string `json:"InvoiceAccountCode,omitempty"`
 
 	// InvoiceAccountName:
-	InvoiceAccountName *string `json:",omitempty"`
+	InvoiceAccountName *string `json:"InvoiceAccountName,omitempty"`
 
 	// InvoiceAttachmentType:
-	InvoiceAttachmentType *int `json:",omitempty"`
+	InvoiceAttachmentType *int `json:"InvoiceAttachmentType,omitempty"`
 
 	// InvoicingMethod:
-	InvoicingMethod *int `json:",omitempty"`
+	InvoicingMethod *int `json:"InvoicingMethod,omitempty"`
 
 	// IsAccountant:
-	IsAccountant *byte `json:",omitempty"`
+	IsAccountant *byte `json:"IsAccountant,omitempty"`
 
 	// IsAgency:
-	IsAgency *byte `json:",omitempty"`
+	IsAgency *byte `json:"IsAgency,omitempty"`
 
 	// IsAnonymised:
-	IsAnonymised *byte `json:",omitempty"`
+	IsAnonymised *byte `json:"IsAnonymised,omitempty"`
 
 	// IsBank:
-	IsBank *bool `json:",omitempty"`
+	IsBank *bool `json:"IsBank,omitempty"`
 
 	// IsCompetitor:
-	IsCompetitor *byte `json:",omitempty"`
+	IsCompetitor *byte `json:"IsCompetitor,omitempty"`
 
 	// IsExtraDuty:
-	IsExtraDuty *bool `json:",omitempty"`
+	IsExtraDuty *bool `json:"IsExtraDuty,omitempty"`
 
 	// IsMailing:
-	IsMailing *byte `json:",omitempty"`
+	IsMailing *byte `json:"IsMailing,omitempty"`
 
 	// IsMember:
-	IsMember *bool `json:",omitempty"`
+	IsMember *bool `json:"IsMember,omitempty"`
 
 	// IsPilot:
-	IsPilot *bool `json:",omitempty"`
+	IsPilot *bool `json:"IsPilot,omitempty"`
 
 	// IsPurchase:
-	IsPurchase *bool `json:",omitempty"`
+	IsPurchase *bool `json:"IsPurchase,omitempty"`
 
 	// IsReseller:
-	IsReseller *bool `json:",omitempty"`
+	IsReseller *bool `json:"IsReseller,omitempty"`
 
 	// IsSales:
-	IsSales *bool `json:",omitempty"`
+	IsSales *bool `json:"IsSales,omitempty"`
 
 	// IsSupplier:
-	IsSupplier *bool `json:",omitempty"`
+	IsSupplier *bool `json:"IsSupplier,omitempty"`
 
 	// Language:
-	Language *string `json:",omitempty"`
+	Language *string `json:"Language,omitempty"`
 
 	// LanguageDescription:
-	LanguageDescription *string `json:",omitempty"`
+	LanguageDescription *string `json:"LanguageDescription,omitempty"`
 
 	// Latitude:
-	Latitude *float64 `json:",omitempty"`
+	Latitude *float64 `json:"Latitude,omitempty"`
 
 	// LeadPurpose:
-	LeadPurpose *GUID `json:",omitempty"`
+	LeadPurpose *GUID `json:"LeadPurpose,omitempty"`
 
 	// LeadSource:
-	LeadSource *GUID `json:",omitempty"`
+	LeadSource *GUID `json:"LeadSource,omitempty"`
 
 	// Logo:
-	Logo *[]byte `json:",omitempty"`
+	Logo *[]byte `json:"Logo,omitempty"`
 
 	// LogoFileName:
-	LogoFileName *string `json:",omitempty"`
+	LogoFileName *string `json:"LogoFileName,omitempty"`
 
 	// LogoThumbnailUrl:
-	LogoThumbnailUrl *string `json:",omitempty"`
+	LogoThumbnailUrl *string `json:"LogoThumbnailUrl,omitempty"`
 
 	// LogoUrl:
-	LogoUrl *string `json:",omitempty"`
+	LogoUrl *string `json:"LogoUrl,omitempty"`
 
 	// Longitude:
-	Longitude *float64 `json:",omitempty"`
+	Longitude *float64 `json:"Longitude,omitempty"`
 
 	// MainContact:
-	MainContact *GUID `json:",omitempty"`
+	MainContact *GUID `json:"MainContact,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Name:
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// OINNumber:
-	OINNumber *string `json:",omitempty"`
+	OINNumber *string `json:"OINNumber,omitempty"`
 
 	// Parent:
-	Parent *GUID `json:",omitempty"`
+	Parent *GUID `json:"Parent,omitempty"`
 
 	// PayAsYouEarn:
-	PayAsYouEarn *string `json:",omitempty"`
+	PayAsYouEarn *string `json:"PayAsYouEarn,omitempty"`
 
 	// PaymentConditionPurchase:
-	PaymentConditionPurchase *string `json:",omitempty"`
+	PaymentConditionPurchase *string `json:"PaymentConditionPurchase,omitempty"`
 
 	// PaymentConditionPurchaseDescription:
-	PaymentConditionPurchaseDescription *string `json:",omitempty"`
+	PaymentConditionPurchaseDescription *string `json:"PaymentConditionPurchaseDescription,omitempty"`
 
 	// PaymentConditionSales:
-	PaymentConditionSales *string `json:",omitempty"`
+	PaymentConditionSales *string `json:"PaymentConditionSales,omitempty"`
 
 	// PaymentConditionSalesDescription:
-	PaymentConditionSalesDescription *string `json:",omitempty"`
+	PaymentConditionSalesDescription *string `json:"PaymentConditionSalesDescription,omitempty"`
 
 	// Phone:
-	Phone *string `json:",omitempty"`
+	Phone *string `json:"Phone,omitempty"`
 
 	// PhoneExtension:
-	PhoneExtension *string `json:",omitempty"`
+	PhoneExtension *string `json:"PhoneExtension,omitempty"`
 
 	// Postcode:
-	Postcode *string `json:",omitempty"`
+	Postcode *string `json:"Postcode,omitempty"`
 
 	// PriceList:
-	PriceList *GUID `json:",omitempty"`
+	PriceList *GUID `json:"PriceList,omitempty"`
 
 	// PurchaseCurrency:
-	PurchaseCurrency *string `json:",omitempty"`
+	PurchaseCurrency *string `json:"PurchaseCurrency,omitempty"`
 
 	// PurchaseCurrencyDescription:
-	PurchaseCurrencyDescription *string `json:",omitempty"`
+	PurchaseCurrencyDescription *string `json:"PurchaseCurrencyDescription,omitempty"`
 
 	// PurchaseLeadDays:
-	PurchaseLeadDays *int `json:",omitempty"`
+	PurchaseLeadDays *int `json:"PurchaseLeadDays,omitempty"`
 
 	// PurchaseVATCode:
-	PurchaseVATCode *string `json:",omitempty"`
+	PurchaseVATCode *string `json:"PurchaseVATCode,omitempty"`
 
 	// PurchaseVATCodeDescription:
-	PurchaseVATCodeDescription *string `json:",omitempty"`
+	PurchaseVATCodeDescription *string `json:"PurchaseVATCodeDescription,omitempty"`
 
 	// RecepientOfCommissions:
-	RecepientOfCommissions *bool `json:",omitempty"`
+	RecepientOfCommissions *bool `json:"RecepientOfCommissions,omitempty"`
 
 	// Remarks:
-	Remarks *string `json:",omitempty"`
+	Remarks *string `json:"Remarks,omitempty"`
 
 	// Reseller:
-	Reseller *GUID `json:",omitempty"`
+	Reseller *GUID `json:"Reseller,omitempty"`
 
 	// ResellerCode:
-	ResellerCode *string `json:",omitempty"`
+	ResellerCode *string `json:"ResellerCode,omitempty"`
 
 	// ResellerName:
-	ResellerName *string `json:",omitempty"`
+	ResellerName *string `json:"ResellerName,omitempty"`
 
 	// RSIN:
-	RSIN *string `json:",omitempty"`
+	RSIN *string `json:"RSIN,omitempty"`
 
 	// SalesCurrency:
-	SalesCurrency *string `json:",omitempty"`
+	SalesCurrency *string `json:"SalesCurrency,omitempty"`
 
 	// SalesCurrencyDescription:
-	SalesCurrencyDescription *string `json:",omitempty"`
+	SalesCurrencyDescription *string `json:"SalesCurrencyDescription,omitempty"`
 
 	// SalesTaxSchedule:
-	SalesTaxSchedule *GUID `json:",omitempty"`
+	SalesTaxSchedule *GUID `json:"SalesTaxSchedule,omitempty"`
 
 	// SalesTaxScheduleCode:
-	SalesTaxScheduleCode *string `json:",omitempty"`
+	SalesTaxScheduleCode *string `json:"SalesTaxScheduleCode,omitempty"`
 
 	// SalesTaxScheduleDescription:
-	SalesTaxScheduleDescription *string `json:",omitempty"`
+	SalesTaxScheduleDescription *string `json:"SalesTaxScheduleDescription,omitempty"`
 
 	// SalesVATCode:
-	SalesVATCode *string `json:",omitempty"`
+	SalesVATCode *string `json:"SalesVATCode,omitempty"`
 
 	// SalesVATCodeDescription:
-	SalesVATCodeDescription *string `json:",omitempty"`
+	SalesVATCodeDescription *string `json:"SalesVATCodeDescription,omitempty"`
 
 	// SearchCode:
-	SearchCode *string `json:",omitempty"`
+	SearchCode *string `json:"SearchCode,omitempty"`
 
 	// SecurityLevel:
-	SecurityLevel *int `json:",omitempty"`
+	SecurityLevel *int `json:"SecurityLevel,omitempty"`
 
 	// SeparateInvPerProject:
-	SeparateInvPerProject *byte `json:",omitempty"`
+	SeparateInvPerProject *byte `json:"SeparateInvPerProject,omitempty"`
 
 	// SeparateInvPerSubscription:
-	SeparateInvPerSubscription *byte `json:",omitempty"`
+	SeparateInvPerSubscription *byte `json:"SeparateInvPerSubscription,omitempty"`
 
 	// ShippingLeadDays:
-	ShippingLeadDays *int `json:",omitempty"`
+	ShippingLeadDays *int `json:"ShippingLeadDays,omitempty"`
 
 	// ShippingMethod:
-	ShippingMethod *GUID `json:",omitempty"`
+	ShippingMethod *GUID `json:"ShippingMethod,omitempty"`
 
 	// StartDate:
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// State:
-	State *string `json:",omitempty"`
+	State *string `json:"State,omitempty"`
 
 	// StateName:
-	StateName *string `json:",omitempty"`
+	StateName *string `json:"StateName,omitempty"`
 
 	// Status:
-	Status *string `json:",omitempty"`
+	Status *string `json:"Status,omitempty"`
 
 	// StatusSince:
-	StatusSince *Date `json:",omitempty"`
+	StatusSince *Date `json:"StatusSince,omitempty"`
 
 	// TradeName:
-	TradeName *string `json:",omitempty"`
+	TradeName *string `json:"TradeName,omitempty"`
 
 	// Type:
-	Type *string `json:",omitempty"`
+	Type *string `json:"Type,omitempty"`
 
 	// UniqueTaxpayerReference:
-	UniqueTaxpayerReference *string `json:",omitempty"`
+	UniqueTaxpayerReference *string `json:"UniqueTaxpayerReference,omitempty"`
 
 	// VATLiability:
-	VATLiability *string `json:",omitempty"`
+	VATLiability *string `json:"VATLiability,omitempty"`
 
 	// VATNumber:
-	VATNumber *string `json:",omitempty"`
+	VATNumber *string `json:"VATNumber,omitempty"`
 
 	// Website:
-	Website *string `json:",omitempty"`
+	Website *string `json:"Website,omitempty"`
 }
 
 func (s *CRMAccounts) GetIdentifier() GUID {
@@ -480,3 +480,22 @@ func (s *CRMAccountsService) List(ctx context.Context, division int, all bool) (
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Accounts enitity, by ID.
+func (s *CRMAccountsService) Get(ctx context.Context, division int, id GUID) (*CRMAccounts, error) {
+	var entities []*CRMAccounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Accounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Accounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

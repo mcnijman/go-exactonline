@@ -23,304 +23,304 @@ type LogisticsItemsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsItems
 type LogisticsItems struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Barcode:
-	Barcode *string `json:",omitempty"`
+	Barcode *string `json:"Barcode,omitempty"`
 
 	// Class_01:
-	Class_01 *string `json:",omitempty"`
+	Class_01 *string `json:"Class_01,omitempty"`
 
 	// Class_02:
-	Class_02 *string `json:",omitempty"`
+	Class_02 *string `json:"Class_02,omitempty"`
 
 	// Class_03:
-	Class_03 *string `json:",omitempty"`
+	Class_03 *string `json:"Class_03,omitempty"`
 
 	// Class_04:
-	Class_04 *string `json:",omitempty"`
+	Class_04 *string `json:"Class_04,omitempty"`
 
 	// Class_05:
-	Class_05 *string `json:",omitempty"`
+	Class_05 *string `json:"Class_05,omitempty"`
 
 	// Class_06:
-	Class_06 *string `json:",omitempty"`
+	Class_06 *string `json:"Class_06,omitempty"`
 
 	// Class_07:
-	Class_07 *string `json:",omitempty"`
+	Class_07 *string `json:"Class_07,omitempty"`
 
 	// Class_08:
-	Class_08 *string `json:",omitempty"`
+	Class_08 *string `json:"Class_08,omitempty"`
 
 	// Class_09:
-	Class_09 *string `json:",omitempty"`
+	Class_09 *string `json:"Class_09,omitempty"`
 
 	// Class_10:
-	Class_10 *string `json:",omitempty"`
+	Class_10 *string `json:"Class_10,omitempty"`
 
 	// Code:
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// CopyRemarks:
-	CopyRemarks *byte `json:",omitempty"`
+	CopyRemarks *byte `json:"CopyRemarks,omitempty"`
 
 	// CostPriceCurrency:
-	CostPriceCurrency *string `json:",omitempty"`
+	CostPriceCurrency *string `json:"CostPriceCurrency,omitempty"`
 
 	// CostPriceNew:
-	CostPriceNew *float64 `json:",omitempty"`
+	CostPriceNew *float64 `json:"CostPriceNew,omitempty"`
 
 	// CostPriceStandard:
-	CostPriceStandard *float64 `json:",omitempty"`
+	CostPriceStandard *float64 `json:"CostPriceStandard,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate:
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// ExtraDescription:
-	ExtraDescription *string `json:",omitempty"`
+	ExtraDescription *string `json:"ExtraDescription,omitempty"`
 
 	// FreeBoolField_01:
-	FreeBoolField_01 *bool `json:",omitempty"`
+	FreeBoolField_01 *bool `json:"FreeBoolField_01,omitempty"`
 
 	// FreeBoolField_02:
-	FreeBoolField_02 *bool `json:",omitempty"`
+	FreeBoolField_02 *bool `json:"FreeBoolField_02,omitempty"`
 
 	// FreeBoolField_03:
-	FreeBoolField_03 *bool `json:",omitempty"`
+	FreeBoolField_03 *bool `json:"FreeBoolField_03,omitempty"`
 
 	// FreeBoolField_04:
-	FreeBoolField_04 *bool `json:",omitempty"`
+	FreeBoolField_04 *bool `json:"FreeBoolField_04,omitempty"`
 
 	// FreeBoolField_05:
-	FreeBoolField_05 *bool `json:",omitempty"`
+	FreeBoolField_05 *bool `json:"FreeBoolField_05,omitempty"`
 
 	// FreeDateField_01:
-	FreeDateField_01 *Date `json:",omitempty"`
+	FreeDateField_01 *Date `json:"FreeDateField_01,omitempty"`
 
 	// FreeDateField_02:
-	FreeDateField_02 *Date `json:",omitempty"`
+	FreeDateField_02 *Date `json:"FreeDateField_02,omitempty"`
 
 	// FreeDateField_03:
-	FreeDateField_03 *Date `json:",omitempty"`
+	FreeDateField_03 *Date `json:"FreeDateField_03,omitempty"`
 
 	// FreeDateField_04:
-	FreeDateField_04 *Date `json:",omitempty"`
+	FreeDateField_04 *Date `json:"FreeDateField_04,omitempty"`
 
 	// FreeDateField_05:
-	FreeDateField_05 *Date `json:",omitempty"`
+	FreeDateField_05 *Date `json:"FreeDateField_05,omitempty"`
 
 	// FreeNumberField_01:
-	FreeNumberField_01 *float64 `json:",omitempty"`
+	FreeNumberField_01 *float64 `json:"FreeNumberField_01,omitempty"`
 
 	// FreeNumberField_02:
-	FreeNumberField_02 *float64 `json:",omitempty"`
+	FreeNumberField_02 *float64 `json:"FreeNumberField_02,omitempty"`
 
 	// FreeNumberField_03:
-	FreeNumberField_03 *float64 `json:",omitempty"`
+	FreeNumberField_03 *float64 `json:"FreeNumberField_03,omitempty"`
 
 	// FreeNumberField_04:
-	FreeNumberField_04 *float64 `json:",omitempty"`
+	FreeNumberField_04 *float64 `json:"FreeNumberField_04,omitempty"`
 
 	// FreeNumberField_05:
-	FreeNumberField_05 *float64 `json:",omitempty"`
+	FreeNumberField_05 *float64 `json:"FreeNumberField_05,omitempty"`
 
 	// FreeNumberField_06:
-	FreeNumberField_06 *float64 `json:",omitempty"`
+	FreeNumberField_06 *float64 `json:"FreeNumberField_06,omitempty"`
 
 	// FreeNumberField_07:
-	FreeNumberField_07 *float64 `json:",omitempty"`
+	FreeNumberField_07 *float64 `json:"FreeNumberField_07,omitempty"`
 
 	// FreeNumberField_08:
-	FreeNumberField_08 *float64 `json:",omitempty"`
+	FreeNumberField_08 *float64 `json:"FreeNumberField_08,omitempty"`
 
 	// FreeTextField_01:
-	FreeTextField_01 *string `json:",omitempty"`
+	FreeTextField_01 *string `json:"FreeTextField_01,omitempty"`
 
 	// FreeTextField_02:
-	FreeTextField_02 *string `json:",omitempty"`
+	FreeTextField_02 *string `json:"FreeTextField_02,omitempty"`
 
 	// FreeTextField_03:
-	FreeTextField_03 *string `json:",omitempty"`
+	FreeTextField_03 *string `json:"FreeTextField_03,omitempty"`
 
 	// FreeTextField_04:
-	FreeTextField_04 *string `json:",omitempty"`
+	FreeTextField_04 *string `json:"FreeTextField_04,omitempty"`
 
 	// FreeTextField_05:
-	FreeTextField_05 *string `json:",omitempty"`
+	FreeTextField_05 *string `json:"FreeTextField_05,omitempty"`
 
 	// FreeTextField_06:
-	FreeTextField_06 *string `json:",omitempty"`
+	FreeTextField_06 *string `json:"FreeTextField_06,omitempty"`
 
 	// FreeTextField_07:
-	FreeTextField_07 *string `json:",omitempty"`
+	FreeTextField_07 *string `json:"FreeTextField_07,omitempty"`
 
 	// FreeTextField_08:
-	FreeTextField_08 *string `json:",omitempty"`
+	FreeTextField_08 *string `json:"FreeTextField_08,omitempty"`
 
 	// FreeTextField_09:
-	FreeTextField_09 *string `json:",omitempty"`
+	FreeTextField_09 *string `json:"FreeTextField_09,omitempty"`
 
 	// FreeTextField_10:
-	FreeTextField_10 *string `json:",omitempty"`
+	FreeTextField_10 *string `json:"FreeTextField_10,omitempty"`
 
 	// GLCosts:
-	GLCosts *GUID `json:",omitempty"`
+	GLCosts *GUID `json:"GLCosts,omitempty"`
 
 	// GLCostsCode:
-	GLCostsCode *string `json:",omitempty"`
+	GLCostsCode *string `json:"GLCostsCode,omitempty"`
 
 	// GLCostsDescription:
-	GLCostsDescription *string `json:",omitempty"`
+	GLCostsDescription *string `json:"GLCostsDescription,omitempty"`
 
 	// GLRevenue:
-	GLRevenue *GUID `json:",omitempty"`
+	GLRevenue *GUID `json:"GLRevenue,omitempty"`
 
 	// GLRevenueCode:
-	GLRevenueCode *string `json:",omitempty"`
+	GLRevenueCode *string `json:"GLRevenueCode,omitempty"`
 
 	// GLRevenueDescription:
-	GLRevenueDescription *string `json:",omitempty"`
+	GLRevenueDescription *string `json:"GLRevenueDescription,omitempty"`
 
 	// GLStock:
-	GLStock *GUID `json:",omitempty"`
+	GLStock *GUID `json:"GLStock,omitempty"`
 
 	// GLStockCode:
-	GLStockCode *string `json:",omitempty"`
+	GLStockCode *string `json:"GLStockCode,omitempty"`
 
 	// GLStockDescription:
-	GLStockDescription *string `json:",omitempty"`
+	GLStockDescription *string `json:"GLStockDescription,omitempty"`
 
 	// GrossWeight:
-	GrossWeight *float64 `json:",omitempty"`
+	GrossWeight *float64 `json:"GrossWeight,omitempty"`
 
 	// IsBatchItem:
-	IsBatchItem *byte `json:",omitempty"`
+	IsBatchItem *byte `json:"IsBatchItem,omitempty"`
 
 	// IsBatchNumberItem:
-	IsBatchNumberItem *byte `json:",omitempty"`
+	IsBatchNumberItem *byte `json:"IsBatchNumberItem,omitempty"`
 
 	// IsFractionAllowedItem:
-	IsFractionAllowedItem *bool `json:",omitempty"`
+	IsFractionAllowedItem *bool `json:"IsFractionAllowedItem,omitempty"`
 
 	// IsMakeItem:
-	IsMakeItem *byte `json:",omitempty"`
+	IsMakeItem *byte `json:"IsMakeItem,omitempty"`
 
 	// IsNewContract:
-	IsNewContract *byte `json:",omitempty"`
+	IsNewContract *byte `json:"IsNewContract,omitempty"`
 
 	// IsOnDemandItem:
-	IsOnDemandItem *byte `json:",omitempty"`
+	IsOnDemandItem *byte `json:"IsOnDemandItem,omitempty"`
 
 	// IsPackageItem:
-	IsPackageItem *bool `json:",omitempty"`
+	IsPackageItem *bool `json:"IsPackageItem,omitempty"`
 
 	// IsPurchaseItem:
-	IsPurchaseItem *bool `json:",omitempty"`
+	IsPurchaseItem *bool `json:"IsPurchaseItem,omitempty"`
 
 	// IsRegistrationCodeItem:
-	IsRegistrationCodeItem *byte `json:",omitempty"`
+	IsRegistrationCodeItem *byte `json:"IsRegistrationCodeItem,omitempty"`
 
 	// IsSalesItem:
-	IsSalesItem *bool `json:",omitempty"`
+	IsSalesItem *bool `json:"IsSalesItem,omitempty"`
 
 	// IsSerialItem:
-	IsSerialItem *bool `json:",omitempty"`
+	IsSerialItem *bool `json:"IsSerialItem,omitempty"`
 
 	// IsSerialNumberItem:
-	IsSerialNumberItem *bool `json:",omitempty"`
+	IsSerialNumberItem *bool `json:"IsSerialNumberItem,omitempty"`
 
 	// IsStockItem:
-	IsStockItem *bool `json:",omitempty"`
+	IsStockItem *bool `json:"IsStockItem,omitempty"`
 
 	// IsSubcontractedItem:
-	IsSubcontractedItem *bool `json:",omitempty"`
+	IsSubcontractedItem *bool `json:"IsSubcontractedItem,omitempty"`
 
 	// IsTaxableItem:
-	IsTaxableItem *byte `json:",omitempty"`
+	IsTaxableItem *byte `json:"IsTaxableItem,omitempty"`
 
 	// IsTime:
-	IsTime *byte `json:",omitempty"`
+	IsTime *byte `json:"IsTime,omitempty"`
 
 	// IsWebshopItem:
-	IsWebshopItem *byte `json:",omitempty"`
+	IsWebshopItem *byte `json:"IsWebshopItem,omitempty"`
 
 	// ItemGroup:
-	ItemGroup *GUID `json:",omitempty"`
+	ItemGroup *GUID `json:"ItemGroup,omitempty"`
 
 	// ItemGroupCode:
-	ItemGroupCode *string `json:",omitempty"`
+	ItemGroupCode *string `json:"ItemGroupCode,omitempty"`
 
 	// ItemGroupDescription:
-	ItemGroupDescription *string `json:",omitempty"`
+	ItemGroupDescription *string `json:"ItemGroupDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// NetWeight:
-	NetWeight *float64 `json:",omitempty"`
+	NetWeight *float64 `json:"NetWeight,omitempty"`
 
 	// NetWeightUnit:
-	NetWeightUnit *string `json:",omitempty"`
+	NetWeightUnit *string `json:"NetWeightUnit,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PictureName:
-	PictureName *string `json:",omitempty"`
+	PictureName *string `json:"PictureName,omitempty"`
 
 	// PictureThumbnailUrl:
-	PictureThumbnailUrl *string `json:",omitempty"`
+	PictureThumbnailUrl *string `json:"PictureThumbnailUrl,omitempty"`
 
 	// PictureUrl:
-	PictureUrl *string `json:",omitempty"`
+	PictureUrl *string `json:"PictureUrl,omitempty"`
 
 	// SalesVatCode:
-	SalesVatCode *string `json:",omitempty"`
+	SalesVatCode *string `json:"SalesVatCode,omitempty"`
 
 	// SalesVatCodeDescription:
-	SalesVatCodeDescription *string `json:",omitempty"`
+	SalesVatCodeDescription *string `json:"SalesVatCodeDescription,omitempty"`
 
 	// SearchCode:
-	SearchCode *string `json:",omitempty"`
+	SearchCode *string `json:"SearchCode,omitempty"`
 
 	// SecurityLevel:
-	SecurityLevel *int `json:",omitempty"`
+	SecurityLevel *int `json:"SecurityLevel,omitempty"`
 
 	// StartDate:
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Stock:
-	Stock *float64 `json:",omitempty"`
+	Stock *float64 `json:"Stock,omitempty"`
 
 	// Unit:
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription:
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// UnitType:
-	UnitType *string `json:",omitempty"`
+	UnitType *string `json:"UnitType,omitempty"`
 }
 
 func (s *LogisticsItems) GetIdentifier() GUID {
@@ -342,3 +342,22 @@ func (s *LogisticsItemsService) List(ctx context.Context, division int, all bool
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Items enitity, by ID.
+func (s *LogisticsItemsService) Get(ctx context.Context, division int, id GUID) (*LogisticsItems, error) {
+	var entities []*LogisticsItems
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Items?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Items entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

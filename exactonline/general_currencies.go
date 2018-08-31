@@ -23,22 +23,22 @@ type GeneralCurrenciesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=GeneralCurrencies
 type GeneralCurrencies struct {
 	// Code: Primary key
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// AmountPrecision: Amount precision
-	AmountPrecision *float64 `json:",omitempty"`
+	AmountPrecision *float64 `json:"AmountPrecision,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Description: Description of the currency
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// PricePrecision: Price precision
-	PricePrecision *float64 `json:",omitempty"`
+	PricePrecision *float64 `json:"PricePrecision,omitempty"`
 }
 
 func (s *GeneralCurrencies) GetIdentifier() string {
@@ -60,3 +60,22 @@ func (s *GeneralCurrenciesService) List(ctx context.Context, division int, all b
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Currencies enitity, by Code.
+func (s *GeneralCurrenciesService) Get(ctx context.Context, division int, id string) (*GeneralCurrencies, error) {
+	var entities []*GeneralCurrencies
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/general/Currencies?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Currencies entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

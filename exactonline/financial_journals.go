@@ -23,109 +23,109 @@ type FinancialJournalsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialJournals
 type FinancialJournals struct {
 	// ID: Primary Key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AllowVariableCurrency: Indicates if the journal allows variable currency
-	AllowVariableCurrency *bool `json:",omitempty"`
+	AllowVariableCurrency *bool `json:"AllowVariableCurrency,omitempty"`
 
 	// AllowVariableExchangeRate: Indicates if the journal allows the exchange rate of the currency of the amounts in the journal entry to be changed
-	AllowVariableExchangeRate *bool `json:",omitempty"`
+	AllowVariableExchangeRate *bool `json:"AllowVariableExchangeRate,omitempty"`
 
 	// AllowVAT: Indicates if the journal allows the use of VAT in the financial entry. Especially true for general journals
-	AllowVAT *bool `json:",omitempty"`
+	AllowVAT *bool `json:"AllowVAT,omitempty"`
 
 	// AutoSave: Indicates if the journal automatically saves the entries when the amount is in balance with the entry lines
-	AutoSave *bool `json:",omitempty"`
+	AutoSave *bool `json:"AutoSave,omitempty"`
 
 	// Bank: Reference to bank account
-	Bank *GUID `json:",omitempty"`
+	Bank *GUID `json:"Bank,omitempty"`
 
 	// BankAccountBICCode: BIC code of the bank where the bank account is held
-	BankAccountBICCode *string `json:",omitempty"`
+	BankAccountBICCode *string `json:"BankAccountBICCode,omitempty"`
 
 	// BankAccountCountry: Country of bank account
-	BankAccountCountry *string `json:",omitempty"`
+	BankAccountCountry *string `json:"BankAccountCountry,omitempty"`
 
 	// BankAccountDescription: Description of BankAccount
-	BankAccountDescription *string `json:",omitempty"`
+	BankAccountDescription *string `json:"BankAccountDescription,omitempty"`
 
 	// BankAccountIBAN: IBAN of the bank account
-	BankAccountIBAN *string `json:",omitempty"`
+	BankAccountIBAN *string `json:"BankAccountIBAN,omitempty"`
 
 	// BankAccountID: Reference to the Bank Account linked to the Journal
-	BankAccountID *GUID `json:",omitempty"`
+	BankAccountID *GUID `json:"BankAccountID,omitempty"`
 
 	// BankAccountIncludingMask: Bank account number. Is mandatory for Journals that have Type = Bank
-	BankAccountIncludingMask *string `json:",omitempty"`
+	BankAccountIncludingMask *string `json:"BankAccountIncludingMask,omitempty"`
 
 	// BankAccountUseSEPA: Obsolete. Whether or not use SEPA for the bank account
-	BankAccountUseSEPA *bool `json:",omitempty"`
+	BankAccountUseSEPA *bool `json:"BankAccountUseSEPA,omitempty"`
 
 	// BankAccountUseSepaDirectDebit: Obsolete. Whether or not use SEPA direct debit for the bank account
-	BankAccountUseSepaDirectDebit *bool `json:",omitempty"`
+	BankAccountUseSepaDirectDebit *bool `json:"BankAccountUseSepaDirectDebit,omitempty"`
 
 	// BankName: Name of bank account
-	BankName *string `json:",omitempty"`
+	BankName *string `json:"BankName,omitempty"`
 
 	// Code: Primary key
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Default Currency of the Journal. If AllowVariableCurrency is false this is the only currency that can be used
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// CurrencyDescription: Description of Currency
-	CurrencyDescription *string `json:",omitempty"`
+	CurrencyDescription *string `json:"CurrencyDescription,omitempty"`
 
 	// Description: Name of the Journal
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// GLAccount: Suspense general ledger account
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GLAccountCode: Code of GLAccount
-	GLAccountCode *string `json:",omitempty"`
+	GLAccountCode *string `json:"GLAccountCode,omitempty"`
 
 	// GLAccountDescription: Description of GLAccount
-	GLAccountDescription *string `json:",omitempty"`
+	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 
 	// GLAccountType: Type of GLAccount
-	GLAccountType *int `json:",omitempty"`
+	GLAccountType *int `json:"GLAccountType,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PaymentInTransitAccount: General ledger account for payment in transit
-	PaymentInTransitAccount *GUID `json:",omitempty"`
+	PaymentInTransitAccount *GUID `json:"PaymentInTransitAccount,omitempty"`
 
 	// PaymentServiceAccountIdentifier: Identifier detail of the Payment service account. Ex. EmailID for Paypal type of Payment service account
-	PaymentServiceAccountIdentifier *string `json:",omitempty"`
+	PaymentServiceAccountIdentifier *string `json:"PaymentServiceAccountIdentifier,omitempty"`
 
 	// PaymentServiceProvider: Type of Payment service provider. The following values are supported: 1 (Adyen), 2 (Paypal), 3 (Stripe). Is mandatory for Journals of Type 16 (Payment service)
-	PaymentServiceProvider *int `json:",omitempty"`
+	PaymentServiceProvider *int `json:"PaymentServiceProvider,omitempty"`
 
 	// PaymentServiceProviderName: Name of the Payment service provider
-	PaymentServiceProviderName *string `json:",omitempty"`
+	PaymentServiceProviderName *string `json:"PaymentServiceProviderName,omitempty"`
 
 	// Type: Type of Journal. The following values are supported: 10 (Cash) 12 (Bank) 16 (Payment service) 20 (Sales) 21 (Return invoice) 22 (Purchase) 23 (Received return invoice) 90 (General journal)
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *FinancialJournals) GetIdentifier() GUID {
@@ -147,3 +147,22 @@ func (s *FinancialJournalsService) List(ctx context.Context, division int, all b
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Journals enitity, by ID.
+func (s *FinancialJournalsService) Get(ctx context.Context, division int, id GUID) (*FinancialJournals, error) {
+	var entities []*FinancialJournals
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Journals entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

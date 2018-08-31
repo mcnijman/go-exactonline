@@ -23,55 +23,55 @@ type FinancialProfitLossOverviewService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialProfitLossOverview
 type FinancialProfitLossOverview struct {
 	// CurrentYear: Primary key, Current year
-	CurrentYear *int `json:",omitempty"`
+	CurrentYear *int `json:"CurrentYear,omitempty"`
 
 	// CostsCurrentPeriod: Costs in current period
-	CostsCurrentPeriod *float64 `json:",omitempty"`
+	CostsCurrentPeriod *float64 `json:"CostsCurrentPeriod,omitempty"`
 
 	// CostsCurrentYear: Costs in current year
-	CostsCurrentYear *float64 `json:",omitempty"`
+	CostsCurrentYear *float64 `json:"CostsCurrentYear,omitempty"`
 
 	// CostsPreviousYear: Costs in previous year
-	CostsPreviousYear *float64 `json:",omitempty"`
+	CostsPreviousYear *float64 `json:"CostsPreviousYear,omitempty"`
 
 	// CostsPreviousYearPeriod: Costs in period of previous year
-	CostsPreviousYearPeriod *float64 `json:",omitempty"`
+	CostsPreviousYearPeriod *float64 `json:"CostsPreviousYearPeriod,omitempty"`
 
 	// CurrencyCode: Currency code
-	CurrencyCode *string `json:",omitempty"`
+	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
 	// CurrentPeriod: Current period
-	CurrentPeriod *int `json:",omitempty"`
+	CurrentPeriod *int `json:"CurrentPeriod,omitempty"`
 
 	// PreviousYear: Previous year
-	PreviousYear *int `json:",omitempty"`
+	PreviousYear *int `json:"PreviousYear,omitempty"`
 
 	// PreviousYearPeriod: Period in previous year
-	PreviousYearPeriod *int `json:",omitempty"`
+	PreviousYearPeriod *int `json:"PreviousYearPeriod,omitempty"`
 
 	// ResultCurrentPeriod: Results of current period
-	ResultCurrentPeriod *float64 `json:",omitempty"`
+	ResultCurrentPeriod *float64 `json:"ResultCurrentPeriod,omitempty"`
 
 	// ResultCurrentYear:
-	ResultCurrentYear *float64 `json:",omitempty"`
+	ResultCurrentYear *float64 `json:"ResultCurrentYear,omitempty"`
 
 	// ResultPreviousYear:
-	ResultPreviousYear *float64 `json:",omitempty"`
+	ResultPreviousYear *float64 `json:"ResultPreviousYear,omitempty"`
 
 	// ResultPreviousYearPeriod: Results of period in previous year
-	ResultPreviousYearPeriod *float64 `json:",omitempty"`
+	ResultPreviousYearPeriod *float64 `json:"ResultPreviousYearPeriod,omitempty"`
 
 	// RevenueCurrentPeriod: Revenue in current period
-	RevenueCurrentPeriod *float64 `json:",omitempty"`
+	RevenueCurrentPeriod *float64 `json:"RevenueCurrentPeriod,omitempty"`
 
 	// RevenueCurrentYear: Revenue in current year
-	RevenueCurrentYear *float64 `json:",omitempty"`
+	RevenueCurrentYear *float64 `json:"RevenueCurrentYear,omitempty"`
 
 	// RevenuePreviousYear: Revenue in previous year
-	RevenuePreviousYear *float64 `json:",omitempty"`
+	RevenuePreviousYear *float64 `json:"RevenuePreviousYear,omitempty"`
 
 	// RevenuePreviousYearPeriod: Revenue in period of previous year
-	RevenuePreviousYearPeriod *float64 `json:",omitempty"`
+	RevenuePreviousYearPeriod *float64 `json:"RevenuePreviousYearPeriod,omitempty"`
 }
 
 func (s *FinancialProfitLossOverview) GetIdentifier() int {
@@ -93,3 +93,22 @@ func (s *FinancialProfitLossOverviewService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ProfitLossOverview enitity, by CurrentYear.
+func (s *FinancialProfitLossOverviewService) Get(ctx context.Context, division int, id int) (*FinancialProfitLossOverview, error) {
+	var entities []*FinancialProfitLossOverview
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ProfitLossOverview?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ProfitLossOverview entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

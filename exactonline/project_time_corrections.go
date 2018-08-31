@@ -23,37 +23,37 @@ type ProjectTimeCorrectionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectTimeCorrections
 type ProjectTimeCorrections struct {
 	// ID: Id
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OriginalEntryId: Reference to the time entry that this corrects for
-	OriginalEntryId *GUID `json:",omitempty"`
+	OriginalEntryId *GUID `json:"OriginalEntryId,omitempty"`
 
 	// Quantity: Quantity has to be negative value. E.g.: If original quantity is 10 and the correct quantity is 4, this quantity is -6
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 }
 
 func (s *ProjectTimeCorrections) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *ProjectTimeCorrectionsService) List(ctx context.Context, division int, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TimeCorrections enitity, by ID.
+func (s *ProjectTimeCorrectionsService) Get(ctx context.Context, division int, id GUID) (*ProjectTimeCorrections, error) {
+	var entities []*ProjectTimeCorrections
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeCorrections?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TimeCorrections entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,151 +23,151 @@ type CRMQuotationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMQuotations
 type CRMQuotations struct {
 	// QuotationID:
-	QuotationID *GUID `json:",omitempty"`
+	QuotationID *GUID `json:"QuotationID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// CloseDate:
-	CloseDate *Date `json:",omitempty"`
+	CloseDate *Date `json:"CloseDate,omitempty"`
 
 	// ClosingDate:
-	ClosingDate *Date `json:",omitempty"`
+	ClosingDate *Date `json:"ClosingDate,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// DeliveryAccount:
-	DeliveryAccount *GUID `json:",omitempty"`
+	DeliveryAccount *GUID `json:"DeliveryAccount,omitempty"`
 
 	// DeliveryAccountCode:
-	DeliveryAccountCode *string `json:",omitempty"`
+	DeliveryAccountCode *string `json:"DeliveryAccountCode,omitempty"`
 
 	// DeliveryAccountContact:
-	DeliveryAccountContact *GUID `json:",omitempty"`
+	DeliveryAccountContact *GUID `json:"DeliveryAccountContact,omitempty"`
 
 	// DeliveryAccountContactFullName:
-	DeliveryAccountContactFullName *string `json:",omitempty"`
+	DeliveryAccountContactFullName *string `json:"DeliveryAccountContactFullName,omitempty"`
 
 	// DeliveryAccountName:
-	DeliveryAccountName *string `json:",omitempty"`
+	DeliveryAccountName *string `json:"DeliveryAccountName,omitempty"`
 
 	// DeliveryAddress:
-	DeliveryAddress *GUID `json:",omitempty"`
+	DeliveryAddress *GUID `json:"DeliveryAddress,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document:
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentSubject:
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// DueDate:
-	DueDate *Date `json:",omitempty"`
+	DueDate *Date `json:"DueDate,omitempty"`
 
 	// InvoiceAccount:
-	InvoiceAccount *GUID `json:",omitempty"`
+	InvoiceAccount *GUID `json:"InvoiceAccount,omitempty"`
 
 	// InvoiceAccountCode:
-	InvoiceAccountCode *string `json:",omitempty"`
+	InvoiceAccountCode *string `json:"InvoiceAccountCode,omitempty"`
 
 	// InvoiceAccountContact:
-	InvoiceAccountContact *GUID `json:",omitempty"`
+	InvoiceAccountContact *GUID `json:"InvoiceAccountContact,omitempty"`
 
 	// InvoiceAccountContactFullName:
-	InvoiceAccountContactFullName *string `json:",omitempty"`
+	InvoiceAccountContactFullName *string `json:"InvoiceAccountContactFullName,omitempty"`
 
 	// InvoiceAccountName:
-	InvoiceAccountName *string `json:",omitempty"`
+	InvoiceAccountName *string `json:"InvoiceAccountName,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Opportunity:
-	Opportunity *GUID `json:",omitempty"`
+	Opportunity *GUID `json:"Opportunity,omitempty"`
 
 	// OpportunityName:
-	OpportunityName *string `json:",omitempty"`
+	OpportunityName *string `json:"OpportunityName,omitempty"`
 
 	// OrderAccount:
-	OrderAccount *GUID `json:",omitempty"`
+	OrderAccount *GUID `json:"OrderAccount,omitempty"`
 
 	// OrderAccountCode:
-	OrderAccountCode *string `json:",omitempty"`
+	OrderAccountCode *string `json:"OrderAccountCode,omitempty"`
 
 	// OrderAccountContact:
-	OrderAccountContact *GUID `json:",omitempty"`
+	OrderAccountContact *GUID `json:"OrderAccountContact,omitempty"`
 
 	// OrderAccountContactFullName:
-	OrderAccountContactFullName *string `json:",omitempty"`
+	OrderAccountContactFullName *string `json:"OrderAccountContactFullName,omitempty"`
 
 	// OrderAccountName:
-	OrderAccountName *string `json:",omitempty"`
+	OrderAccountName *string `json:"OrderAccountName,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// QuotationDate:
-	QuotationDate *Date `json:",omitempty"`
+	QuotationDate *Date `json:"QuotationDate,omitempty"`
 
 	// QuotationLines:
-	QuotationLines *[]byte `json:",omitempty"`
+	QuotationLines *[]byte `json:"QuotationLines,omitempty"`
 
 	// QuotationNumber:
-	QuotationNumber *int `json:",omitempty"`
+	QuotationNumber *int `json:"QuotationNumber,omitempty"`
 
 	// Remarks:
-	Remarks *string `json:",omitempty"`
+	Remarks *string `json:"Remarks,omitempty"`
 
 	// SalesPerson:
-	SalesPerson *GUID `json:",omitempty"`
+	SalesPerson *GUID `json:"SalesPerson,omitempty"`
 
 	// SalesPersonFullName:
-	SalesPersonFullName *string `json:",omitempty"`
+	SalesPersonFullName *string `json:"SalesPersonFullName,omitempty"`
 
 	// Status:
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription:
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// VATAmountFC:
-	VATAmountFC *float64 `json:",omitempty"`
+	VATAmountFC *float64 `json:"VATAmountFC,omitempty"`
 
 	// VersionNumber:
-	VersionNumber *int `json:",omitempty"`
+	VersionNumber *int `json:"VersionNumber,omitempty"`
 
 	// YourRef:
-	YourRef *string `json:",omitempty"`
+	YourRef *string `json:"YourRef,omitempty"`
 }
 
 func (s *CRMQuotations) GetIdentifier() GUID {
@@ -189,3 +189,22 @@ func (s *CRMQuotationsService) List(ctx context.Context, division int, all bool)
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Quotations enitity, by QuotationID.
+func (s *CRMQuotationsService) Get(ctx context.Context, division int, id GUID) (*CRMQuotations, error) {
+	var entities []*CRMQuotations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Quotations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Quotations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

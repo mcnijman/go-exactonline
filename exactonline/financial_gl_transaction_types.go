@@ -23,13 +23,13 @@ type FinancialGLTransactionTypesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLTransactionTypes
 type FinancialGLTransactionTypes struct {
 	// ID:
-	ID *int `json:",omitempty"`
+	ID *int `json:"ID,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DescriptionSuffix:
-	DescriptionSuffix *string `json:",omitempty"`
+	DescriptionSuffix *string `json:"DescriptionSuffix,omitempty"`
 }
 
 func (s *FinancialGLTransactionTypes) GetIdentifier() int {
@@ -51,3 +51,22 @@ func (s *FinancialGLTransactionTypesService) List(ctx context.Context, division 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GLTransactionTypes enitity, by ID.
+func (s *FinancialGLTransactionTypesService) Get(ctx context.Context, division int, id int) (*FinancialGLTransactionTypes, error) {
+	var entities []*FinancialGLTransactionTypes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GLTransactionTypes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

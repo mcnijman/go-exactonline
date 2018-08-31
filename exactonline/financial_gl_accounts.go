@@ -23,124 +23,124 @@ type FinancialGLAccountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLAccounts
 type FinancialGLAccounts struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AssimilatedVATBox:
-	AssimilatedVATBox *int `json:",omitempty"`
+	AssimilatedVATBox *int `json:"AssimilatedVATBox,omitempty"`
 
 	// BalanceSide:
-	BalanceSide *string `json:",omitempty"`
+	BalanceSide *string `json:"BalanceSide,omitempty"`
 
 	// BalanceType:
-	BalanceType *string `json:",omitempty"`
+	BalanceType *string `json:"BalanceType,omitempty"`
 
 	// BelcotaxType:
-	BelcotaxType *int `json:",omitempty"`
+	BelcotaxType *int `json:"BelcotaxType,omitempty"`
 
 	// Code:
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Compress:
-	Compress *bool `json:",omitempty"`
+	Compress *bool `json:"Compress,omitempty"`
 
 	// Costcenter:
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription:
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit:
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription:
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ExcludeVATListing:
-	ExcludeVATListing *byte `json:",omitempty"`
+	ExcludeVATListing *byte `json:"ExcludeVATListing,omitempty"`
 
 	// ExpenseNonDeductiblePercentage:
-	ExpenseNonDeductiblePercentage *float64 `json:",omitempty"`
+	ExpenseNonDeductiblePercentage *float64 `json:"ExpenseNonDeductiblePercentage,omitempty"`
 
 	// IsBlocked:
-	IsBlocked *bool `json:",omitempty"`
+	IsBlocked *bool `json:"IsBlocked,omitempty"`
 
 	// Matching:
-	Matching *bool `json:",omitempty"`
+	Matching *bool `json:"Matching,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PrivateGLAccount:
-	PrivateGLAccount *GUID `json:",omitempty"`
+	PrivateGLAccount *GUID `json:"PrivateGLAccount,omitempty"`
 
 	// PrivatePercentage:
-	PrivatePercentage *float64 `json:",omitempty"`
+	PrivatePercentage *float64 `json:"PrivatePercentage,omitempty"`
 
 	// ReportingCode:
-	ReportingCode *string `json:",omitempty"`
+	ReportingCode *string `json:"ReportingCode,omitempty"`
 
 	// RevalueCurrency:
-	RevalueCurrency *bool `json:",omitempty"`
+	RevalueCurrency *bool `json:"RevalueCurrency,omitempty"`
 
 	// SearchCode:
-	SearchCode *string `json:",omitempty"`
+	SearchCode *string `json:"SearchCode,omitempty"`
 
 	// Type:
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 
 	// UseCostcenter:
-	UseCostcenter *byte `json:",omitempty"`
+	UseCostcenter *byte `json:"UseCostcenter,omitempty"`
 
 	// UseCostunit:
-	UseCostunit *byte `json:",omitempty"`
+	UseCostunit *byte `json:"UseCostunit,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATDescription:
-	VATDescription *string `json:",omitempty"`
+	VATDescription *string `json:"VATDescription,omitempty"`
 
 	// VATGLAccountType:
-	VATGLAccountType *string `json:",omitempty"`
+	VATGLAccountType *string `json:"VATGLAccountType,omitempty"`
 
 	// VATNonDeductibleGLAccount:
-	VATNonDeductibleGLAccount *GUID `json:",omitempty"`
+	VATNonDeductibleGLAccount *GUID `json:"VATNonDeductibleGLAccount,omitempty"`
 
 	// VATNonDeductiblePercentage:
-	VATNonDeductiblePercentage *float64 `json:",omitempty"`
+	VATNonDeductiblePercentage *float64 `json:"VATNonDeductiblePercentage,omitempty"`
 
 	// VATSystem:
-	VATSystem *string `json:",omitempty"`
+	VATSystem *string `json:"VATSystem,omitempty"`
 
 	// YearEndCostGLAccount:
-	YearEndCostGLAccount *GUID `json:",omitempty"`
+	YearEndCostGLAccount *GUID `json:"YearEndCostGLAccount,omitempty"`
 
 	// YearEndReflectionGLAccount:
-	YearEndReflectionGLAccount *GUID `json:",omitempty"`
+	YearEndReflectionGLAccount *GUID `json:"YearEndReflectionGLAccount,omitempty"`
 }
 
 func (s *FinancialGLAccounts) GetIdentifier() GUID {
@@ -162,3 +162,22 @@ func (s *FinancialGLAccountsService) List(ctx context.Context, division int, all
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the GLAccounts enitity, by ID.
+func (s *FinancialGLAccountsService) Get(ctx context.Context, division int, id GUID) (*FinancialGLAccounts, error) {
+	var entities []*FinancialGLAccounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLAccounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d GLAccounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

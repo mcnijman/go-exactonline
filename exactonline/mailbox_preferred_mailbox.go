@@ -23,37 +23,37 @@ type MailboxPreferredMailboxService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadMailboxPreferredMailbox
 type MailboxPreferredMailbox struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// Description: Extra description of the mailbox
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// ForDivision: Only used when this mailbox is used for one specific administration, for example invoices to this mailbox will only be booked in this administration
-	ForDivision *int `json:",omitempty"`
+	ForDivision *int `json:"ForDivision,omitempty"`
 
 	// IsScanServiceMailbox: Indicates whether this service is used for messages returned by the scanning service
-	IsScanServiceMailbox *bool `json:",omitempty"`
+	IsScanServiceMailbox *bool `json:"IsScanServiceMailbox,omitempty"`
 
 	// Mailbox: E-mail address-like format, for example johndoe@exactonline.nl
-	Mailbox *string `json:",omitempty"`
+	Mailbox *string `json:"Mailbox,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ValidFrom: Date that this mailbox became valid
-	ValidFrom *Date `json:",omitempty"`
+	ValidFrom *Date `json:"ValidFrom,omitempty"`
 
 	// ValidTo: Date that this mailbox will not be valid anymore
-	ValidTo *Date `json:",omitempty"`
+	ValidTo *Date `json:"ValidTo,omitempty"`
 }
 
 func (s *MailboxPreferredMailbox) GetIdentifier() GUID {
@@ -75,3 +75,22 @@ func (s *MailboxPreferredMailboxService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the PreferredMailbox enitity, by ID.
+func (s *MailboxPreferredMailboxService) Get(ctx context.Context, division int, id GUID) (*MailboxPreferredMailbox, error) {
+	var entities []*MailboxPreferredMailbox
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/mailbox/PreferredMailbox?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d PreferredMailbox entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

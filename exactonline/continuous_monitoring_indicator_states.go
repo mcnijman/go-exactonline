@@ -23,52 +23,52 @@ type ContinuousMonitoringIndicatorStatesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorStates
 type ContinuousMonitoringIndicatorStates struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Count: To store the number (e.g. 2) of occurrences of an indicator (e.g. Number of deviating entries: 2)
-	Count *int `json:",omitempty"`
+	Count *int `json:"Count,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Indicator: ID of Indicators
-	Indicator *GUID `json:",omitempty"`
+	Indicator *GUID `json:"Indicator,omitempty"`
 
 	// IndicatorDescription: Indicator type description
-	IndicatorDescription *string `json:",omitempty"`
+	IndicatorDescription *string `json:"IndicatorDescription,omitempty"`
 
 	// IndicatorType: Indicator type (1 = Balance G/L account per financial year, 2 = Usage of journals, 3 = Deviating amount entered, 4 = Liquidity, 5 = VAT Return deadline, 6 = Difference result in percentage, 7 = Different VAT code used)
-	IndicatorType *int `json:",omitempty"`
+	IndicatorType *int `json:"IndicatorType,omitempty"`
 
 	// LastUpdated: Last update date
-	LastUpdated *Date `json:",omitempty"`
+	LastUpdated *Date `json:"LastUpdated,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// ReportingYear: Financial year
-	ReportingYear *int `json:",omitempty"`
+	ReportingYear *int `json:"ReportingYear,omitempty"`
 
 	// Status: Indicator status (1 = OK, 2 = Warning, 3 = Exception)
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// Value: To store a value (e.g. -1234.56) that will be used by the indicators current situation (e.g. Lowest expected balance of liquid assets will be: -1,234.56)
-	Value *float64 `json:",omitempty"`
+	Value *float64 `json:"Value,omitempty"`
 }
 
 func (s *ContinuousMonitoringIndicatorStates) GetIdentifier() GUID {
@@ -90,3 +90,22 @@ func (s *ContinuousMonitoringIndicatorStatesService) List(ctx context.Context, d
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the IndicatorStates enitity, by ID.
+func (s *ContinuousMonitoringIndicatorStatesService) Get(ctx context.Context, division int, id GUID) (*ContinuousMonitoringIndicatorStates, error) {
+	var entities []*ContinuousMonitoringIndicatorStates
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorStates?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d IndicatorStates entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

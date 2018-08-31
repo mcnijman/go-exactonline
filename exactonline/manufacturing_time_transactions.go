@@ -23,70 +23,70 @@ type ManufacturingTimeTransactionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingTimeTransactions
 type ManufacturingTimeTransactions struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Activity: Manufacturing time type: Setup = 10, Run = 20
-	Activity *int `json:",omitempty"`
+	Activity *int `json:"Activity,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Date: Date
-	Date *Date `json:",omitempty"`
+	Date *Date `json:"Date,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Employee: Employee linked to the transaction
-	Employee *GUID `json:",omitempty"`
+	Employee *GUID `json:"Employee,omitempty"`
 
 	// Hours: Machine hours
-	Hours *float64 `json:",omitempty"`
+	Hours *float64 `json:"Hours,omitempty"`
 
 	// IsOperationFinished: Is the operation finished?
-	IsOperationFinished *byte `json:",omitempty"`
+	IsOperationFinished *byte `json:"IsOperationFinished,omitempty"`
 
 	// LaborHours: Labor Hours on the operation
-	LaborHours *float64 `json:",omitempty"`
+	LaborHours *float64 `json:"LaborHours,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes linked to the time transaction
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PercentComplete: Percentage of the operation that is complete
-	PercentComplete *float64 `json:",omitempty"`
+	PercentComplete *float64 `json:"PercentComplete,omitempty"`
 
 	// Quantity: Quantity
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// RoutingStepPlan: Routing step linked to the transaction
-	RoutingStepPlan *GUID `json:",omitempty"`
+	RoutingStepPlan *GUID `json:"RoutingStepPlan,omitempty"`
 
 	// ShopOrder: Shop order linked to the transaction
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// Status: Status of the transaction: Draft = 1, Rejected = 2, Submitted = 10, Final = 20
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// TimedTimeTransaction: Timed time transaction linked to the transaction
-	TimedTimeTransaction *GUID `json:",omitempty"`
+	TimedTimeTransaction *GUID `json:"TimedTimeTransaction,omitempty"`
 
 	// WorkCenter: Workcenter linked to the transaction
-	WorkCenter *GUID `json:",omitempty"`
+	WorkCenter *GUID `json:"WorkCenter,omitempty"`
 }
 
 func (s *ManufacturingTimeTransactions) GetIdentifier() GUID {
@@ -108,3 +108,22 @@ func (s *ManufacturingTimeTransactionsService) List(ctx context.Context, divisio
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the TimeTransactions enitity, by ID.
+func (s *ManufacturingTimeTransactionsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingTimeTransactions, error) {
+	var entities []*ManufacturingTimeTransactions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/TimeTransactions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d TimeTransactions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

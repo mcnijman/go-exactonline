@@ -23,28 +23,28 @@ type LogisticsUnitsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsUnits
 type LogisticsUnits struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Active: Indicates whether a unit is in use
-	Active *bool `json:",omitempty"`
+	Active *bool `json:"Active,omitempty"`
 
 	// Code: Unique code for the unit
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Main: Indicates the main unit per division. Will be used when creating new item
-	Main *byte `json:",omitempty"`
+	Main *byte `json:"Main,omitempty"`
 
 	// TimeUnit: If Type = &#39;T&#39; (time) then this fields indicates the type of time frame. yy = Year, mm = Month, wk = Week, dd = Day, hh = Hour, mi = Minute, ss = Second
-	TimeUnit *string `json:",omitempty"`
+	TimeUnit *string `json:"TimeUnit,omitempty"`
 
 	// Type: Type of unit. Type &#39;Time&#39; is especially important for contracts.
-	Type *string `json:",omitempty"`
+	Type *string `json:"Type,omitempty"`
 }
 
 func (s *LogisticsUnits) GetIdentifier() GUID {
@@ -66,3 +66,22 @@ func (s *LogisticsUnitsService) List(ctx context.Context, division int, all bool
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Units enitity, by ID.
+func (s *LogisticsUnitsService) Get(ctx context.Context, division int, id GUID) (*LogisticsUnits, error) {
+	var entities []*LogisticsUnits
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Units entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

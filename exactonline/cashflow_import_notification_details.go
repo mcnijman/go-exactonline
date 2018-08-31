@@ -23,28 +23,28 @@ type CashflowImportNotificationDetailsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowImportNotificationDetails
 type CashflowImportNotificationDetails struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// CashflowImportNotification: ID of the notification these details belong to.
-	CashflowImportNotification *GUID `json:",omitempty"`
+	CashflowImportNotification *GUID `json:"CashflowImportNotification,omitempty"`
 
 	// CashflowTransactionFeed: ID of the cashflow transaction feed related to this notification.
-	CashflowTransactionFeed *GUID `json:",omitempty"`
+	CashflowTransactionFeed *GUID `json:"CashflowTransactionFeed,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Message: Termed message
-	Message *string `json:",omitempty"`
+	Message *string `json:"Message,omitempty"`
 
 	// ResponseCode: Response code
-	ResponseCode *int `json:",omitempty"`
+	ResponseCode *int `json:"ResponseCode,omitempty"`
 
 	// ResponseCodeArguments: Additional information about the response
-	ResponseCodeArguments *string `json:",omitempty"`
+	ResponseCodeArguments *string `json:"ResponseCodeArguments,omitempty"`
 }
 
 func (s *CashflowImportNotificationDetails) GetIdentifier() GUID {
@@ -66,3 +66,22 @@ func (s *CashflowImportNotificationDetailsService) List(ctx context.Context, div
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ImportNotificationDetails enitity, by ID.
+func (s *CashflowImportNotificationDetailsService) Get(ctx context.Context, division int, id GUID) (*CashflowImportNotificationDetails, error) {
+	var entities []*CashflowImportNotificationDetails
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ImportNotificationDetails entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

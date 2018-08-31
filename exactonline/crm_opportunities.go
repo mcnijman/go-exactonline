@@ -23,151 +23,151 @@ type CRMOpportunitiesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMOpportunities
 type CRMOpportunities struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// Accountant:
-	Accountant *GUID `json:",omitempty"`
+	Accountant *GUID `json:"Accountant,omitempty"`
 
 	// AccountantCode:
-	AccountantCode *string `json:",omitempty"`
+	AccountantCode *string `json:"AccountantCode,omitempty"`
 
 	// AccountantName:
-	AccountantName *string `json:",omitempty"`
+	AccountantName *string `json:"AccountantName,omitempty"`
 
 	// AccountCode:
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// ActionDate:
-	ActionDate *Date `json:",omitempty"`
+	ActionDate *Date `json:"ActionDate,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// Campaign:
-	Campaign *GUID `json:",omitempty"`
+	Campaign *GUID `json:"Campaign,omitempty"`
 
 	// CampaignDescription:
-	CampaignDescription *string `json:",omitempty"`
+	CampaignDescription *string `json:"CampaignDescription,omitempty"`
 
 	// Channel:
-	Channel *int `json:",omitempty"`
+	Channel *int `json:"Channel,omitempty"`
 
 	// ChannelDescription:
-	ChannelDescription *string `json:",omitempty"`
+	ChannelDescription *string `json:"ChannelDescription,omitempty"`
 
 	// CloseDate:
-	CloseDate *Date `json:",omitempty"`
+	CloseDate *Date `json:"CloseDate,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency:
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// LeadSource:
-	LeadSource *GUID `json:",omitempty"`
+	LeadSource *GUID `json:"LeadSource,omitempty"`
 
 	// LeadSourceDescription:
-	LeadSourceDescription *string `json:",omitempty"`
+	LeadSourceDescription *string `json:"LeadSourceDescription,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Name:
-	Name *string `json:",omitempty"`
+	Name *string `json:"Name,omitempty"`
 
 	// NextAction:
-	NextAction *string `json:",omitempty"`
+	NextAction *string `json:"NextAction,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OpportunityDepartmentCode:
-	OpportunityDepartmentCode *int `json:",omitempty"`
+	OpportunityDepartmentCode *int `json:"OpportunityDepartmentCode,omitempty"`
 
 	// OpportunityDepartmentDescription:
-	OpportunityDepartmentDescription *string `json:",omitempty"`
+	OpportunityDepartmentDescription *string `json:"OpportunityDepartmentDescription,omitempty"`
 
 	// OpportunityStage:
-	OpportunityStage *GUID `json:",omitempty"`
+	OpportunityStage *GUID `json:"OpportunityStage,omitempty"`
 
 	// OpportunityStageDescription:
-	OpportunityStageDescription *string `json:",omitempty"`
+	OpportunityStageDescription *string `json:"OpportunityStageDescription,omitempty"`
 
 	// OpportunityStatus:
-	OpportunityStatus *int `json:",omitempty"`
+	OpportunityStatus *int `json:"OpportunityStatus,omitempty"`
 
 	// OpportunityType:
-	OpportunityType *int `json:",omitempty"`
+	OpportunityType *int `json:"OpportunityType,omitempty"`
 
 	// OpportunityTypeDescription:
-	OpportunityTypeDescription *string `json:",omitempty"`
+	OpportunityTypeDescription *string `json:"OpportunityTypeDescription,omitempty"`
 
 	// Owner:
-	Owner *GUID `json:",omitempty"`
+	Owner *GUID `json:"Owner,omitempty"`
 
 	// OwnerFullName:
-	OwnerFullName *string `json:",omitempty"`
+	OwnerFullName *string `json:"OwnerFullName,omitempty"`
 
 	// Probability:
-	Probability *float64 `json:",omitempty"`
+	Probability *float64 `json:"Probability,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectCode:
-	ProjectCode *string `json:",omitempty"`
+	ProjectCode *string `json:"ProjectCode,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// RateFC:
-	RateFC *float64 `json:",omitempty"`
+	RateFC *float64 `json:"RateFC,omitempty"`
 
 	// ReasonCode:
-	ReasonCode *GUID `json:",omitempty"`
+	ReasonCode *GUID `json:"ReasonCode,omitempty"`
 
 	// ReasonCodeDescription:
-	ReasonCodeDescription *string `json:",omitempty"`
+	ReasonCodeDescription *string `json:"ReasonCodeDescription,omitempty"`
 
 	// Reseller:
-	Reseller *GUID `json:",omitempty"`
+	Reseller *GUID `json:"Reseller,omitempty"`
 
 	// ResellerCode:
-	ResellerCode *string `json:",omitempty"`
+	ResellerCode *string `json:"ResellerCode,omitempty"`
 
 	// ResellerName:
-	ResellerName *string `json:",omitempty"`
+	ResellerName *string `json:"ResellerName,omitempty"`
 
 	// SalesType:
-	SalesType *GUID `json:",omitempty"`
+	SalesType *GUID `json:"SalesType,omitempty"`
 
 	// SalesTypeDescription:
-	SalesTypeDescription *string `json:",omitempty"`
+	SalesTypeDescription *string `json:"SalesTypeDescription,omitempty"`
 }
 
 func (s *CRMOpportunities) GetIdentifier() GUID {
@@ -189,3 +189,22 @@ func (s *CRMOpportunitiesService) List(ctx context.Context, division int, all bo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Opportunities enitity, by ID.
+func (s *CRMOpportunitiesService) Get(ctx context.Context, division int, id GUID) (*CRMOpportunities, error) {
+	var entities []*CRMOpportunities
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Opportunities entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

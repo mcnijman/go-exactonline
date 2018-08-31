@@ -23,40 +23,40 @@ type BudgetBudgetScenariosService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BudgetBudgetScenarios
 type BudgetBudgetScenarios struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Budget scenario code
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Budget scenario description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// FromYear: From year
-	FromYear *int `json:",omitempty"`
+	FromYear *int `json:"FromYear,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// ToYear: To year
-	ToYear *int `json:",omitempty"`
+	ToYear *int `json:"ToYear,omitempty"`
 }
 
 func (s *BudgetBudgetScenarios) GetIdentifier() GUID {
@@ -78,3 +78,22 @@ func (s *BudgetBudgetScenariosService) List(ctx context.Context, division int, a
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the BudgetScenarios enitity, by ID.
+func (s *BudgetBudgetScenariosService) Get(ctx context.Context, division int, id GUID) (*BudgetBudgetScenarios, error) {
+	var entities []*BudgetBudgetScenarios
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/budget/BudgetScenarios?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d BudgetScenarios entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

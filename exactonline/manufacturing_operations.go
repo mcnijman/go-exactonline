@@ -23,52 +23,52 @@ type ManufacturingOperationsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingOperations
 type ManufacturingOperations struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Code: Code of the operation
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the operation
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// HasSuppliers: Indicates if the operation has suppliers associated with it
-	HasSuppliers *byte `json:",omitempty"`
+	HasSuppliers *byte `json:"HasSuppliers,omitempty"`
 
 	// Item: Reference to Items table
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Searchcode: Search code for the operation
-	Searchcode *string `json:",omitempty"`
+	Searchcode *string `json:"Searchcode,omitempty"`
 
 	// Status: Status of the operation
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *ManufacturingOperations) GetIdentifier() GUID {
@@ -90,3 +90,22 @@ func (s *ManufacturingOperationsService) List(ctx context.Context, division int,
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Operations enitity, by ID.
+func (s *ManufacturingOperationsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingOperations, error) {
+	var entities []*ManufacturingOperations
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/Operations?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Operations entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

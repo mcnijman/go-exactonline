@@ -23,10 +23,10 @@ type ProjectHourCostTypesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectHourCostTypes
 type ProjectHourCostTypes struct {
 	// ItemId: Primary key
-	ItemId *GUID `json:",omitempty"`
+	ItemId *GUID `json:"ItemId,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 }
 
 func (s *ProjectHourCostTypes) GetIdentifier() GUID {
@@ -48,3 +48,22 @@ func (s *ProjectHourCostTypesService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the HourCostTypes enitity, by ItemId.
+func (s *ProjectHourCostTypesService) Get(ctx context.Context, division int, id GUID) (*ProjectHourCostTypes, error) {
+	var entities []*ProjectHourCostTypes
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/HourCostTypes?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d HourCostTypes entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

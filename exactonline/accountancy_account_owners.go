@@ -23,49 +23,49 @@ type AccountancyAccountOwnersService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AccountancyAccountOwners
 type AccountancyAccountOwners struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: ID of the account that is owned
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountCode: Code of the account that is owned
-	AccountCode *string `json:",omitempty"`
+	AccountCode *string `json:"AccountCode,omitempty"`
 
 	// AccountName: Name of the account that is owned
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// OwnerAccount: ID of the account who owns specified account
-	OwnerAccount *GUID `json:",omitempty"`
+	OwnerAccount *GUID `json:"OwnerAccount,omitempty"`
 
 	// OwnerAccountCode: Code of the account who owns specified account
-	OwnerAccountCode *string `json:",omitempty"`
+	OwnerAccountCode *string `json:"OwnerAccountCode,omitempty"`
 
 	// OwnerAccountName: Name of the account who owns specified account
-	OwnerAccountName *string `json:",omitempty"`
+	OwnerAccountName *string `json:"OwnerAccountName,omitempty"`
 
 	// Shares: Percentage of shares that is owned. 1 is 100%, 0.5 is 50%
-	Shares *float64 `json:",omitempty"`
+	Shares *float64 `json:"Shares,omitempty"`
 }
 
 func (s *AccountancyAccountOwners) GetIdentifier() GUID {
@@ -87,3 +87,22 @@ func (s *AccountancyAccountOwnersService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the AccountOwners enitity, by ID.
+func (s *AccountancyAccountOwnersService) Get(ctx context.Context, division int, id GUID) (*AccountancyAccountOwners, error) {
+	var entities []*AccountancyAccountOwners
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountOwners?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d AccountOwners entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

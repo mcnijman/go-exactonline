@@ -23,82 +23,82 @@ type InventoryStockCountLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStockCountLines
 type InventoryStockCountLines struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// BatchNumbers: The collection of batch numbers that belong to the items included in this stock count
-	BatchNumbers *[]byte `json:",omitempty"`
+	BatchNumbers *[]byte `json:"BatchNumbers,omitempty"`
 
 	// CostPrice: Cost price of the item that is used to create the stock count
-	CostPrice *float64 `json:",omitempty"`
+	CostPrice *float64 `json:"CostPrice,omitempty"`
 
 	// CountedBy: Counted by
-	CountedBy *GUID `json:",omitempty"`
+	CountedBy *GUID `json:"CountedBy,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Reference to the item for which the stock is counted
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Item code
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemCostPrice: Current standard/actual item cost price
-	ItemCostPrice *float64 `json:",omitempty"`
+	ItemCostPrice *float64 `json:"ItemCostPrice,omitempty"`
 
 	// ItemDescription: Description of item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemDivisable: Indicates if fractional quantities of the item can be used, for example quantity = 0.4
-	ItemDivisable *bool `json:",omitempty"`
+	ItemDivisable *bool `json:"ItemDivisable,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// QuantityDifference: The difference between the current quantity in stock and the new quantity in stock. For example specify -1 for this field to correct the quantity if one item in stock is broken.
-	QuantityDifference *float64 `json:",omitempty"`
+	QuantityDifference *float64 `json:"QuantityDifference,omitempty"`
 
 	// QuantityInStock: The current quantity available in stock
-	QuantityInStock *float64 `json:",omitempty"`
+	QuantityInStock *float64 `json:"QuantityInStock,omitempty"`
 
 	// QuantityNew: The new quantity in stock. Use this field to correct the quantity when the items in stock are physically counted.
-	QuantityNew *float64 `json:",omitempty"`
+	QuantityNew *float64 `json:"QuantityNew,omitempty"`
 
 	// SerialNumbers: The collection of serial numbers that belong to the items included in this stock count
-	SerialNumbers *[]byte `json:",omitempty"`
+	SerialNumbers *[]byte `json:"SerialNumbers,omitempty"`
 
 	// StockCountID: Identifies the stock count. All the lines of a stock count have the same StockCountID
-	StockCountID *GUID `json:",omitempty"`
+	StockCountID *GUID `json:"StockCountID,omitempty"`
 
 	// StockKeepingUnit: Stock item&#39;s unit description
-	StockKeepingUnit *string `json:",omitempty"`
+	StockKeepingUnit *string `json:"StockKeepingUnit,omitempty"`
 
 	// StorageLocation: This property is package specific (Stock count can have multiple lines for the same item only if it is for multiple storage locations).
-	StorageLocation *GUID `json:",omitempty"`
+	StorageLocation *GUID `json:"StorageLocation,omitempty"`
 
 	// StorageLocationCode: Storage location code
-	StorageLocationCode *string `json:",omitempty"`
+	StorageLocationCode *string `json:"StorageLocationCode,omitempty"`
 
 	// StorageLocationDescription: Storage location description
-	StorageLocationDescription *string `json:",omitempty"`
+	StorageLocationDescription *string `json:"StorageLocationDescription,omitempty"`
 }
 
 func (s *InventoryStockCountLines) GetIdentifier() GUID {
@@ -120,3 +120,22 @@ func (s *InventoryStockCountLinesService) List(ctx context.Context, division int
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the StockCountLines enitity, by ID.
+func (s *InventoryStockCountLinesService) Get(ctx context.Context, division int, id GUID) (*InventoryStockCountLines, error) {
+	var entities []*InventoryStockCountLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCountLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d StockCountLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

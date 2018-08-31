@@ -23,142 +23,142 @@ type SalesOrderSalesOrderLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesOrderSalesOrderLines
 type SalesOrderSalesOrderLines struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AmountDC:
-	AmountDC *float64 `json:",omitempty"`
+	AmountDC *float64 `json:"AmountDC,omitempty"`
 
 	// AmountFC:
-	AmountFC *float64 `json:",omitempty"`
+	AmountFC *float64 `json:"AmountFC,omitempty"`
 
 	// CostCenter:
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostCenterDescription:
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostPriceFC:
-	CostPriceFC *float64 `json:",omitempty"`
+	CostPriceFC *float64 `json:"CostPriceFC,omitempty"`
 
 	// CostUnit:
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// CostUnitDescription:
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// DeliveryDate:
-	DeliveryDate *Date `json:",omitempty"`
+	DeliveryDate *Date `json:"DeliveryDate,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Discount:
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item:
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode:
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription:
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemVersion:
-	ItemVersion *GUID `json:",omitempty"`
+	ItemVersion *GUID `json:"ItemVersion,omitempty"`
 
 	// ItemVersionDescription:
-	ItemVersionDescription *string `json:",omitempty"`
+	ItemVersionDescription *string `json:"ItemVersionDescription,omitempty"`
 
 	// LineNumber:
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Margin:
-	Margin *float64 `json:",omitempty"`
+	Margin *float64 `json:"Margin,omitempty"`
 
 	// NetPrice:
-	NetPrice *float64 `json:",omitempty"`
+	NetPrice *float64 `json:"NetPrice,omitempty"`
 
 	// Notes:
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// OrderID:
-	OrderID *GUID `json:",omitempty"`
+	OrderID *GUID `json:"OrderID,omitempty"`
 
 	// OrderNumber:
-	OrderNumber *int `json:",omitempty"`
+	OrderNumber *int `json:"OrderNumber,omitempty"`
 
 	// Pricelist:
-	Pricelist *GUID `json:",omitempty"`
+	Pricelist *GUID `json:"Pricelist,omitempty"`
 
 	// PricelistDescription:
-	PricelistDescription *string `json:",omitempty"`
+	PricelistDescription *string `json:"PricelistDescription,omitempty"`
 
 	// Project:
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// ProjectDescription:
-	ProjectDescription *string `json:",omitempty"`
+	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 
 	// PurchaseOrder:
-	PurchaseOrder *GUID `json:",omitempty"`
+	PurchaseOrder *GUID `json:"PurchaseOrder,omitempty"`
 
 	// PurchaseOrderLine:
-	PurchaseOrderLine *GUID `json:",omitempty"`
+	PurchaseOrderLine *GUID `json:"PurchaseOrderLine,omitempty"`
 
 	// PurchaseOrderLineNumber:
-	PurchaseOrderLineNumber *int `json:",omitempty"`
+	PurchaseOrderLineNumber *int `json:"PurchaseOrderLineNumber,omitempty"`
 
 	// PurchaseOrderNumber:
-	PurchaseOrderNumber *int `json:",omitempty"`
+	PurchaseOrderNumber *int `json:"PurchaseOrderNumber,omitempty"`
 
 	// Quantity:
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// QuantityDelivered:
-	QuantityDelivered *float64 `json:",omitempty"`
+	QuantityDelivered *float64 `json:"QuantityDelivered,omitempty"`
 
 	// QuantityInvoiced:
-	QuantityInvoiced *float64 `json:",omitempty"`
+	QuantityInvoiced *float64 `json:"QuantityInvoiced,omitempty"`
 
 	// ShopOrder:
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// TaxSchedule:
-	TaxSchedule *GUID `json:",omitempty"`
+	TaxSchedule *GUID `json:"TaxSchedule,omitempty"`
 
 	// TaxScheduleCode:
-	TaxScheduleCode *string `json:",omitempty"`
+	TaxScheduleCode *string `json:"TaxScheduleCode,omitempty"`
 
 	// TaxScheduleDescription:
-	TaxScheduleDescription *string `json:",omitempty"`
+	TaxScheduleDescription *string `json:"TaxScheduleDescription,omitempty"`
 
 	// UnitCode:
-	UnitCode *string `json:",omitempty"`
+	UnitCode *string `json:"UnitCode,omitempty"`
 
 	// UnitDescription:
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 
 	// UnitPrice:
-	UnitPrice *float64 `json:",omitempty"`
+	UnitPrice *float64 `json:"UnitPrice,omitempty"`
 
 	// UseDropShipment:
-	UseDropShipment *byte `json:",omitempty"`
+	UseDropShipment *byte `json:"UseDropShipment,omitempty"`
 
 	// VATAmount:
-	VATAmount *float64 `json:",omitempty"`
+	VATAmount *float64 `json:"VATAmount,omitempty"`
 
 	// VATCode:
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATCodeDescription:
-	VATCodeDescription *string `json:",omitempty"`
+	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 
 	// VATPercentage:
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 }
 
 func (s *SalesOrderSalesOrderLines) GetIdentifier() GUID {
@@ -180,3 +180,22 @@ func (s *SalesOrderSalesOrderLinesService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the SalesOrderLines enitity, by ID.
+func (s *SalesOrderSalesOrderLinesService) Get(ctx context.Context, division int, id GUID) (*SalesOrderSalesOrderLines, error) {
+	var entities []*SalesOrderSalesOrderLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/salesorder/SalesOrderLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d SalesOrderLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

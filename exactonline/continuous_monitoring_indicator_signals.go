@@ -23,79 +23,79 @@ type ContinuousMonitoringIndicatorSignalsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorSignals
 type ContinuousMonitoringIndicatorSignals struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Indicator signal description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryID: Primary key
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// GLAccount: GL Account ID
-	GLAccount *GUID `json:",omitempty"`
+	GLAccount *GUID `json:"GLAccount,omitempty"`
 
 	// GlAccountCode: GL Account Code
-	GlAccountCode *string `json:",omitempty"`
+	GlAccountCode *string `json:"GlAccountCode,omitempty"`
 
 	// GlAccountDescription: GL Account Description
-	GlAccountDescription *string `json:",omitempty"`
+	GlAccountDescription *string `json:"GlAccountDescription,omitempty"`
 
 	// Indicator: ID of Indicators
-	Indicator *GUID `json:",omitempty"`
+	Indicator *GUID `json:"Indicator,omitempty"`
 
 	// IndicatorDescription: Indicator description
-	IndicatorDescription *string `json:",omitempty"`
+	IndicatorDescription *string `json:"IndicatorDescription,omitempty"`
 
 	// IndicatorState: ID of IndicatorStates
-	IndicatorState *GUID `json:",omitempty"`
+	IndicatorState *GUID `json:"IndicatorState,omitempty"`
 
 	// IndicatorStateReportingYear: Indicator states reporting year
-	IndicatorStateReportingYear *int `json:",omitempty"`
+	IndicatorStateReportingYear *int `json:"IndicatorStateReportingYear,omitempty"`
 
 	// IndicatorType: Indicator type (1 = Balance G/L account per financial year, 2 = Usage of journals, 3 = Deviating amount entered, 4 = Liquidity, 5 = VAT Return deadline, 6 = Difference result in percentage, 7 = Different VAT code used)
-	IndicatorType *int `json:",omitempty"`
+	IndicatorType *int `json:"IndicatorType,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Notes of indicator signal
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// NotesModified: Notes of indicator signal&#39;s modified date
-	NotesModified *Date `json:",omitempty"`
+	NotesModified *Date `json:"NotesModified,omitempty"`
 
 	// NotesModifier: Notes of indicator signal&#39;s user ID modifier
-	NotesModifier *GUID `json:",omitempty"`
+	NotesModifier *GUID `json:"NotesModifier,omitempty"`
 
 	// NotesModifierFullName: Name of modifier of notes in indicator signal
-	NotesModifierFullName *string `json:",omitempty"`
+	NotesModifierFullName *string `json:"NotesModifierFullName,omitempty"`
 
 	// Severity: Severity of the indicators (1 = Low, 2 = Medium, 3 = High, 4 = Critical)
-	Severity *int `json:",omitempty"`
+	Severity *int `json:"Severity,omitempty"`
 
 	// SignalDate: Signal&#39;s creation date
-	SignalDate *Date `json:",omitempty"`
+	SignalDate *Date `json:"SignalDate,omitempty"`
 
 	// Status: Indicator signal status (0 = Ignore, 1 = Active, 2 = Archived)
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 }
 
 func (s *ContinuousMonitoringIndicatorSignals) GetIdentifier() GUID {
@@ -117,3 +117,22 @@ func (s *ContinuousMonitoringIndicatorSignalsService) List(ctx context.Context, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the IndicatorSignals enitity, by ID.
+func (s *ContinuousMonitoringIndicatorSignalsService) Get(ctx context.Context, division int, id GUID) (*ContinuousMonitoringIndicatorSignals, error) {
+	var entities []*ContinuousMonitoringIndicatorSignals
+	u, err := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorSignals?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d IndicatorSignals entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

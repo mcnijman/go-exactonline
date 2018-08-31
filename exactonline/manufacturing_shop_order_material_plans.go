@@ -23,91 +23,91 @@ type ManufacturingShopOrderMaterialPlansService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingShopOrderMaterialPlans
 type ManufacturingShopOrderMaterialPlans struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Backflush: Indicates if this is a backflush step
-	Backflush *byte `json:",omitempty"`
+	Backflush *byte `json:"Backflush,omitempty"`
 
 	// CalculatorType: Calculator type
-	CalculatorType *int `json:",omitempty"`
+	CalculatorType *int `json:"CalculatorType,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the material
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DetailDrawing: Detail drawing reference
-	DetailDrawing *string `json:",omitempty"`
+	DetailDrawing *string `json:"DetailDrawing,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Item: Reference to Items table
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemCode: Item Code
-	ItemCode *string `json:",omitempty"`
+	ItemCode *string `json:"ItemCode,omitempty"`
 
 	// ItemDescription: Description of Item
-	ItemDescription *string `json:",omitempty"`
+	ItemDescription *string `json:"ItemDescription,omitempty"`
 
 	// ItemPictureUrl: URL of the material item&#39;s picture
-	ItemPictureUrl *string `json:",omitempty"`
+	ItemPictureUrl *string `json:"ItemPictureUrl,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Line notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PlannedAmountFC: Planned amount in the currency of the transaction
-	PlannedAmountFC *float64 `json:",omitempty"`
+	PlannedAmountFC *float64 `json:"PlannedAmountFC,omitempty"`
 
 	// PlannedDate: Date that the material is required.
-	PlannedDate *Date `json:",omitempty"`
+	PlannedDate *Date `json:"PlannedDate,omitempty"`
 
 	// PlannedPriceFC: Planned price of the material
-	PlannedPriceFC *float64 `json:",omitempty"`
+	PlannedPriceFC *float64 `json:"PlannedPriceFC,omitempty"`
 
 	// PlannedQuantity: Intended quantity
-	PlannedQuantity *float64 `json:",omitempty"`
+	PlannedQuantity *float64 `json:"PlannedQuantity,omitempty"`
 
 	// PlannedQuantityFactor: Intended quantity unit factor
-	PlannedQuantityFactor *float64 `json:",omitempty"`
+	PlannedQuantityFactor *float64 `json:"PlannedQuantityFactor,omitempty"`
 
 	// ShopOrder: Reference to ShopOrders table
-	ShopOrder *GUID `json:",omitempty"`
+	ShopOrder *GUID `json:"ShopOrder,omitempty"`
 
 	// Status: Line status
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription: Description of Status
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// Type: Type
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// Unit: Unit
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitDescription: Unit description
-	UnitDescription *string `json:",omitempty"`
+	UnitDescription *string `json:"UnitDescription,omitempty"`
 }
 
 func (s *ManufacturingShopOrderMaterialPlans) GetIdentifier() GUID {
@@ -129,3 +129,22 @@ func (s *ManufacturingShopOrderMaterialPlansService) List(ctx context.Context, d
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ShopOrderMaterialPlans enitity, by ID.
+func (s *ManufacturingShopOrderMaterialPlansService) Get(ctx context.Context, division int, id GUID) (*ManufacturingShopOrderMaterialPlans, error) {
+	var entities []*ManufacturingShopOrderMaterialPlans
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderMaterialPlans?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ShopOrderMaterialPlans entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

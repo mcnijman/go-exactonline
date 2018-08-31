@@ -23,76 +23,76 @@ type ActivitiesServiceRequestsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesServiceRequests
 type ActivitiesServiceRequests struct {
 	// ID: The Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account: The account that is related to the service request
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName: The name of the account
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// AssignedTo: The user that the service request is assigned to
-	AssignedTo *GUID `json:",omitempty"`
+	AssignedTo *GUID `json:"AssignedTo,omitempty"`
 
 	// AssignedToFullName: The user name
-	AssignedToFullName *string `json:",omitempty"`
+	AssignedToFullName *string `json:"AssignedToFullName,omitempty"`
 
 	// Attachments: Attachments linked to the service request
-	Attachments *[]byte `json:",omitempty"`
+	Attachments *[]byte `json:"Attachments,omitempty"`
 
 	// Contact: The contact person that is related to the service request
-	Contact *GUID `json:",omitempty"`
+	Contact *GUID `json:"Contact,omitempty"`
 
 	// ContactFullName: The name of the contact person
-	ContactFullName *string `json:",omitempty"`
+	ContactFullName *string `json:"ContactFullName,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of the creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of the creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: The description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: The division
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Document: The document that is linked to the service request
-	Document *GUID `json:",omitempty"`
+	Document *GUID `json:"Document,omitempty"`
 
 	// DocumentSubject: The subject of the document
-	DocumentSubject *string `json:",omitempty"`
+	DocumentSubject *string `json:"DocumentSubject,omitempty"`
 
 	// HID: The human readable key
-	HID *int `json:",omitempty"`
+	HID *int `json:"HID,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of the last modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of the last modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// NextAction: The date indicating by when the next action has to be taken
-	NextAction *Date `json:",omitempty"`
+	NextAction *Date `json:"NextAction,omitempty"`
 
 	// Notes: The notes of the service request
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// ReceiptDate: The date the service request was received
-	ReceiptDate *Date `json:",omitempty"`
+	ReceiptDate *Date `json:"ReceiptDate,omitempty"`
 
 	// Status: Status: 0 = Void, 5 = Rejected, 10 = Draft, 20 = Open, 30 = Approved, 40 = Realized, 50 = Processed
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StatusDescription: The description of the status
-	StatusDescription *string `json:",omitempty"`
+	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
 func (s *ActivitiesServiceRequests) GetIdentifier() GUID {
@@ -114,3 +114,22 @@ func (s *ActivitiesServiceRequestsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the ServiceRequests enitity, by ID.
+func (s *ActivitiesServiceRequestsService) Get(ctx context.Context, division int, id GUID) (*ActivitiesServiceRequests, error) {
+	var entities []*ActivitiesServiceRequests
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/ServiceRequests?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d ServiceRequests entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

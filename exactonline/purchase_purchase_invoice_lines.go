@@ -23,85 +23,85 @@ type PurchasePurchaseInvoiceLinesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchasePurchaseInvoiceLines
 type PurchasePurchaseInvoiceLines struct {
 	// ID: A guid that uniqely identifies the invoice line.
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Amount: In a GET request the line amount is always returned excluding VAT.In a POST request the line amount has to be submitted either including or excluding the VAT amount. This depends on the type (including or excluding) of the VAT code.
-	Amount *float64 `json:",omitempty"`
+	Amount *float64 `json:"Amount,omitempty"`
 
 	// CostCenter: The code of the cost center that is linked to this invoice line.
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostUnit: The code of the cost unit that is linked to this invoice line.
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// Currency: The currency of the line amount. The total invoice amount and all individual line amounts are in the same currency.
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// Description: Description of the invoice line.
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Discount: The discount given on the default price. A value of 0.1 translates to 10% discount.
-	Discount *float64 `json:",omitempty"`
+	Discount *float64 `json:"Discount,omitempty"`
 
 	// Expense: Expense related to the Work Breakdown Structure of the selected project. Only available with a professional service license
-	Expense *GUID `json:",omitempty"`
+	Expense *GUID `json:"Expense,omitempty"`
 
 	// ExpenseDescription: Description of expense. Only available with a professional service license
-	ExpenseDescription *string `json:",omitempty"`
+	ExpenseDescription *string `json:"ExpenseDescription,omitempty"`
 
 	// InvoiceID: The unique identifier of the purchase invoice this line belongs to.
-	InvoiceID *GUID `json:",omitempty"`
+	InvoiceID *GUID `json:"InvoiceID,omitempty"`
 
 	// InvoiceType: Purchase invoice type.
-	InvoiceType *int `json:",omitempty"`
+	InvoiceType *int `json:"InvoiceType,omitempty"`
 
 	// Item: Guid that identifies the purchase item. In a POST request either the Item or the PurchaseOrderLine has to be supplied.
-	Item *GUID `json:",omitempty"`
+	Item *GUID `json:"Item,omitempty"`
 
 	// ItemUnit: The default unit of the purchased item.
-	ItemUnit *string `json:",omitempty"`
+	ItemUnit *string `json:"ItemUnit,omitempty"`
 
 	// LineNumber: The sequence number of the line.
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified: The date and time the invoice line was last modified.
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// NetPrice: The net price that has to be paid per unit. NetPrice = UnitPrice * (1.0 - Discount).Depending on the type of the VAT code the net price is including or excluding VAT.
-	NetPrice *float64 `json:",omitempty"`
+	NetPrice *float64 `json:"NetPrice,omitempty"`
 
 	// Notes: The user can enter notes related to the invoice line here.
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Project: The project linked to the purchase invoice line. This field is only applicable for Manufacturing and Professional Services.
-	Project *GUID `json:",omitempty"`
+	Project *GUID `json:"Project,omitempty"`
 
 	// PurchaseOrderLine: Guid that identifies the purchase order line that is being invoiced. When doing a POST either the Item or the PurchaseOrderLine has to be supplied.The values of the purchase order line such as Quantity, Item and Amount will be copied to the purchase invoice line.
-	PurchaseOrderLine *GUID `json:",omitempty"`
+	PurchaseOrderLine *GUID `json:"PurchaseOrderLine,omitempty"`
 
 	// Quantity: The number of purchased items in purchase units. The purchase unit is defined on the item card and it can also be found using the logistics/SupplierItem api endpoint.For divisible items the quantity can be a fractional number, otherwise it is an integer.
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// QuantityInDefaultUnits: The number of purchased items in default units. An item has both a default unit and a purchase unit, for example piece and box with a box containing 12 pieces. The multiplication factor (12 in this example) between the default unit and purchase unit is maintained on the item card. When you GET a purchase invoice line for 1 box of items the field Quantity = 1 and QuantityInDefaultUnits = 12.
-	QuantityInDefaultUnits *float64 `json:",omitempty"`
+	QuantityInDefaultUnits *float64 `json:"QuantityInDefaultUnits,omitempty"`
 
 	// Rebill: Indicates whether the purchase invoice line needs to be rebilled. Only available with a professional service license
-	Rebill *bool `json:",omitempty"`
+	Rebill *bool `json:"Rebill,omitempty"`
 
 	// Unit: The code of the unit in which the item is purchased. For example piece, box or kg. The value is taken from the purchase unit in the item card.
-	Unit *string `json:",omitempty"`
+	Unit *string `json:"Unit,omitempty"`
 
 	// UnitPrice: The default purchase price per unit.Depending on the type of the VAT code the unit price is including or excluding VAT.
-	UnitPrice *float64 `json:",omitempty"`
+	UnitPrice *float64 `json:"UnitPrice,omitempty"`
 
 	// VATAmount: The VAT amount of the invoice line.
-	VATAmount *float64 `json:",omitempty"`
+	VATAmount *float64 `json:"VATAmount,omitempty"`
 
 	// VATCode: The VAT code used for the invoice line.
-	VATCode *string `json:",omitempty"`
+	VATCode *string `json:"VATCode,omitempty"`
 
 	// VATPercentage: The VAT percentage.
-	VATPercentage *float64 `json:",omitempty"`
+	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 }
 
 func (s *PurchasePurchaseInvoiceLines) GetIdentifier() GUID {
@@ -123,3 +123,22 @@ func (s *PurchasePurchaseInvoiceLinesService) List(ctx context.Context, division
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the PurchaseInvoiceLines enitity, by ID.
+func (s *PurchasePurchaseInvoiceLinesService) Get(ctx context.Context, division int, id GUID) (*PurchasePurchaseInvoiceLines, error) {
+	var entities []*PurchasePurchaseInvoiceLines
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/purchase/PurchaseInvoiceLines?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d PurchaseInvoiceLines entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

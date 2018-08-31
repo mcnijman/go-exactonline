@@ -23,73 +23,73 @@ type CRMBankAccountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMBankAccounts
 type CRMBankAccounts struct {
 	// ID:
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Account:
-	Account *GUID `json:",omitempty"`
+	Account *GUID `json:"Account,omitempty"`
 
 	// AccountName:
-	AccountName *string `json:",omitempty"`
+	AccountName *string `json:"AccountName,omitempty"`
 
 	// Bank:
-	Bank *GUID `json:",omitempty"`
+	Bank *GUID `json:"Bank,omitempty"`
 
 	// BankAccount:
-	BankAccount *string `json:",omitempty"`
+	BankAccount *string `json:"BankAccount,omitempty"`
 
 	// BankAccountHolderName:
-	BankAccountHolderName *string `json:",omitempty"`
+	BankAccountHolderName *string `json:"BankAccountHolderName,omitempty"`
 
 	// BankDescription:
-	BankDescription *string `json:",omitempty"`
+	BankDescription *string `json:"BankDescription,omitempty"`
 
 	// BankName:
-	BankName *string `json:",omitempty"`
+	BankName *string `json:"BankName,omitempty"`
 
 	// BICCode:
-	BICCode *string `json:",omitempty"`
+	BICCode *string `json:"BICCode,omitempty"`
 
 	// Created:
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator:
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName:
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description:
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division:
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// Format:
-	Format *string `json:",omitempty"`
+	Format *string `json:"Format,omitempty"`
 
 	// IBAN:
-	IBAN *string `json:",omitempty"`
+	IBAN *string `json:"IBAN,omitempty"`
 
 	// Main:
-	Main *bool `json:",omitempty"`
+	Main *bool `json:"Main,omitempty"`
 
 	// Modified:
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier:
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName:
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// PaymentServiceAccount:
-	PaymentServiceAccount *GUID `json:",omitempty"`
+	PaymentServiceAccount *GUID `json:"PaymentServiceAccount,omitempty"`
 
 	// Type:
-	Type *string `json:",omitempty"`
+	Type *string `json:"Type,omitempty"`
 
 	// TypeDescription:
-	TypeDescription *string `json:",omitempty"`
+	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
 func (s *CRMBankAccounts) GetIdentifier() GUID {
@@ -111,3 +111,22 @@ func (s *CRMBankAccountsService) List(ctx context.Context, division int, all boo
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the BankAccounts enitity, by ID.
+func (s *CRMBankAccountsService) Get(ctx context.Context, division int, id GUID) (*CRMBankAccounts, error) {
+	var entities []*CRMBankAccounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/BankAccounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d BankAccounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

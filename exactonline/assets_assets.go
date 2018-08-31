@@ -23,163 +23,163 @@ type AssetsAssetsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AssetsAssets
 type AssetsAssets struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AlreadyDepreciated: Indicates if an asset was already depreciated before registering it in Exact Online
-	AlreadyDepreciated *byte `json:",omitempty"`
+	AlreadyDepreciated *byte `json:"AlreadyDepreciated,omitempty"`
 
 	// AssetFrom: In case of a transfer or a split, the original asset ID is saved in this field. This is done to provide tracability of the Asset
-	AssetFrom *GUID `json:",omitempty"`
+	AssetFrom *GUID `json:"AssetFrom,omitempty"`
 
 	// AssetFromDescription: Description of AssetFrom
-	AssetFromDescription *string `json:",omitempty"`
+	AssetFromDescription *string `json:"AssetFromDescription,omitempty"`
 
 	// AssetGroup: Asset group identifies GLAccounts to be used for Asset transactions
-	AssetGroup *GUID `json:",omitempty"`
+	AssetGroup *GUID `json:"AssetGroup,omitempty"`
 
 	// AssetGroupCode: Code of the asset group
-	AssetGroupCode *string `json:",omitempty"`
+	AssetGroupCode *string `json:"AssetGroupCode,omitempty"`
 
 	// AssetGroupDescription: Description of the asset group
-	AssetGroupDescription *string `json:",omitempty"`
+	AssetGroupDescription *string `json:"AssetGroupDescription,omitempty"`
 
 	// CatalogueValue: The catalogue value of the asset
-	CatalogueValue *float64 `json:",omitempty"`
+	CatalogueValue *float64 `json:"CatalogueValue,omitempty"`
 
 	// Code: Code of the asset
-	Code *string `json:",omitempty"`
+	Code *string `json:"Code,omitempty"`
 
 	// Costcenter: Assets can be linked to a cost center
-	Costcenter *string `json:",omitempty"`
+	Costcenter *string `json:"Costcenter,omitempty"`
 
 	// CostcenterDescription: Description of Costcenter
-	CostcenterDescription *string `json:",omitempty"`
+	CostcenterDescription *string `json:"CostcenterDescription,omitempty"`
 
 	// Costunit: Assets can be linked to a cost unit
-	Costunit *string `json:",omitempty"`
+	Costunit *string `json:"Costunit,omitempty"`
 
 	// CostunitDescription: Description of Costunit
-	CostunitDescription *string `json:",omitempty"`
+	CostunitDescription *string `json:"CostunitDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// DeductionPercentage: Used for Belgium legislation. Used to produce the official &#39;Investment deduction&#39; report
-	DeductionPercentage *float64 `json:",omitempty"`
+	DeductionPercentage *float64 `json:"DeductionPercentage,omitempty"`
 
 	// DepreciatedAmount: Amount that is already depreciated when adding an existing asset. Can only be filled when &#39;Alreadydepreciated&#39; is on
-	DepreciatedAmount *float64 `json:",omitempty"`
+	DepreciatedAmount *float64 `json:"DepreciatedAmount,omitempty"`
 
 	// DepreciatedPeriods: Number of periods that already have been depreciated for the asset. Can only be filled when &#39;Alreadydepreciated&#39; is on
-	DepreciatedPeriods *int `json:",omitempty"`
+	DepreciatedPeriods *int `json:"DepreciatedPeriods,omitempty"`
 
 	// DepreciatedStartDate: StartDate of depreciating. Can only be filled when &#39;Alreadydepreciated&#39; is on
-	DepreciatedStartDate *Date `json:",omitempty"`
+	DepreciatedStartDate *Date `json:"DepreciatedStartDate,omitempty"`
 
 	// Description: This is the description of the Asset
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: Asset EndDate is filled when asset is Sold or Inactive
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// EngineEmission: Engine emission of the asset, needed to calculate the co² report
-	EngineEmission *int `json:",omitempty"`
+	EngineEmission *int `json:"EngineEmission,omitempty"`
 
 	// EngineType: Engine type of the asset, Needed to generate a co² report
-	EngineType *int `json:",omitempty"`
+	EngineType *int `json:"EngineType,omitempty"`
 
 	// GLTransactionLine: Links to the gltransactions.id. GL transaction line based on which the asset is created
-	GLTransactionLine *GUID `json:",omitempty"`
+	GLTransactionLine *GUID `json:"GLTransactionLine,omitempty"`
 
 	// GLTransactionLineDescription: Description of GLTransactionLine
-	GLTransactionLineDescription *string `json:",omitempty"`
+	GLTransactionLineDescription *string `json:"GLTransactionLineDescription,omitempty"`
 
 	// InvestmentAccount: Supplier of the asset
-	InvestmentAccount *GUID `json:",omitempty"`
+	InvestmentAccount *GUID `json:"InvestmentAccount,omitempty"`
 
 	// InvestmentAccountCode: Code of InvestmentAccount
-	InvestmentAccountCode *string `json:",omitempty"`
+	InvestmentAccountCode *string `json:"InvestmentAccountCode,omitempty"`
 
 	// InvestmentAccountName: Name of InvestmentAccount
-	InvestmentAccountName *string `json:",omitempty"`
+	InvestmentAccountName *string `json:"InvestmentAccountName,omitempty"`
 
 	// InvestmentAmountDC: Investment amount in the default currency of the company
-	InvestmentAmountDC *float64 `json:",omitempty"`
+	InvestmentAmountDC *float64 `json:"InvestmentAmountDC,omitempty"`
 
 	// InvestmentAmountFC: Investment value of the asset. Currently the field is filled with the PurchasePriceLocal. Can be status &#39;Not used&#39; after sources have been cleaned
-	InvestmentAmountFC *float64 `json:",omitempty"`
+	InvestmentAmountFC *float64 `json:"InvestmentAmountFC,omitempty"`
 
 	// InvestmentCurrency: Indicates the currency of the investment amount
-	InvestmentCurrency *string `json:",omitempty"`
+	InvestmentCurrency *string `json:"InvestmentCurrency,omitempty"`
 
 	// InvestmentCurrencyDescription: Description of InvestmentCurrency
-	InvestmentCurrencyDescription *string `json:",omitempty"`
+	InvestmentCurrencyDescription *string `json:"InvestmentCurrencyDescription,omitempty"`
 
 	// InvestmentDate: Refers to the original date when the asset was bought
-	InvestmentDate *Date `json:",omitempty"`
+	InvestmentDate *Date `json:"InvestmentDate,omitempty"`
 
 	// InvestmentDeduction: Belgian functionality, to determine how a local legal report regarding investment deduction must be created
-	InvestmentDeduction *int `json:",omitempty"`
+	InvestmentDeduction *int `json:"InvestmentDeduction,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Extra remarks for the asset
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Parent: Parent asset
-	Parent *GUID `json:",omitempty"`
+	Parent *GUID `json:"Parent,omitempty"`
 
 	// ParentCode: Code of Parent
-	ParentCode *string `json:",omitempty"`
+	ParentCode *string `json:"ParentCode,omitempty"`
 
 	// ParentDescription: Description of Parent
-	ParentDescription *string `json:",omitempty"`
+	ParentDescription *string `json:"ParentDescription,omitempty"`
 
 	// Picture: Image for an asset
-	Picture *[]byte `json:",omitempty"`
+	Picture *[]byte `json:"Picture,omitempty"`
 
 	// PictureFileName: Filename of the image
-	PictureFileName *string `json:",omitempty"`
+	PictureFileName *string `json:"PictureFileName,omitempty"`
 
 	// PrimaryMethod: First method of depreciation. Currently, it is the only one used
-	PrimaryMethod *GUID `json:",omitempty"`
+	PrimaryMethod *GUID `json:"PrimaryMethod,omitempty"`
 
 	// PrimaryMethodCode: Code of PrimaryMethod
-	PrimaryMethodCode *string `json:",omitempty"`
+	PrimaryMethodCode *string `json:"PrimaryMethodCode,omitempty"`
 
 	// PrimaryMethodDescription: Description of PrimaryMethod
-	PrimaryMethodDescription *string `json:",omitempty"`
+	PrimaryMethodDescription *string `json:"PrimaryMethodDescription,omitempty"`
 
 	// ResidualValue: Indicates the residual value of the asset at the end of the depreciation
-	ResidualValue *float64 `json:",omitempty"`
+	ResidualValue *float64 `json:"ResidualValue,omitempty"`
 
 	// StartDate: Asset Depreciation StartDate
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Status: Identifies the status of the Asset. (see AssetStatus table to see the possibilities)
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// TransactionEntryID: Reference to the transaction lines that make up the financial entry.
-	TransactionEntryID *GUID `json:",omitempty"`
+	TransactionEntryID *GUID `json:"TransactionEntryID,omitempty"`
 
 	// TransactionEntryNo: Entry number of transaction
-	TransactionEntryNo *int `json:",omitempty"`
+	TransactionEntryNo *int `json:"TransactionEntryNo,omitempty"`
 }
 
 func (s *AssetsAssets) GetIdentifier() GUID {
@@ -201,3 +201,22 @@ func (s *AssetsAssetsService) List(ctx context.Context, division int, all bool) 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Assets enitity, by ID.
+func (s *AssetsAssetsService) Get(ctx context.Context, division int, id GUID) (*AssetsAssets, error) {
+	var entities []*AssetsAssets
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/Assets?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Assets entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

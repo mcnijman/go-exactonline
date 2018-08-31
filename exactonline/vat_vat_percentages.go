@@ -23,46 +23,46 @@ type VATVatPercentagesService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=VATVatPercentages
 type VATVatPercentages struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: End date of the date range during which this percentage is valid
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Percentage: Percentage
-	Percentage *float64 `json:",omitempty"`
+	Percentage *float64 `json:"Percentage,omitempty"`
 
 	// StartDate: Start date of the date range during which this percentage is valid
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// Type: 0 = Normal, 1 = Extra duty
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 
 	// VATCodeID: VAT code
-	VATCodeID *GUID `json:",omitempty"`
+	VATCodeID *GUID `json:"VATCodeID,omitempty"`
 }
 
 func (s *VATVatPercentages) GetIdentifier() GUID {
@@ -84,3 +84,22 @@ func (s *VATVatPercentagesService) List(ctx context.Context, division int, all b
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the VatPercentages enitity, by ID.
+func (s *VATVatPercentagesService) Get(ctx context.Context, division int, id GUID) (*VATVatPercentages, error) {
+	var entities []*VATVatPercentages
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VatPercentages?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d VatPercentages entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

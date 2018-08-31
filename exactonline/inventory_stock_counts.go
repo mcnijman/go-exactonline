@@ -23,70 +23,70 @@ type InventoryStockCountsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStockCounts
 type InventoryStockCounts struct {
 	// StockCountID: Primary key
-	StockCountID *GUID `json:",omitempty"`
+	StockCountID *GUID `json:"StockCountID,omitempty"`
 
 	// CountedBy: Stock count user
-	CountedBy *GUID `json:",omitempty"`
+	CountedBy *GUID `json:"CountedBy,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the stock count
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EntryNumber: Entry number of the stock transaction
-	EntryNumber *int `json:",omitempty"`
+	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// OffsetGLInventory: Offset GL account of inventory
-	OffsetGLInventory *GUID `json:",omitempty"`
+	OffsetGLInventory *GUID `json:"OffsetGLInventory,omitempty"`
 
 	// OffsetGLInventoryCode: GLAccount code
-	OffsetGLInventoryCode *string `json:",omitempty"`
+	OffsetGLInventoryCode *string `json:"OffsetGLInventoryCode,omitempty"`
 
 	// OffsetGLInventoryDescription: GLAccount description
-	OffsetGLInventoryDescription *string `json:",omitempty"`
+	OffsetGLInventoryDescription *string `json:"OffsetGLInventoryDescription,omitempty"`
 
 	// Source: Source of stock count entry: 1-Manual entry, 2-Import, 3-Stock count, 4-Web service
-	Source *int `json:",omitempty"`
+	Source *int `json:"Source,omitempty"`
 
 	// Status: Stock count status: 12-Draft, 21-Processed
-	Status *int `json:",omitempty"`
+	Status *int `json:"Status,omitempty"`
 
 	// StockCountDate: Stock count date
-	StockCountDate *Date `json:",omitempty"`
+	StockCountDate *Date `json:"StockCountDate,omitempty"`
 
 	// StockCountLines: Collection of stock count lines
-	StockCountLines *[]byte `json:",omitempty"`
+	StockCountLines *[]byte `json:"StockCountLines,omitempty"`
 
 	// StockCountNumber: Human readable id of the stock count
-	StockCountNumber *int `json:",omitempty"`
+	StockCountNumber *int `json:"StockCountNumber,omitempty"`
 
 	// Warehouse: Warehouse
-	Warehouse *GUID `json:",omitempty"`
+	Warehouse *GUID `json:"Warehouse,omitempty"`
 
 	// WarehouseCode: Code of Warehouse
-	WarehouseCode *string `json:",omitempty"`
+	WarehouseCode *string `json:"WarehouseCode,omitempty"`
 
 	// WarehouseDescription: Description of Warehouse
-	WarehouseDescription *string `json:",omitempty"`
+	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
 func (s *InventoryStockCounts) GetIdentifier() GUID {
@@ -108,3 +108,22 @@ func (s *InventoryStockCountsService) List(ctx context.Context, division int, al
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the StockCounts enitity, by StockCountID.
+func (s *InventoryStockCountsService) Get(ctx context.Context, division int, id GUID) (*InventoryStockCounts, error) {
+	var entities []*InventoryStockCounts
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCounts?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d StockCounts entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

@@ -23,133 +23,133 @@ type SubscriptionSubscriptionsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptions
 type SubscriptionSubscriptions struct {
 	// EntryID: Primary key
-	EntryID *GUID `json:",omitempty"`
+	EntryID *GUID `json:"EntryID,omitempty"`
 
 	// BlockEntry: Indicates if subscription is blocked for time cost entry
-	BlockEntry *bool `json:",omitempty"`
+	BlockEntry *bool `json:"BlockEntry,omitempty"`
 
 	// CancellationDate: Date of cancellation
-	CancellationDate *Date `json:",omitempty"`
+	CancellationDate *Date `json:"CancellationDate,omitempty"`
 
 	// Classification: Reference to Classification
-	Classification *GUID `json:",omitempty"`
+	Classification *GUID `json:"Classification,omitempty"`
 
 	// ClassificationCode: Code of Classification
-	ClassificationCode *string `json:",omitempty"`
+	ClassificationCode *string `json:"ClassificationCode,omitempty"`
 
 	// ClassificationDescription: Description of Classification
-	ClassificationDescription *string `json:",omitempty"`
+	ClassificationDescription *string `json:"ClassificationDescription,omitempty"`
 
 	// Created: Creation date
-	Created *Date `json:",omitempty"`
+	Created *Date `json:"Created,omitempty"`
 
 	// Creator: User ID of creator
-	Creator *GUID `json:",omitempty"`
+	Creator *GUID `json:"Creator,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Currency: Currency code
-	Currency *string `json:",omitempty"`
+	Currency *string `json:"Currency,omitempty"`
 
 	// CustomerPONumber: Purchase order number of customer
-	CustomerPONumber *string `json:",omitempty"`
+	CustomerPONumber *string `json:"CustomerPONumber,omitempty"`
 
 	// Description: Description
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// EndDate: End date
-	EndDate *Date `json:",omitempty"`
+	EndDate *Date `json:"EndDate,omitempty"`
 
 	// InvoiceDay: Invoice Day
-	InvoiceDay *byte `json:",omitempty"`
+	InvoiceDay *byte `json:"InvoiceDay,omitempty"`
 
 	// InvoicedTo: Invoice date
-	InvoicedTo *Date `json:",omitempty"`
+	InvoicedTo *Date `json:"InvoicedTo,omitempty"`
 
 	// InvoiceTo: Reference to invoice account
-	InvoiceTo *GUID `json:",omitempty"`
+	InvoiceTo *GUID `json:"InvoiceTo,omitempty"`
 
 	// InvoiceToContactPerson: Reference to contact person of invoice account
-	InvoiceToContactPerson *GUID `json:",omitempty"`
+	InvoiceToContactPerson *GUID `json:"InvoiceToContactPerson,omitempty"`
 
 	// InvoiceToContactPersonFullName: Name of contact person of invoice account
-	InvoiceToContactPersonFullName *string `json:",omitempty"`
+	InvoiceToContactPersonFullName *string `json:"InvoiceToContactPersonFullName,omitempty"`
 
 	// InvoiceToName: Name of invoice account
-	InvoiceToName *string `json:",omitempty"`
+	InvoiceToName *string `json:"InvoiceToName,omitempty"`
 
 	// InvoicingStartDate: Invoicing start date
-	InvoicingStartDate *Date `json:",omitempty"`
+	InvoicingStartDate *Date `json:"InvoicingStartDate,omitempty"`
 
 	// Modified: Last modified date
-	Modified *Date `json:",omitempty"`
+	Modified *Date `json:"Modified,omitempty"`
 
 	// Modifier: User ID of modifier
-	Modifier *GUID `json:",omitempty"`
+	Modifier *GUID `json:"Modifier,omitempty"`
 
 	// ModifierFullName: Name of modifier
-	ModifierFullName *string `json:",omitempty"`
+	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 
 	// Notes: Remarks
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// Number: Number
-	Number *int `json:",omitempty"`
+	Number *int `json:"Number,omitempty"`
 
 	// OrderedBy: Reference to order account
-	OrderedBy *GUID `json:",omitempty"`
+	OrderedBy *GUID `json:"OrderedBy,omitempty"`
 
 	// OrderedByContactPerson: Reference of contact person of order account
-	OrderedByContactPerson *GUID `json:",omitempty"`
+	OrderedByContactPerson *GUID `json:"OrderedByContactPerson,omitempty"`
 
 	// OrderedByContactPersonFullName: Name of contact person of order account
-	OrderedByContactPersonFullName *string `json:",omitempty"`
+	OrderedByContactPersonFullName *string `json:"OrderedByContactPersonFullName,omitempty"`
 
 	// OrderedByName: Name of order account
-	OrderedByName *string `json:",omitempty"`
+	OrderedByName *string `json:"OrderedByName,omitempty"`
 
 	// PaymentCondition: Payment condition
-	PaymentCondition *string `json:",omitempty"`
+	PaymentCondition *string `json:"PaymentCondition,omitempty"`
 
 	// PaymentConditionDescription: Description of PaymentCondition
-	PaymentConditionDescription *string `json:",omitempty"`
+	PaymentConditionDescription *string `json:"PaymentConditionDescription,omitempty"`
 
 	// Printed: Indicates if subscription is printed
-	Printed *bool `json:",omitempty"`
+	Printed *bool `json:"Printed,omitempty"`
 
 	// ReasonCancelled: Reference to reason cancelled
-	ReasonCancelled *GUID `json:",omitempty"`
+	ReasonCancelled *GUID `json:"ReasonCancelled,omitempty"`
 
 	// ReasonCancelledCode: Code of ReasonCancelled
-	ReasonCancelledCode *string `json:",omitempty"`
+	ReasonCancelledCode *string `json:"ReasonCancelledCode,omitempty"`
 
 	// ReasonCancelledDescription: Description of ReasonCancelled
-	ReasonCancelledDescription *string `json:",omitempty"`
+	ReasonCancelledDescription *string `json:"ReasonCancelledDescription,omitempty"`
 
 	// StartDate: Start date
-	StartDate *Date `json:",omitempty"`
+	StartDate *Date `json:"StartDate,omitempty"`
 
 	// SubscriptionLines: Collection of subscription lines
-	SubscriptionLines *[]byte `json:",omitempty"`
+	SubscriptionLines *[]byte `json:"SubscriptionLines,omitempty"`
 
 	// SubscriptionRestrictionEmployees: Collection of restriction employees
-	SubscriptionRestrictionEmployees *[]byte `json:",omitempty"`
+	SubscriptionRestrictionEmployees *[]byte `json:"SubscriptionRestrictionEmployees,omitempty"`
 
 	// SubscriptionRestrictionItems: Collection of restriction items
-	SubscriptionRestrictionItems *[]byte `json:",omitempty"`
+	SubscriptionRestrictionItems *[]byte `json:"SubscriptionRestrictionItems,omitempty"`
 
 	// SubscriptionType: Reference to subscription type
-	SubscriptionType *GUID `json:",omitempty"`
+	SubscriptionType *GUID `json:"SubscriptionType,omitempty"`
 
 	// SubscriptionTypeCode: Code of SubscriptionType
-	SubscriptionTypeCode *string `json:",omitempty"`
+	SubscriptionTypeCode *string `json:"SubscriptionTypeCode,omitempty"`
 
 	// SubscriptionTypeDescription: Description of SubscriptionType
-	SubscriptionTypeDescription *string `json:",omitempty"`
+	SubscriptionTypeDescription *string `json:"SubscriptionTypeDescription,omitempty"`
 }
 
 func (s *SubscriptionSubscriptions) GetIdentifier() GUID {
@@ -171,3 +171,22 @@ func (s *SubscriptionSubscriptionsService) List(ctx context.Context, division in
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the Subscriptions enitity, by EntryID.
+func (s *SubscriptionSubscriptionsService) Get(ctx context.Context, division int, id GUID) (*SubscriptionSubscriptions, error) {
+	var entities []*SubscriptionSubscriptions
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/Subscriptions?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d Subscriptions entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */

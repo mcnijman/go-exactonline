@@ -23,91 +23,91 @@ type ManufacturingBillOfMaterialMaterialsService service
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingBillOfMaterialMaterials
 type ManufacturingBillOfMaterialMaterials struct {
 	// ID: Primary key
-	ID *GUID `json:",omitempty"`
+	ID *GUID `json:"ID,omitempty"`
 
 	// AverageCost: Item average cost available when average cost method is used
-	AverageCost *float64 `json:",omitempty"`
+	AverageCost *float64 `json:"AverageCost,omitempty"`
 
 	// Backflush: Indicates if this is a backflush item
-	Backflush *byte `json:",omitempty"`
+	Backflush *byte `json:"Backflush,omitempty"`
 
 	// CalculatorType: Calculator type
-	CalculatorType *int `json:",omitempty"`
+	CalculatorType *int `json:"CalculatorType,omitempty"`
 
 	// CostBatch: Cost batch
-	CostBatch *float64 `json:",omitempty"`
+	CostBatch *float64 `json:"CostBatch,omitempty"`
 
 	// CostCenter: Cost center
-	CostCenter *string `json:",omitempty"`
+	CostCenter *string `json:"CostCenter,omitempty"`
 
 	// CostCenterDescription: Cost center description
-	CostCenterDescription *string `json:",omitempty"`
+	CostCenterDescription *string `json:"CostCenterDescription,omitempty"`
 
 	// CostUnit: Cost unit
-	CostUnit *string `json:",omitempty"`
+	CostUnit *string `json:"CostUnit,omitempty"`
 
 	// CostUnitDescription: Cost unit description
-	CostUnitDescription *string `json:",omitempty"`
+	CostUnitDescription *string `json:"CostUnitDescription,omitempty"`
 
 	// CreatorFullName: Name of creator
-	CreatorFullName *string `json:",omitempty"`
+	CreatorFullName *string `json:"CreatorFullName,omitempty"`
 
 	// Description: Description of the material
-	Description *string `json:",omitempty"`
+	Description *string `json:"Description,omitempty"`
 
 	// DetailDrawing: Detail drawing reference
-	DetailDrawing *string `json:",omitempty"`
+	DetailDrawing *string `json:"DetailDrawing,omitempty"`
 
 	// Division: Division code
-	Division *int `json:",omitempty"`
+	Division *int `json:"Division,omitempty"`
 
 	// ItemVersion: Key of item version
-	ItemVersion *GUID `json:",omitempty"`
+	ItemVersion *GUID `json:"ItemVersion,omitempty"`
 
 	// LineNumber: Line number
-	LineNumber *int `json:",omitempty"`
+	LineNumber *int `json:"LineNumber,omitempty"`
 
 	// NetWeight: Net weight
-	NetWeight *float64 `json:",omitempty"`
+	NetWeight *float64 `json:"NetWeight,omitempty"`
 
 	// NetWeightUnit: Net weight unit of measure
-	NetWeightUnit *string `json:",omitempty"`
+	NetWeightUnit *string `json:"NetWeightUnit,omitempty"`
 
 	// Notes: Notes
-	Notes *string `json:",omitempty"`
+	Notes *string `json:"Notes,omitempty"`
 
 	// PartItem: Key of part item
-	PartItem *GUID `json:",omitempty"`
+	PartItem *GUID `json:"PartItem,omitempty"`
 
 	// PartItemCode: Part item code
-	PartItemCode *string `json:",omitempty"`
+	PartItemCode *string `json:"PartItemCode,omitempty"`
 
 	// PartItemCostPriceStandard: Item standard cost available when standard cost method is used
-	PartItemCostPriceStandard *float64 `json:",omitempty"`
+	PartItemCostPriceStandard *float64 `json:"PartItemCostPriceStandard,omitempty"`
 
 	// PartItemDescription: Part item description
-	PartItemDescription *string `json:",omitempty"`
+	PartItemDescription *string `json:"PartItemDescription,omitempty"`
 
 	// Quantity: Quantity
-	Quantity *float64 `json:",omitempty"`
+	Quantity *float64 `json:"Quantity,omitempty"`
 
 	// QuantityBatch: Quantity batch
-	QuantityBatch *float64 `json:",omitempty"`
+	QuantityBatch *float64 `json:"QuantityBatch,omitempty"`
 
-	// syscreated: Creation date
-	syscreated *Date `json:",omitempty"`
+	// Syscreated: Creation date
+	Syscreated *Date `json:"syscreated,omitempty"`
 
-	// syscreator: User ID of creator
-	syscreator *GUID `json:",omitempty"`
+	// Syscreator: User ID of creator
+	Syscreator *GUID `json:"syscreator,omitempty"`
 
-	// sysmodified: Modified date
-	sysmodified *Date `json:",omitempty"`
+	// Sysmodified: Modified date
+	Sysmodified *Date `json:"sysmodified,omitempty"`
 
-	// sysmodifier: User ID of modifier
-	sysmodifier *GUID `json:",omitempty"`
+	// Sysmodifier: User ID of modifier
+	Sysmodifier *GUID `json:"sysmodifier,omitempty"`
 
 	// Type: Material type 1 indicates material, 2 indicates byproduct
-	Type *int `json:",omitempty"`
+	Type *int `json:"Type,omitempty"`
 }
 
 func (s *ManufacturingBillOfMaterialMaterials) GetIdentifier() GUID {
@@ -129,3 +129,22 @@ func (s *ManufacturingBillOfMaterialMaterialsService) List(ctx context.Context, 
 	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
+
+/* // Get the BillOfMaterialMaterials enitity, by ID.
+func (s *ManufacturingBillOfMaterialMaterialsService) Get(ctx context.Context, division int, id GUID) (*ManufacturingBillOfMaterialMaterials, error) {
+	var entities []*ManufacturingBillOfMaterialMaterials
+	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialMaterials?$select=*", division)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities); err != nil {
+		return nil, err
+	}
+
+	if len(entities) != 1 {
+		return nil, fmt.Errorf("Returned %d BillOfMaterialMaterials entities, expected 1", len(entities))
+	}
+
+	return entities[0], nil
+} */
