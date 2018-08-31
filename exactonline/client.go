@@ -1,3 +1,5 @@
+// go:generate go run gen-services.go -v
+
 package exactonline
 
 import (
@@ -8,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -15,7 +18,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://start.exactonline.nl/api/v1/"
+	defaultBaseURL = "https://start.exactonline.nl/"
 	userAgent      = "go-exactonline"
 )
 
@@ -24,7 +27,7 @@ type Client struct {
 	clientMu sync.Mutex
 	client   *http.Client
 
-	// BaseURL for API requests. Defaults to the Dutch API.
+	// BaseURL for API requests. Defaults to the Dutch API. See more available base urls in the API documentation. @TODO
 	BaseURL *url.URL
 
 	// UserAgent used when communicating with the Exact Online API.
@@ -33,10 +36,8 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the Exact Online API
-	CostCenters      *CostCentersService
-	Divisions        *DivisionsService
-	Me               *MeService
-	TransactionLines *TransactionLinesService
+	AccountancyAccountInvolvedAccounts *AccountancyAccountInvolvedAccountsService
+	AccountancyAccountOwners           *AccountancyAccountOwnersService
 }
 
 type service struct {
@@ -55,10 +56,8 @@ func NewClient(httpClient *http.Client) *Client {
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 	c.common.client = c
-	c.CostCenters = (*CostCentersService)(&c.common)
-	c.Divisions = (*DivisionsService)(&c.common)
-	c.Me = (*MeService)(&c.common)
-	c.TransactionLines = (*TransactionLinesService)(&c.common)
+	c.AccountancyAccountInvolvedAccounts = (*AccountancyAccountInvolvedAccountsService)(&c.common)
+	c.AccountancyAccountOwners = (*AccountancyAccountOwnersService)(&c.common)
 	return c
 }
 
@@ -83,12 +82,12 @@ func (c *Client) ResolveURL(urlStr string) (*url.URL, error) {
 }
 
 // ResolvePathWithDivision will resolve the base url for paths that need a division prefix
-func (c *Client) ResolvePathWithDivision(path, division string) (*url.URL, error) {
+func (c *Client) ResolvePathWithDivision(path string, division int) (*url.URL, error) {
 	if !strings.HasSuffix(c.BaseURL.Path, "/") {
 		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
 	}
 
-	return c.BaseURL.Parse(fmt.Sprintf("%s/%s", division, path))
+	return c.BaseURL.Parse(strings.Replace(path, "{division}", strconv.Itoa(division), 1))
 }
 
 // NewRequest creates an API request. An absolute URL must be provided in url.
@@ -110,13 +109,15 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
-		return nil, err
+		return req, err
 	}
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", c.UserAgent)
+	if c.UserAgent != "" {
+		req.Header.Set("User-Agent", c.UserAgent)
+	}
 	return req, nil
 }
 
@@ -140,6 +141,10 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if err := handleResponseError(resp, req.URL.String()); err != nil {
+		return resp, err
+	}
 
 	if v != nil {
 		if w, ok := v.(io.Writer); ok {
@@ -188,7 +193,7 @@ func (c *Client) ListRequestAndDo(ctx context.Context, urlStr string, v interfac
 
 // ListRequestAndDoAll requests all paginated pages ListRequestAndDo
 func (c *Client) ListRequestAndDoAll(ctx context.Context, urlStr string, v interface{}) error {
-	var s []interface{}
+	var s []json.RawMessage
 	f, _, _, err := c.ListRequestAndDo(ctx, urlStr, &s)
 	if err != nil {
 		return err
@@ -196,22 +201,42 @@ func (c *Client) ListRequestAndDoAll(ctx context.Context, urlStr string, v inter
 
 	var next = f.Data.Next
 	for next != "" {
-		var i []interface{}
-		l, _, _, rerr := c.ListRequestAndDo(ctx, next, &i)
-		if rerr != nil {
-			return rerr
+		var i []json.RawMessage
+		l, _, _, rErr := c.ListRequestAndDo(ctx, next, &i)
+		if rErr != nil {
+			return rErr
 		}
 		s = append(s, i...)
 		next = l.Data.Next
 	}
 
-	b, merr := json.Marshal(s)
-	if merr != nil {
-		return merr
+	b, mErr := json.Marshal(s)
+	if mErr != nil {
+		return mErr
 	}
 
 	if err := json.Unmarshal(b, v); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func handleResponseError(r *http.Response, u string) error {
+	if r.StatusCode == 500 {
+		var e InternalServerErrorResponse
+		f := json.NewDecoder(r.Body).Decode(e)
+		if f != nil {
+			return fmt.Errorf("%s: ListRequestAndDo for %s, also encountered an error "+
+				"Unmarshalling the error response", r.Status, u)
+		}
+		return fmt.Errorf("%s: ListRequestAndDo for %s, with message %s", r.Status,
+			u, e.Error.Message.Value)
+	}
+
+	if r.StatusCode == 400 || r.StatusCode == 401 || r.StatusCode == 403 ||
+		r.StatusCode == 404 {
+		return fmt.Errorf("%s: ListRequestAndDo for %s", r.Status, u)
 	}
 
 	return nil
