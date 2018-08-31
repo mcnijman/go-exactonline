@@ -25,16 +25,29 @@ func TestAccountancyAccountOwnersService_List_all(t *testing.T) {
 	if e != nil {
 		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountOwnersService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountOwners", e)
 	}
+
 	g := NewGUID()
+	gs := g.String()
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+g.String()+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
 		}
 	})
+
+	/* g := NewGUID()
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		if r.URL.Query().Get("$skiptoken") != "" {
+			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
+		} else {
+			fmt.Fprint(w, `{ "d": { "__next": "` + u2.String() + `", "results": [{ "ID": "` + g.String() + `"}]}}`)
+		}
+	}) */
 
 	entities, err := client.AccountancyAccountOwners.List(context.Background(), 0, true)
 	if err != nil {
@@ -58,11 +71,13 @@ func TestAccountancyAccountOwnersService_List(t *testing.T) {
 	if e != nil {
 		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountOwnersService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountOwners", e)
 	}
+
 	g := NewGUID()
+	gs := g.String()
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+g.String()+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
 	})
 
 	entities, err := client.AccountancyAccountOwners.List(context.Background(), 0, false)

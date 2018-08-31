@@ -14,16 +14,16 @@ import (
 	"testing"
 )
 
-func TestAccountancyAccountInvolvedAccountsService_List_all(t *testing.T) {
+func TestInventoryStockBatchNumbersService_List_all(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$select=*", 0)
-	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$skiptoken=foo", 0)
+	u, e := client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers?$select=*", 0)
+	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountInvolvedAccountsService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountInvolvedAccounts", e)
+		t.Errorf("client.ResolvePathWithDivision in InventoryStockBatchNumbersService.List returned error: %v, with url /api/v1/{division}/inventory/StockBatchNumbers", e)
 	}
 
 	g := NewGUID()
@@ -49,27 +49,27 @@ func TestAccountancyAccountInvolvedAccountsService_List_all(t *testing.T) {
 		}
 	}) */
 
-	entities, err := client.AccountancyAccountInvolvedAccounts.List(context.Background(), 0, true)
+	entities, err := client.InventoryStockBatchNumbers.List(context.Background(), 0, true)
 	if err != nil {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned error: %v", err)
+		t.Errorf("InventoryStockBatchNumbersService.List returned error: %v", err)
 	}
 
-	want := []*AccountancyAccountInvolvedAccounts{{ID: &g}}
+	want := []*InventoryStockBatchNumbers{{ID: &g}}
 	if !reflect.DeepEqual(entities, want) {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned %+v, want %+v", entities, want)
+		t.Errorf("InventoryStockBatchNumbersService.List returned %+v, want %+v", entities, want)
 	}
 }
 
-func TestAccountancyAccountInvolvedAccountsService_List(t *testing.T) {
+func TestInventoryStockBatchNumbersService_List(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$select=*", 0)
-	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$skiptoken=foo", 0)
+	u, e := client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers?$select=*", 0)
+	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountInvolvedAccountsService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountInvolvedAccounts", e)
+		t.Errorf("client.ResolvePathWithDivision in InventoryStockBatchNumbersService.List returned error: %v, with url /api/v1/{division}/inventory/StockBatchNumbers", e)
 	}
 
 	g := NewGUID()
@@ -80,13 +80,13 @@ func TestAccountancyAccountInvolvedAccountsService_List(t *testing.T) {
 		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
 	})
 
-	entities, err := client.AccountancyAccountInvolvedAccounts.List(context.Background(), 0, false)
+	entities, err := client.InventoryStockBatchNumbers.List(context.Background(), 0, false)
 	if err != nil {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned error: %v", err)
+		t.Errorf("InventoryStockBatchNumbersService.List returned error: %v", err)
 	}
 
-	want := []*AccountancyAccountInvolvedAccounts{{ID: &g}}
+	want := []*InventoryStockBatchNumbers{{ID: &g}}
 	if !reflect.DeepEqual(entities, want) {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned %+v, want %+v", entities, want)
+		t.Errorf("InventoryStockBatchNumbersService.List returned %+v, want %+v", entities, want)
 	}
 }

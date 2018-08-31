@@ -14,16 +14,16 @@ import (
 	"testing"
 )
 
-func TestAccountancyAccountInvolvedAccountsService_List_all(t *testing.T) {
+func TestPayrollEmploymentOrganizationsService_List_all(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$select=*", 0)
-	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$skiptoken=foo", 0)
+	u, e := client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentOrganizations?$select=*", 0)
+	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentOrganizations?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountInvolvedAccountsService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountInvolvedAccounts", e)
+		t.Errorf("client.ResolvePathWithDivision in PayrollEmploymentOrganizationsService.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentOrganizations", e)
 	}
 
 	g := NewGUID()
@@ -49,27 +49,27 @@ func TestAccountancyAccountInvolvedAccountsService_List_all(t *testing.T) {
 		}
 	}) */
 
-	entities, err := client.AccountancyAccountInvolvedAccounts.List(context.Background(), 0, true)
+	entities, err := client.PayrollEmploymentOrganizations.List(context.Background(), 0, true)
 	if err != nil {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned error: %v", err)
+		t.Errorf("PayrollEmploymentOrganizationsService.List returned error: %v", err)
 	}
 
-	want := []*AccountancyAccountInvolvedAccounts{{ID: &g}}
+	want := []*PayrollEmploymentOrganizations{{ID: &g}}
 	if !reflect.DeepEqual(entities, want) {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned %+v, want %+v", entities, want)
+		t.Errorf("PayrollEmploymentOrganizationsService.List returned %+v, want %+v", entities, want)
 	}
 }
 
-func TestAccountancyAccountInvolvedAccountsService_List(t *testing.T) {
+func TestPayrollEmploymentOrganizationsService_List(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$select=*", 0)
-	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/accountancy/AccountInvolvedAccounts?$skiptoken=foo", 0)
+	u, e := client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentOrganizations?$select=*", 0)
+	u2, e := client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentOrganizations?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("client.ResolvePathWithDivision in AccountancyAccountInvolvedAccountsService.List returned error: %v, with url /api/v1/{division}/accountancy/AccountInvolvedAccounts", e)
+		t.Errorf("client.ResolvePathWithDivision in PayrollEmploymentOrganizationsService.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentOrganizations", e)
 	}
 
 	g := NewGUID()
@@ -80,13 +80,13 @@ func TestAccountancyAccountInvolvedAccountsService_List(t *testing.T) {
 		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
 	})
 
-	entities, err := client.AccountancyAccountInvolvedAccounts.List(context.Background(), 0, false)
+	entities, err := client.PayrollEmploymentOrganizations.List(context.Background(), 0, false)
 	if err != nil {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned error: %v", err)
+		t.Errorf("PayrollEmploymentOrganizationsService.List returned error: %v", err)
 	}
 
-	want := []*AccountancyAccountInvolvedAccounts{{ID: &g}}
+	want := []*PayrollEmploymentOrganizations{{ID: &g}}
 	if !reflect.DeepEqual(entities, want) {
-		t.Errorf("AccountancyAccountInvolvedAccountsService.List returned %+v, want %+v", entities, want)
+		t.Errorf("PayrollEmploymentOrganizationsService.List returned %+v, want %+v", entities, want)
 	}
 }

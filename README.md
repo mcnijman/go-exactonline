@@ -18,8 +18,6 @@ This library doesn't directly handle authentication. You should provide a `http.
 
 ## Divisions ##
 
-The last used division by the user is available in the `Me.GetLastUsedDivision()` service. All user accessible divisions are accessible through the `Divisions` service.
-
 ## Versioning ##
 
 This library uses symantic versions using git tags. However since this library is still in development, API methods are subject to change.
@@ -27,11 +25,11 @@ This library uses symantic versions using git tags. However since this library i
 ## TODO ##
 
 - Implement all CRUD operations
-  - Unit tests
-  - Integration tests
-  - Error handling
-  - Web hooks support
-  - Documentation and examples
+- Unit tests
+- Integration tests
+- Error handling
+- Web hooks support
+- Documentation and examples
 
 ## License ##
 

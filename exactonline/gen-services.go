@@ -222,12 +222,6 @@ func main() {
 		err := sourceTmpl.Execute(&buf, s)
 		dontPanic(err)
 
-		if e.Name == "AccountDocumentsCount" {
-			logf("%+v \n", e.PrimaryProperty())
-			fmt.Print(string(buf.Bytes()))
-			logf("%+v \n", e)
-		}
-
 		clean, err := format.Source(buf.Bytes())
 		dontPanic(err)
 
@@ -235,19 +229,25 @@ func main() {
 		err = ioutil.WriteFile(s.filename, clean, 0644)
 		dontPanic(err)
 
-		/* t := &templateData{
+		imports := map[string]string{
+			"1": "testing",
+			"2": "net/http",
+			"3": "strings",
+			"4": "context",
+			"5": "reflect",
+			"6": "fmt",
+		}
+
+		if e.PrimaryProperty().Type != "string" && e.PrimaryProperty().Type != "GUID" {
+			imports["7"] = "strconv"
+		}
+
+		t := &templateData{
 			filename: toSnake(e.EntityName()) + "_test.go",
 			Year:     2018,
 			Package:  "exactonline",
 			Endpoint: e,
-			Imports: map[string]string{
-				"1": "testing",
-				"2": "net/http",
-				"3": "strings",
-				"4": "context",
-				"5": "reflect",
-				"6": "fmt",
-			},
+			Imports:  imports,
 		}
 
 		var buf2 bytes.Buffer
@@ -259,7 +259,7 @@ func main() {
 
 		logf("Writing %v...", t.filename)
 		err = ioutil.WriteFile(t.filename, clean2, 0644)
-		dontPanic(err) */
+		dontPanic(err)
 	}
 
 	printCopyPasteDeclarations(filtered)
@@ -377,7 +377,62 @@ func Test{{.ServiceName}}_List_all(t *testing.T) {
 	if e != nil {
 		t.Errorf("client.ResolvePathWithDivision in {{.ServiceName}}.List returned error: %v, with url {{.URL}}", e)
 	}
+
+	{{ if eq .PrimaryProperty.Type "GUID"}}
 	g := NewGUID()
+	gs := g.String()
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		if r.URL.Query().Get("$skiptoken") != "" {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "", "results": []}}` + "`" + `)
+		} else {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + gs + `" + `"}]}}` + "`" + `)
+		}
+	})
+	{{ end }}
+	{{ if eq .PrimaryProperty.Type "int"}}
+	g := 100
+	gs := strconv.Itoa(g)
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		if r.URL.Query().Get("$skiptoken") != "" {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "", "results": []}}` + "`" + `)
+		} else {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": ` + "` + gs + `" + `}]}}` + "`" + `)
+		}
+	})
+	{{end}}
+	{{ if eq .PrimaryProperty.Type "int64"}}
+	g := int64(100)
+	gs := strconv.Itoa(int(g))
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		if r.URL.Query().Get("$skiptoken") != "" {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "", "results": []}}` + "`" + `)
+		} else {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": ` + "` + gs + `" + `}]}}` + "`" + `)
+		}
+	})
+	{{end}}
+	{{ if eq .PrimaryProperty.Type "string"}}
+	g := "100"
+	gs := "100"
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		if r.URL.Query().Get("$skiptoken") != "" {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "", "results": []}}` + "`" + `)
+		} else {
+			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + gs + `" + `"}]}}` + "`" + `)
+		}
+	})
+	{{end}}
+
+
+	/* g := NewGUID()
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -386,7 +441,7 @@ func Test{{.ServiceName}}_List_all(t *testing.T) {
 		} else {
 			fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + g.String() + `" + `"}]}}` + "`" + `)
 		}
-	})
+	}) */
 
 	entities, err := client.{{.EntityName}}.List(context.Background(), 0, true)
 	if err != nil {
@@ -410,12 +465,42 @@ func Test{{.ServiceName}}_List(t *testing.T) {
 	if e != nil {
 		t.Errorf("client.ResolvePathWithDivision in {{.ServiceName}}.List returned error: %v, with url {{.URL}}", e)
 	}
+	{{ if eq .PrimaryProperty.Type "GUID"}}
 	g := NewGUID()
+	gs := g.String()
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + g.String() + `" + `"}]}}` + "`" + `)
+		fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + gs + `" + `"}]}}` + "`" + `)
 	})
+	{{ end }}
+	{{ if eq .PrimaryProperty.Type "int"}}
+	g := 100
+	gs := strconv.Itoa(g)
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": ` + "` + gs + `" + `}]}}` + "`" + `)
+	})
+	{{end}}
+	{{ if eq .PrimaryProperty.Type "int64"}}
+	g := int64(100)
+	gs := strconv.Itoa(int(g))
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": ` + "` + gs + `" + `}]}}` + "`" + `)
+	})
+	{{end}}
+	{{ if eq .PrimaryProperty.Type "string"}}
+	g := "100"
+	gs := "100"
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+		fmt.Fprint(w, ` + "`" + `{ "d": { "__next": "` + "` + u2.String() + `" + `", "results": [{ "{{.PrimaryProperty.Name}}": "` + "` + gs + `" + `"}]}}` + "`" + `)
+	})
+	{{end}}
 
 	entities, err := client.{{.EntityName}}.List(context.Background(), 0, false)
 	if err != nil {
