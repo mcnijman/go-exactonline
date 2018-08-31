@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 )
 
 func TestDate_isSet(t *testing.T) {

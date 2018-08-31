@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 )
 
 // Date allows for unmarshalling the date objects returned by Exact.
