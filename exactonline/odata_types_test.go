@@ -27,9 +27,9 @@ func TestDate_unMarshalJSON(t *testing.T) {
 		t.Error("Unmarshalled Date should return true for Date.IsSet")
 	}
 
-	want := time.Date(2018, 8, 31, 14, 25, 44, 17000000, time.Local)
+	want := time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)
 
-	if !d.Equal(want) {
+	if !d.UTC().Equal(want) {
 		t.Errorf("Date = %v, want %v", d, want)
 	}
 }
