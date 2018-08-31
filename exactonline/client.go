@@ -210,16 +210,18 @@ func (c *Client) ListRequestAndDoAll(ctx context.Context, urlStr string, v inter
 		next = l.Data.Next
 	}
 
-	b, mErr := json.Marshal(s)
-	if mErr != nil {
-		return mErr
-	}
+	err = unmarshalRawMessages(s, v)
+	return err
+}
 
-	if err := json.Unmarshal(b, v); err != nil {
+func unmarshalRawMessages(m []json.RawMessage, v interface{}) error {
+	b, err := json.Marshal(m)
+	if err != nil {
 		return err
 	}
 
-	return nil
+	err = json.Unmarshal(b, v)
+	return err
 }
 
 func handleResponseError(r *http.Response, u string) error {
