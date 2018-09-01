@@ -155,9 +155,7 @@ func TestNewClientFromTokenSource(t *testing.T) {
 		name string
 		args args
 		want *Client
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewClientFromTokenSource(tt.args.ctx, tt.args.tokenSource); !reflect.DeepEqual(got, tt.want) {
@@ -213,9 +211,7 @@ func TestClient_SetBaseURL(t *testing.T) {
 		fields  fields
 		args    args
 		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Client{
@@ -307,9 +303,7 @@ func TestClient_SetUserAgent(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Client{
@@ -401,9 +395,7 @@ func TestClient_GetCurrentDivisionID(t *testing.T) {
 		args    args
 		want    int
 		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Client{
@@ -463,9 +455,7 @@ func TestBool(t *testing.T) {
 		name string
 		args args
 		want *bool
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Bool(tt.args.v); got != tt.want {
@@ -483,9 +473,7 @@ func TestInt(t *testing.T) {
 		name string
 		args args
 		want *int
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Int(tt.args.v); got != tt.want {
@@ -503,9 +491,7 @@ func TestInt64(t *testing.T) {
 		name string
 		args args
 		want *int64
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Int64(tt.args.v); got != tt.want {
@@ -523,9 +509,7 @@ func TestString(t *testing.T) {
 		name string
 		args args
 		want *string
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := String(tt.args.v); got != tt.want {

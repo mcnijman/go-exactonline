@@ -7,7 +7,6 @@ package types
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -25,7 +24,10 @@ func TestDate_unMarshalJSON(t *testing.T) {
 	b := []byte(`"/Date(1535718344017)/"`)
 
 	var d Date
-	json.Unmarshal(b, &d)
+	err := json.Unmarshal(b, &d)
+	if err != nil {
+		t.Errorf("Unmarshalled Date should not return an err: %v", err)
+	}
 
 	if !d.IsSet() {
 		t.Error("Unmarshalled Date should return true for Date.IsSet")
@@ -57,14 +59,18 @@ func TestDate_unMarshalJSONEmpty(t *testing.T) {
 }
 
 func TestDate_MarshalJSON(t *testing.T) {
-	d := Date{time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)}
-	testJSONMarshal(t, d, `"2018-08-31T12:25:44.017Z"`)
+	v := Date{time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)}
+	want := `"2018-08-31T12:25:44.017Z"`
+	testJSONMarshal(t, v, want)
+
+	v2 := time.Now()
+	want2 := `"` + v2.Format(time.RFC3339Nano) + `"`
+	testJSONMarshal(t, v2, want2)
 }
 
 // Helper function to test that a value is marshalled to JSON as expected.
 func testJSONMarshal(t *testing.T, v interface{}, want string) {
 	j, err := json.Marshal(v)
-	fmt.Printf("%+v", err)
 	if err != nil {
 		t.Errorf("Unable to marshal JSON for %v", v)
 	}
