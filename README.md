@@ -9,7 +9,7 @@ This is library is incomplete and under development.
 ## Usage ##
 
 ```go
-import "github.com/mcnijman/go-exactonline/exactonline"
+import "github.com/mcnijman/go-exactonline"
 ```
 
 ## Authentication ##
@@ -25,7 +25,7 @@ This library uses symantic versions using git tags. However since this library i
 ## TODO ##
 
 - Implement all CRUD operations
-- Unit tests
+- Helpers for odata types creation
 - Integration tests
 - Error handling
 - Web hooks support
