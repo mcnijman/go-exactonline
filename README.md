@@ -12,11 +12,22 @@ This is library is incomplete and under development.
 import "github.com/mcnijman/go-exactonline"
 ```
 
+Note that this library doens't directly handle authentication, see [Authentication](Authentication).
+
+```go
+client := exactonline.NewClient(nil)
+```
+
 ## Authentication ##
 
 This library doesn't directly handle authentication. You should provide a `http.Client` that handles the authentication for you.
 
 ## Divisions ##
+
+
+## Issues ##
+
+Issues and/or pull requests are welcome. Note that the services are generated using `gen-services.go`. If there are issues with the services, take a look at this file or the templates. The service files shouldn't be edites.
 
 ## Versioning ##
 
