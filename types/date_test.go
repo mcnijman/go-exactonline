@@ -5,7 +5,10 @@
 package types
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -54,17 +57,37 @@ func TestDate_unMarshalJSONEmpty(t *testing.T) {
 }
 
 func TestDate_MarshalJSON(t *testing.T) {
-	d := time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)
+	d := Date{time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)}
+	testJSONMarshal(t, d, `"2018-08-31T12:25:44.017Z"`)
+}
 
-	b, err := json.Marshal(d)
+// Helper function to test that a value is marshalled to JSON as expected.
+func testJSONMarshal(t *testing.T, v interface{}, want string) {
+	j, err := json.Marshal(v)
+	fmt.Printf("%+v", err)
 	if err != nil {
-		t.Errorf("Failed marshalling date: %v", d)
+		t.Errorf("Unable to marshal JSON for %v", v)
 	}
 
-	want := `"2018-08-31T12:25:44.017Z"`
-	got := string(b)
+	w := new(bytes.Buffer)
+	err = json.Compact(w, []byte(want))
+	if err != nil {
+		t.Errorf("String is not valid json: %s", want)
+	}
 
-	if got != want {
-		t.Errorf("Failed marshalling date: got: %v, want %v", got, want)
+	if w.String() != string(j) {
+		t.Errorf("json.Marshal(%q) returned %s, want %s", v, j, w)
+	}
+}
+
+func testJSONUnmarshal(t *testing.T, v interface{}, want string) {
+	// now go the other direction and make sure things unmarshal as expected
+	u := reflect.ValueOf(v).Interface()
+	if err := json.Unmarshal([]byte(want), u); err != nil {
+		t.Errorf("Unable to unmarshal JSON for %v", want)
+	}
+
+	if !reflect.DeepEqual(v, u) {
+		t.Errorf("json.Unmarshal(%q) returned %s, want %s", want, u, v)
 	}
 }

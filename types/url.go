@@ -8,6 +8,7 @@ package types
 import (
 	"encoding/json"
 	"net/url"
+	"strings"
 )
 
 // URL allows for unmarshalling the urls returned by Exact.
@@ -18,7 +19,7 @@ type URL struct {
 // UnmarshalJSON unmarshals the url to url.URL returned from the
 // Exact Online API.
 func (u *URL) UnmarshalJSON(b []byte) error {
-	s := string(b[1 : len(b)-1]) // drop quotes
+	s := strings.Replace(string(b), `"`, "", -1)
 	j, err := url.Parse(s)
 	if err == nil {
 		u.URL = j

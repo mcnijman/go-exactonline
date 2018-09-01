@@ -24,7 +24,7 @@ func TestNewGUID(t *testing.T) {
 	}
 }
 
-func TestGUID_unMarshalJSON(t *testing.T) {
+func TestGUID_UnMarshalJSON(t *testing.T) {
 	g := NewGUID()
 	b := []byte(`"` + g.UUID.String() + `"`)
 
@@ -32,11 +32,47 @@ func TestGUID_unMarshalJSON(t *testing.T) {
 	json.Unmarshal(b, &u)
 
 	if !reflect.DeepEqual(u, g) {
-		t.Errorf("Unmarshalled URI failed: got %s, want %s", u.UUID.String(), g.UUID.String())
+		t.Errorf("Unmarshalled GUID failed: got %s, want %s", u.UUID.String(), g.UUID.String())
 	}
 
 }
 
 func TestGUID_MarshalJSON(t *testing.T) {
+	g := NewGUID()
+	got, err := json.Marshal(g)
 
+	if err != nil {
+		t.Errorf("URL.MarshalJSON() error = %v", err)
+	}
+
+	want := []byte(`"` + g.UUID.String() + `"`)
+
+	if string(got) != string(want) {
+		t.Errorf("Marshalling GUID failed: got %v, want %v", got, want)
+	}
+}
+
+func TestGUID_String(t *testing.T) {
+	type fields struct {
+		UUID uuid.UUID
+	}
+	g := NewGUID()
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{"t", fields{g.UUID}, g.UUID.String()},
+		{"t2", fields{}, ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			g := &GUID{
+				UUID: tt.fields.UUID,
+			}
+			if got := g.String(); got != tt.want {
+				t.Errorf("GUID.String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

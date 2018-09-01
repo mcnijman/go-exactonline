@@ -7,6 +7,7 @@ package types
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/gofrs/uuid"
 )
@@ -24,7 +25,7 @@ type GUID struct {
 // UnmarshalJSON unmarshals the guid to uuid.UUID returned from the
 // Exact Online API.
 func (g *GUID) UnmarshalJSON(b []byte) error {
-	s := b[1 : len(b)-1]
+	s := []byte(strings.Replace(string(b), `"`, "", -1))
 	err := (&g.UUID).UnmarshalText(s)
 	return err
 }
