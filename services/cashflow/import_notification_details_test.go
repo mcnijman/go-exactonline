@@ -23,9 +23,12 @@ func TestImportNotificationDetailsEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestImportNotificationDetailsEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ImportNotificationDetailsEndpoint.List returned error: %v, with url /api/v1/{division}/cashflow/ImportNotificationDetails?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

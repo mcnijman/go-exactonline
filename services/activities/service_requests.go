@@ -101,7 +101,7 @@ func (s *ServiceRequests) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the ServiceRequests entities in the provided divison.
+// List the ServiceRequests entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ServiceRequestsEndpoint) List(ctx context.Context, division int, all bool) ([]*ServiceRequests, error) {
 	var entities []*ServiceRequests

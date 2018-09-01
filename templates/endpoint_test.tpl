@@ -13,9 +13,12 @@ func Test{{.EndpointServiceName}}_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}", e)
+		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$skiptoken=foo", e2)
 	}
 
 	{{ if eq .PrimaryProperty.Type "types.GUID"}}
@@ -89,9 +92,12 @@ func Test{{.EndpointServiceName}}_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}", e)
+		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$skiptoken=foo", e2)
 	}
 	{{ if eq .PrimaryProperty.Type "types.GUID"}}
 	g := types.NewGUID()

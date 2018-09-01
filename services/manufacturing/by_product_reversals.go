@@ -110,7 +110,7 @@ func (s *ByProductReversals) GetIdentifier() types.GUID {
 	return *s.ReversalStockTransactionId
 }
 
-// List the ByProductReversals entities in the provided divison.
+// List the ByProductReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ByProductReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*ByProductReversals, error) {
 	var entities []*ByProductReversals

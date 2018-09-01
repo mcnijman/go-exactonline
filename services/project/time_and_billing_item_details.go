@@ -50,7 +50,7 @@ func (s *TimeAndBillingItemDetails) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the TimeAndBillingItemDetails entities in the provided divison.
+// List the TimeAndBillingItemDetails entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingItemDetailsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeAndBillingItemDetails, error) {
 	var entities []*TimeAndBillingItemDetails

@@ -62,7 +62,7 @@ func (s *PreferredMailbox) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the PreferredMailbox entities in the provided divison.
+// List the PreferredMailbox entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PreferredMailboxEndpoint) List(ctx context.Context, division int, all bool) ([]*PreferredMailbox, error) {
 	var entities []*PreferredMailbox

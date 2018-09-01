@@ -65,7 +65,7 @@ func (s *DivisionClassNames) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the DivisionClassNames entities in the provided divison.
+// List the DivisionClassNames entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DivisionClassNamesEndpoint) List(ctx context.Context, division int, all bool) ([]*DivisionClassNames, error) {
 	var entities []*DivisionClassNames

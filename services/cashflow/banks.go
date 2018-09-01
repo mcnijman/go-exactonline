@@ -59,7 +59,7 @@ func (s *Banks) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the Banks entities in the provided divison.
+// List the Banks entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BanksEndpoint) List(ctx context.Context, division int, all bool) ([]*Banks, error) {
 	var entities []*Banks

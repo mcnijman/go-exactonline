@@ -53,7 +53,7 @@ func (s *Units) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the Units entities in the provided divison.
+// List the Units entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *UnitsEndpoint) List(ctx context.Context, division int, all bool) ([]*Units, error) {
 	var entities []*Units

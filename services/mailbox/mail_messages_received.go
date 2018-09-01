@@ -125,7 +125,7 @@ func (s *MailMessagesReceived) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the MailMessagesReceived entities in the provided divison.
+// List the MailMessagesReceived entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MailMessagesReceivedEndpoint) List(ctx context.Context, division int, all bool) ([]*MailMessagesReceived, error) {
 	var entities []*MailMessagesReceived

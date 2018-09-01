@@ -62,7 +62,7 @@ func (s *MailMessageAttachments) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the MailMessageAttachments entities in the provided divison.
+// List the MailMessageAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MailMessageAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*MailMessageAttachments, error) {
 	var entities []*MailMessageAttachments

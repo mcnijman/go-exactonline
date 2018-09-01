@@ -59,7 +59,7 @@ func (s *SubscriptionTypes) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the SubscriptionTypes entities in the provided divison.
+// List the SubscriptionTypes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubscriptionTypesEndpoint) List(ctx context.Context, division int, all bool) ([]*SubscriptionTypes, error) {
 	var entities []*SubscriptionTypes

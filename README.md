@@ -12,7 +12,7 @@ This is library is incomplete and under development.
 import "github.com/mcnijman/go-exactonline"
 ```
 
-Note that this library doens't directly handle authentication, see [Authentication](Authentication).
+Note that this library doens't directly handle authentication, see [Authentication](#authentication).
 
 ```go
 client := exactonline.NewClient(nil)

@@ -23,9 +23,12 @@ func TestShippingMethodsEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestShippingMethodsEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ShippingMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/sales/ShippingMethods?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

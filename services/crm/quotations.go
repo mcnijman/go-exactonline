@@ -176,7 +176,7 @@ func (s *Quotations) GetIdentifier() types.GUID {
 	return *s.QuotationID
 }
 
-// List the Quotations entities in the provided divison.
+// List the Quotations entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *QuotationsEndpoint) List(ctx context.Context, division int, all bool) ([]*Quotations, error) {
 	var entities []*Quotations

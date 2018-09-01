@@ -71,7 +71,7 @@ func (s *ReasonCodes) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the ReasonCodes entities in the provided divison.
+// List the ReasonCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReasonCodesEndpoint) List(ctx context.Context, division int, all bool) ([]*ReasonCodes, error) {
 	var entities []*ReasonCodes

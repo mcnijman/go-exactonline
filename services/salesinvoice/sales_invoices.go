@@ -224,7 +224,7 @@ func (s *SalesInvoices) GetIdentifier() types.GUID {
 	return *s.InvoiceID
 }
 
-// List the SalesInvoices entities in the provided divison.
+// List the SalesInvoices entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SalesInvoicesEndpoint) List(ctx context.Context, division int, all bool) ([]*SalesInvoices, error) {
 	var entities []*SalesInvoices

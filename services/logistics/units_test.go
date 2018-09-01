@@ -23,9 +23,12 @@ func TestUnitsEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units", e)
+		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestUnitsEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units", e)
+		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in UnitsEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/Units?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

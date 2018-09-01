@@ -113,7 +113,7 @@ func (s *StockSerialNumbers) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the StockSerialNumbers entities in the provided divison.
+// List the StockSerialNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StockSerialNumbersEndpoint) List(ctx context.Context, division int, all bool) ([]*StockSerialNumbers, error) {
 	var entities []*StockSerialNumbers

@@ -119,7 +119,7 @@ func (s *MaterialIssues) GetIdentifier() types.GUID {
 	return *s.StockTransactionId
 }
 
-// List the MaterialIssues entities in the provided divison.
+// List the MaterialIssues entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MaterialIssuesEndpoint) List(ctx context.Context, division int, all bool) ([]*MaterialIssues, error) {
 	var entities []*MaterialIssues

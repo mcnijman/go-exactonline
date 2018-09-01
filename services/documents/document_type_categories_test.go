@@ -22,9 +22,12 @@ func TestDocumentTypeCategoriesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", e2)
 	}
 
 	g := 100
@@ -57,9 +60,12 @@ func TestDocumentTypeCategoriesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypeCategoriesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypeCategories?$skiptoken=foo", e2)
 	}
 
 	g := 100

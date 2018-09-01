@@ -41,7 +41,7 @@ func (s *DocumentCategories) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the DocumentCategories entities in the provided divison.
+// List the DocumentCategories entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentCategoriesEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentCategories, error) {
 	var entities []*DocumentCategories

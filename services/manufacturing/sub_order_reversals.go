@@ -107,7 +107,7 @@ func (s *SubOrderReversals) GetIdentifier() types.GUID {
 	return *s.MaterialReversalStockTransactionId
 }
 
-// List the SubOrderReversals entities in the provided divison.
+// List the SubOrderReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubOrderReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*SubOrderReversals, error) {
 	var entities []*SubOrderReversals

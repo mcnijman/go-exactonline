@@ -23,9 +23,12 @@ func TestIndicatorBalancesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances", e)
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestIndicatorBalancesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances", e)
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorBalancesEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

@@ -203,7 +203,7 @@ func (s *ShopOrders) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the ShopOrders entities in the provided divison.
+// List the ShopOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrders, error) {
 	var entities []*ShopOrders

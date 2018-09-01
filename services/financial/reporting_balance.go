@@ -83,7 +83,7 @@ func (s *ReportingBalance) GetIdentifier() int64 {
 	return *s.ID
 }
 
-// List the ReportingBalance entities in the provided divison.
+// List the ReportingBalance entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReportingBalanceEndpoint) List(ctx context.Context, division int, all bool) ([]*ReportingBalance, error) {
 	var entities []*ReportingBalance

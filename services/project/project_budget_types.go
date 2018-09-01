@@ -31,7 +31,7 @@ func (s *ProjectBudgetTypes) GetIdentifier() int {
 	return *s.ID
 }
 
-// List the ProjectBudgetTypes entities in the provided divison.
+// List the ProjectBudgetTypes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectBudgetTypesEndpoint) List(ctx context.Context, division int, all bool) ([]*ProjectBudgetTypes, error) {
 	var entities []*ProjectBudgetTypes

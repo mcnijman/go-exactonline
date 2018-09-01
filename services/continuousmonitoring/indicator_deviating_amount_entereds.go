@@ -86,7 +86,7 @@ func (s *IndicatorDeviatingAmountEntereds) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the IndicatorDeviatingAmountEntereds entities in the provided divison.
+// List the IndicatorDeviatingAmountEntereds entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorDeviatingAmountEnteredsEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorDeviatingAmountEntereds, error) {
 	var entities []*IndicatorDeviatingAmountEntereds

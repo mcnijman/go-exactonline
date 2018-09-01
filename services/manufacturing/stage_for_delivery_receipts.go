@@ -95,7 +95,7 @@ func (s *StageForDeliveryReceipts) GetIdentifier() types.GUID {
 	return *s.Id
 }
 
-// List the StageForDeliveryReceipts entities in the provided divison.
+// List the StageForDeliveryReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StageForDeliveryReceiptsEndpoint) List(ctx context.Context, division int, all bool) ([]*StageForDeliveryReceipts, error) {
 	var entities []*StageForDeliveryReceipts

@@ -23,9 +23,12 @@ func TestInvoiceTermsEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms", e)
+		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestInvoiceTermsEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms", e)
+		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in InvoiceTermsEndpoint.List returned error: %v, with url /api/v1/{division}/project/InvoiceTerms?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

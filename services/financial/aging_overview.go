@@ -40,7 +40,7 @@ func (s *AgingOverview) GetIdentifier() int {
 	return *s.AgeGroup
 }
 
-// List the AgingOverview entities in the provided divison.
+// List the AgingOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AgingOverviewEndpoint) List(ctx context.Context, division int, all bool) ([]*AgingOverview, error) {
 	var entities []*AgingOverview

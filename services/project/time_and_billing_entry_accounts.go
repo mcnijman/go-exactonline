@@ -35,7 +35,7 @@ func (s *TimeAndBillingEntryAccounts) GetIdentifier() types.GUID {
 	return *s.AccountId
 }
 
-// List the TimeAndBillingEntryAccounts entities in the provided divison.
+// List the TimeAndBillingEntryAccounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingEntryAccountsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeAndBillingEntryAccounts, error) {
 	var entities []*TimeAndBillingEntryAccounts

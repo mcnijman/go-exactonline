@@ -23,9 +23,12 @@ func TestOpportunitiesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities", e)
+		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestOpportunitiesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities", e)
+		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in OpportunitiesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Opportunities?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

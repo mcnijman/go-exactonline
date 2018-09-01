@@ -71,7 +71,7 @@ func (s *ProjectRestrictionRebillings) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the ProjectRestrictionRebillings entities in the provided divison.
+// List the ProjectRestrictionRebillings entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectRestrictionRebillingsEndpoint) List(ctx context.Context, division int, all bool) ([]*ProjectRestrictionRebillings, error) {
 	var entities []*ProjectRestrictionRebillings

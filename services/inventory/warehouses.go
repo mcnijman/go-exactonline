@@ -80,7 +80,7 @@ func (s *Warehouses) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the Warehouses entities in the provided divison.
+// List the Warehouses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *WarehousesEndpoint) List(ctx context.Context, division int, all bool) ([]*Warehouses, error) {
 	var entities []*Warehouses

@@ -71,7 +71,7 @@ func (s *ExchangeRates) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the ExchangeRates entities in the provided divison.
+// List the ExchangeRates entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ExchangeRatesEndpoint) List(ctx context.Context, division int, all bool) ([]*ExchangeRates, error) {
 	var entities []*ExchangeRates

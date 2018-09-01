@@ -80,7 +80,7 @@ func (s *PayablesList) GetIdentifier() int64 {
 	return *s.HID
 }
 
-// List the PayablesList entities in the provided divison.
+// List the PayablesList entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PayablesListEndpoint) List(ctx context.Context, division int, all bool) ([]*PayablesList, error) {
 	var entities []*PayablesList

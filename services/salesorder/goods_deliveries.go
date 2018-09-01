@@ -116,7 +116,7 @@ func (s *GoodsDeliveries) GetIdentifier() types.GUID {
 	return *s.EntryID
 }
 
-// List the GoodsDeliveries entities in the provided divison.
+// List the GoodsDeliveries entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GoodsDeliveriesEndpoint) List(ctx context.Context, division int, all bool) ([]*GoodsDeliveries, error) {
 	var entities []*GoodsDeliveries

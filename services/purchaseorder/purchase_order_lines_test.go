@@ -23,9 +23,12 @@ func TestPurchaseOrderLinesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines", e)
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestPurchaseOrderLinesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines", e)
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseOrderLinesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseorder/PurchaseOrderLines?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

@@ -74,7 +74,7 @@ func (s *SolutionLinks) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the SolutionLinks entities in the provided divison.
+// List the SolutionLinks entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SolutionLinksEndpoint) List(ctx context.Context, division int, all bool) ([]*SolutionLinks, error) {
 	var entities []*SolutionLinks

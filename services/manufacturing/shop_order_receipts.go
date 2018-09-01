@@ -116,7 +116,7 @@ func (s *ShopOrderReceipts) GetIdentifier() types.GUID {
 	return *s.StockTransactionId
 }
 
-// List the ShopOrderReceipts entities in the provided divison.
+// List the ShopOrderReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrderReceiptsEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrderReceipts, error) {
 	var entities []*ShopOrderReceipts

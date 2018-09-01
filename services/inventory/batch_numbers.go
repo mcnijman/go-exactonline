@@ -83,7 +83,7 @@ func (s *BatchNumbers) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the BatchNumbers entities in the provided divison.
+// List the BatchNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BatchNumbersEndpoint) List(ctx context.Context, division int, all bool) ([]*BatchNumbers, error) {
 	var entities []*BatchNumbers

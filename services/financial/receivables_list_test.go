@@ -22,9 +22,12 @@ func TestReceivablesListEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", e2)
 	}
 
 	g := int64(100)
@@ -57,9 +60,12 @@ func TestReceivablesListEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ReceivablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ReceivablesList?$skiptoken=foo", e2)
 	}
 
 	g := int64(100)

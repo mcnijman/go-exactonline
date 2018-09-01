@@ -83,7 +83,7 @@ func (s *DirectDebitMandates) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the DirectDebitMandates entities in the provided divison.
+// List the DirectDebitMandates entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DirectDebitMandatesEndpoint) List(ctx context.Context, division int, all bool) ([]*DirectDebitMandates, error) {
 	var entities []*DirectDebitMandates

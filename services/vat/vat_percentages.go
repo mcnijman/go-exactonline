@@ -71,7 +71,7 @@ func (s *VatPercentages) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the VatPercentages entities in the provided divison.
+// List the VatPercentages entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *VatPercentagesEndpoint) List(ctx context.Context, division int, all bool) ([]*VatPercentages, error) {
 	var entities []*VatPercentages

@@ -467,7 +467,7 @@ func (s *Accounts) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the Accounts entities in the provided divison.
+// List the Accounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountsEndpoint) List(ctx context.Context, division int, all bool) ([]*Accounts, error) {
 	var entities []*Accounts

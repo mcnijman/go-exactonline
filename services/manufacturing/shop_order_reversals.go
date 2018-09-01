@@ -104,7 +104,7 @@ func (s *ShopOrderReversals) GetIdentifier() types.GUID {
 	return *s.ReversalStockTransactionId
 }
 
-// List the ShopOrderReversals entities in the provided divison.
+// List the ShopOrderReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrderReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrderReversals, error) {
 	var entities []*ShopOrderReversals

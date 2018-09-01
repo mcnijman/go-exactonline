@@ -44,7 +44,7 @@ func (s *DocumentsAttachments) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the DocumentsAttachments entities in the provided divison.
+// List the DocumentsAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentsAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentsAttachments, error) {
 	var entities []*DocumentsAttachments

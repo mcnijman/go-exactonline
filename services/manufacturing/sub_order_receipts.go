@@ -107,7 +107,7 @@ func (s *SubOrderReceipts) GetIdentifier() types.GUID {
 	return *s.ShopOrderReceiptStockTransactionId
 }
 
-// List the SubOrderReceipts entities in the provided divison.
+// List the SubOrderReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubOrderReceiptsEndpoint) List(ctx context.Context, division int, all bool) ([]*SubOrderReceipts, error) {
 	var entities []*SubOrderReceipts

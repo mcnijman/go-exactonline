@@ -59,7 +59,7 @@ func (s *AccountClassificationNames) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the AccountClassificationNames entities in the provided divison.
+// List the AccountClassificationNames entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountClassificationNamesEndpoint) List(ctx context.Context, division int, all bool) ([]*AccountClassificationNames, error) {
 	var entities []*AccountClassificationNames

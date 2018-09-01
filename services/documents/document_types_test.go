@@ -22,9 +22,12 @@ func TestDocumentTypesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", e2)
 	}
 
 	g := 100
@@ -57,9 +60,12 @@ func TestDocumentTypesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentTypesEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentTypes?$skiptoken=foo", e2)
 	}
 
 	g := 100

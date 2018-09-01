@@ -34,7 +34,7 @@ func (s *{{.Name}}) GetIdentifier() {{.PrimaryProperty.Type}} {
 }
 
 {{ if (.HasMethod "GET")}}
-// List the {{.Name}} entities{{ if .NeedsDivision }} in the provided divison{{end}}.
+// List the {{.Name}} entities{{ if .NeedsDivision }} in the provided division{{end}}.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} all bool) ([]*{{.Name}}, error) {
 	var entities []*{{.Name}}

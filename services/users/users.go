@@ -140,7 +140,7 @@ func (s *Users) GetIdentifier() types.GUID {
 	return *s.UserID
 }
 
-// List the Users entities in the provided divison.
+// List the Users entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *UsersEndpoint) List(ctx context.Context, division int, all bool) ([]*Users, error) {
 	var entities []*Users

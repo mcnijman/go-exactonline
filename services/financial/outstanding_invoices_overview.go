@@ -52,7 +52,7 @@ func (s *OutstandingInvoicesOverview) GetIdentifier() string {
 	return *s.CurrencyCode
 }
 
-// List the OutstandingInvoicesOverview entities in the provided divison.
+// List the OutstandingInvoicesOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *OutstandingInvoicesOverviewEndpoint) List(ctx context.Context, division int, all bool) ([]*OutstandingInvoicesOverview, error) {
 	var entities []*OutstandingInvoicesOverview

@@ -110,7 +110,7 @@ func (s *Transactions) GetIdentifier() types.GUID {
 	return *s.EntryID
 }
 
-// List the Transactions entities in the provided divison.
+// List the Transactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TransactionsEndpoint) List(ctx context.Context, division int, all bool) ([]*Transactions, error) {
 	var entities []*Transactions

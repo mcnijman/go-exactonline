@@ -101,7 +101,7 @@ func (s *LeaveRegistrations) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the LeaveRegistrations entities in the provided divison.
+// List the LeaveRegistrations entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *LeaveRegistrationsEndpoint) List(ctx context.Context, division int, all bool) ([]*LeaveRegistrations, error) {
 	var entities []*LeaveRegistrations

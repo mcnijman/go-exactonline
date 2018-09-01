@@ -22,9 +22,12 @@ func TestGLTransactionTypesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", e2)
 	}
 
 	g := 100
@@ -57,9 +60,12 @@ func TestGLTransactionTypesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", e2)
 	}
 
 	g := 100

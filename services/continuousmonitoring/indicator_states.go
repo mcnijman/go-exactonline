@@ -77,7 +77,7 @@ func (s *IndicatorStates) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the IndicatorStates entities in the provided divison.
+// List the IndicatorStates entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorStatesEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorStates, error) {
 	var entities []*IndicatorStates

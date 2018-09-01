@@ -329,7 +329,7 @@ func (s *Items) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the Items entities in the provided divison.
+// List the Items entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ItemsEndpoint) List(ctx context.Context, division int, all bool) ([]*Items, error) {
 	var entities []*Items

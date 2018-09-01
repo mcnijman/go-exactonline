@@ -98,7 +98,7 @@ func (s *InvoiceTerms) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the InvoiceTerms entities in the provided divison.
+// List the InvoiceTerms entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *InvoiceTermsEndpoint) List(ctx context.Context, division int, all bool) ([]*InvoiceTerms, error) {
 	var entities []*InvoiceTerms

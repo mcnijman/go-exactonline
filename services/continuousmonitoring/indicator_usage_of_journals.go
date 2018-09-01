@@ -83,7 +83,7 @@ func (s *IndicatorUsageOfJournals) GetIdentifier() types.GUID {
 	return *s.ID
 }
 
-// List the IndicatorUsageOfJournals entities in the provided divison.
+// List the IndicatorUsageOfJournals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorUsageOfJournalsEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorUsageOfJournals, error) {
 	var entities []*IndicatorUsageOfJournals

@@ -23,9 +23,12 @@ func TestTimeAndBillingEntryRecentHourCostTypesEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestTimeAndBillingEntryRecentHourCostTypesEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes", e)
+		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in TimeAndBillingEntryRecentHourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()

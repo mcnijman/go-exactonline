@@ -23,9 +23,12 @@ func TestProjectPlanningEndpoint_List_all(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
@@ -58,9 +61,12 @@ func TestProjectPlanningEndpoint_List(t *testing.T) {
 	acceptHeaders := []string{"application/json"}
 
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$select=*", 0)
-	u2, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning?$select=*", e)
+	}
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", 0)
+	if e2 != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ProjectPlanningEndpoint.List returned error: %v, with url /api/v1/{division}/project/ProjectPlanning?$skiptoken=foo", e2)
 	}
 
 	g := types.NewGUID()
