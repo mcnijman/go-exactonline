@@ -5,12 +5,7 @@
 
 package api
 
-import (
-	"net/url"
-
-	"github.com/mcnijman/go-exactonline/types"
-)
-
+/*
 // ListQueryOptions holds options for fetching a list.
 type ListQueryOptions struct {
 	// Select allows for limiting the fields returned, * is all fields
@@ -49,3 +44,4 @@ func (o ListQueryOptions) GetQueryString() string {
 func OptionsFromQuery(u *url.URL) ListQueryOptions {
 	return ListQueryOptions{}
 }
+*/

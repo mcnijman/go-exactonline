@@ -54,5 +54,17 @@ func TestDate_unMarshalJSONEmpty(t *testing.T) {
 }
 
 func TestDate_MarshalJSON(t *testing.T) {
+	d := time.Date(2018, 8, 31, 12, 25, 44, 17000000, time.UTC)
 
+	b, err := json.Marshal(d)
+	if err != nil {
+		t.Errorf("Failed marshalling date: %v", d)
+	}
+
+	want := `"2018-08-31T12:25:44.017Z"`
+	got := string(b)
+
+	if got != want {
+		t.Errorf("Failed marshalling date: got: %v, want %v", got, want)
+	}
 }
