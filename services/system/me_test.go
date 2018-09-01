@@ -40,7 +40,7 @@ func TestMeEndpoint_List_all(t *testing.T) {
 		}
 	})
 
-	entities, err := s.Me.List(context.Background(), 0, true)
+	entities, err := s.Me.List(context.Background(), true)
 	if err != nil {
 		t.Errorf("MeEndpoint.List returned error: %v", err)
 	}
@@ -71,7 +71,7 @@ func TestMeEndpoint_List(t *testing.T) {
 		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "UserID": "`+gs+`"}]}}`)
 	})
 
-	entities, err := s.Me.List(context.Background(), 0, false)
+	entities, err := s.Me.List(context.Background(), false)
 	if err != nil {
 		t.Errorf("MeEndpoint.List returned error: %v", err)
 	}

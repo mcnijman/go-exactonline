@@ -71,7 +71,7 @@ func Test{{.EndpointServiceName}}_List_all(t *testing.T) {
 	})
 	{{end}}
 
-	entities, err := s.{{.Name}}.List(context.Background(), 0, true)
+	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} true)
 	if err != nil {
 		t.Errorf("{{.EndpointServiceName}}.List returned error: %v", err)
 	}
@@ -130,7 +130,7 @@ func Test{{.EndpointServiceName}}_List(t *testing.T) {
 	})
 	{{end}}
 
-	entities, err := s.{{.Name}}.List(context.Background(), 0, false)
+	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} false)
 	if err != nil {
 		t.Errorf("{{.EndpointServiceName}}.List returned error: %v", err)
 	}

@@ -64,12 +64,8 @@ func (c *Client) ResolveURL(urlStr string) (*url.URL, error) {
 
 // ResolvePathWithDivision will resolve the base url for paths that need a division prefix
 func (c *Client) ResolvePathWithDivision(path string, division int) (*url.URL, error) {
-	fmt.Printf("%+v \n", path)
-	if !strings.HasSuffix(c.BaseURL.Path, "/") {
-		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
-	}
-
-	return c.BaseURL.Parse(strings.Replace(path, "{division}", strconv.Itoa(division), 1))
+	s := strings.Replace(path, "{division}", strconv.Itoa(division), 1)
+	return c.ResolveURL(s)
 }
 
 // NewRequest creates an API request. An absolute URL must be provided in url.

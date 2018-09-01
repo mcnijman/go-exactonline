@@ -36,9 +36,14 @@ func (s *{{.Name}}) GetIdentifier() {{.PrimaryProperty.Type}} {
 {{ if (.HasMethod "GET")}}
 // List the {{.Name}} entities{{ if .NeedsDivision }} in the provided divison{{end}}.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *{{.EndpointServiceName}}) List(ctx context.Context, division int, all bool) ([]*{{.Name}}, error) {
+func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} all bool) ([]*{{.Name}}, error) {
 	var entities []*{{.Name}}
+	{{- if .NeedsDivision}}
 	u, err := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", division)
+	{{else}}
+	u, err := s.client.ResolveURL("{{.URL}}?$select=*")
+	{{end -}}
+	
 	if err != nil {
 		return nil, err
 	}

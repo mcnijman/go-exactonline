@@ -16,6 +16,9 @@ Note that this library doens't directly handle authentication, see [Authenticati
 
 ```go
 client := exactonline.NewClient(nil)
+
+divisionID, err := client.GetCurrentDivisionID()
+transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, nil)
 ```
 
 ## Authentication ##
@@ -24,6 +27,11 @@ This library doesn't directly handle authentication. You should provide a `http.
 
 ## Divisions ##
 
+TODO
+
+## Pagination ##
+
+TODO
 
 ## Issues ##
 

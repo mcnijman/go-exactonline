@@ -9,6 +9,7 @@ package exactonline
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -174,6 +175,18 @@ func (c *Client) SetBaseURL(baseURL string) error {
 // SetUserAgent sets the useragent provided on every communication with the Exact Online API.
 func (c *Client) SetUserAgent(userAgent string) {
 	c.client.UserAgent = userAgent
+}
+
+// GetCurrentDivisionID fetches the last used division id of the user
+func (c *Client) GetCurrentDivisionID(ctx context.Context) (int, error) {
+	mes, err := c.System.Me.List(ctx, false)
+	if err != nil {
+		return 0, err
+	}
+	if len(mes) != 1 {
+		return 0, fmt.Errorf("System.Me response is supposed to have 1 entity, got %d", len(mes))
+	}
+	return *mes[0].CurrentDivision, nil
 }
 
 // Bool is a helper routine that allocates a new bool value
