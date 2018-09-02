@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/mcnijman/go-exactonline?status.svg)](https://godoc.org/github.com/mcnijman/go-exactonline) [![Build Status](https://travis-ci.org/mcnijman/go-exactonline.svg?branch=master)](https://travis-ci.org/mcnijman/go-exactonline) [![Test Coverage](https://coveralls.io/repos/github/mcnijman/go-exactonline/badge.svg?branch=master)](https://coveralls.io/github/mcnijman/go-exactonline?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/a2ca34f94cb3bc58e6a1/maintainability)](https://codeclimate.com/github/mcnijman/go-exactonline/maintainability)
 
-go-exactonline is a Go client library for accessing the Exact Online API. This library requires go 1.9 and above.
+go-exactonline is a Go client library for accessing the Exact Online API. This library is tested for go 1.9 and above.
 
 This is library is incomplete and under development.
 
@@ -22,7 +22,7 @@ client := exactonline.NewClient(nil)
 divisionID, err := client.GetCurrentDivisionID()
 
 // Fetch all transactions in the division
-transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, nil)
+transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, false)
 ```
 
 ## Authentication ##

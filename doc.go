@@ -19,6 +19,6 @@ We first contstruct a client and then access the various API endpoints.
 	divisionID, err := client.GetCurrentDivisionID()
 
 	// Fetch all transactions in the division
-	transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, nil)
+	transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, false)
 */
 package exactonline
