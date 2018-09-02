@@ -12,3 +12,4 @@
 *.out
 
 coverage.out
+coverage.txt

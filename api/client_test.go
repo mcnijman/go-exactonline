@@ -282,12 +282,12 @@ func Test_handleResponseError400(t *testing.T) {
 	}
 }
 
-func Test_doContextError(t *testing.T) {
+func Test_DoContextError(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(500 * time.Microsecond)
+		// time.Sleep(5000 * time.Microsecond)
 		fmt.Fprint(w, `test`)
 	})
 
