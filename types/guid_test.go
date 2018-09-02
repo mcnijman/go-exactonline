@@ -50,6 +50,14 @@ func TestGUID_MarshalJSON(t *testing.T) {
 	if string(got) != string(want) {
 		t.Errorf("Marshalling GUID failed: got %v, want %v", got, want)
 	}
+
+	b, err := g.MarshalJSON()
+	if err != nil {
+		t.Errorf("Unable to marshal JSON for %v", g)
+	}
+	if string(b) != string(want) {
+		t.Errorf("String is not valid json: got %s, want %s", string(b), string(want))
+	}
 }
 
 func TestGUID_String(t *testing.T) {

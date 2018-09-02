@@ -63,9 +63,25 @@ func TestDate_MarshalJSON(t *testing.T) {
 	want := `"2018-08-31T12:25:44.017Z"`
 	testJSONMarshal(t, v, want)
 
+	b, err := v.MarshalJSON()
+	if err != nil {
+		t.Errorf("Unable to marshal JSON for %v", v)
+	}
+	if string(b) != want {
+		t.Errorf("String is not valid json: got %s, want %s", string(b), want)
+	}
+
 	v2 := time.Now()
 	want2 := `"` + v2.Format(time.RFC3339Nano) + `"`
 	testJSONMarshal(t, v2, want2)
+
+	b2, err2 := v2.MarshalJSON()
+	if err2 != nil {
+		t.Errorf("Unable to marshal JSON for %v", v2)
+	}
+	if string(b2) != want2 {
+		t.Errorf("String is not valid json: got %s, want %s", string(b2), want2)
+	}
 }
 
 // Helper function to test that a value is marshalled to JSON as expected.
