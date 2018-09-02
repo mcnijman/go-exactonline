@@ -17,21 +17,44 @@ We first contstruct a client and then access the various API endpoints.
 
 ```go
 client := exactonline.NewClient(nil)
+ctx := context.Background()
 
 // Get the last used division
-divisionID, err := client.GetCurrentDivisionID(context.Background())
+divisionID, err := client.GetCurrentDivisionID(ctx)
 
 // Fetch all transactions in the division
-transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, false)
+transactions, err := client.FinancialTransaction.Transactions.List(ctx, divisionID, false)
 ```
 
 ## Authentication ##
 
 This library doesn't directly handle authentication. You should provide a `http.Client` that handles the authentication for you.
+There are multiple ways to do this, however this is recommended way:
+
+```go
+ctx := context.Background()
+ts := oauth2.StaticTokenSource(
+    &oauth2.Token{AccessToken: "... your access token ..."},
+)
+client := exactonline.NewClientFromTokenSource(ctx, ts)
+```
 
 ## Divisions ##
 
-TODO
+The current division can be fetched using:
+
+```go
+divisionID, err := client.GetCurrentDivisionID(context.Background())
+```
+
+Other available divisions can be fecthed through te following enpoints:
+
+```go
+// To get all divisions which are accessible for the user that granted the app permission, use:
+divisions, err := client.System.Divisions.List(context.Background(), true)
+// or if you need to retrieve the divisions for the current license, of the user that granted the app permission, use:
+divisions, err := client.HRM.Divisions.List(context.Background(), true)
+```
 
 ## Pagination ##
 
