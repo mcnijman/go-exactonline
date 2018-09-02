@@ -181,7 +181,9 @@ func (c *Client) SetUserAgent(userAgent string) {
 	c.client.UserAgent = userAgent
 }
 
-// GetCurrentDivisionID fetches the last used division id of the user
+// GetCurrentDivisionID fetches the last used division id of the user.
+// Other divisions available can be fetched through the `Client.System.Divisions` or
+// `Client.HRM.Divisions` endpoints.
 func (c *Client) GetCurrentDivisionID(ctx context.Context) (int, error) {
 	mes, err := c.System.Me.List(ctx, false)
 	if err != nil {
