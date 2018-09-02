@@ -287,7 +287,7 @@ func Test_DoContextError(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// time.Sleep(5000 * time.Microsecond)
+		time.Sleep(1 * time.Second)
 		fmt.Fprint(w, `test`)
 	})
 
