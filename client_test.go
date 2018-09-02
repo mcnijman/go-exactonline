@@ -220,6 +220,8 @@ func TestClient_SetBaseURL(t *testing.T) {
 	u, _ := url.Parse(uri)
 	uri2 := "https://start.exactonline.nl"
 	u2, _ := url.Parse(uri2)
+	uri3 := ":foo"
+	u3, _ := url.Parse(uri2)
 	tests := []struct {
 		name      string
 		fields    fields
@@ -228,7 +230,8 @@ func TestClient_SetBaseURL(t *testing.T) {
 		wantEqual bool
 	}{
 		{"1", fields{client: c}, args{uri, u}, false, true},
-		{"1", fields{client: c}, args{uri2, u2}, false, false},
+		{"2", fields{client: c}, args{uri2, u2}, false, false},
+		{"3", fields{client: c}, args{uri3, u3}, true, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -378,102 +381,14 @@ func TestClient_SetUserAgent(t *testing.T) {
 }
 
 func TestClient_GetCurrentDivisionID(t *testing.T) {
-	type fields struct {
-		client               *api.Client
-		Budget               *budget.BudgetService
-		Bulk                 *bulk.BulkService
-		ContinuousMonitoring *continuousmonitoring.ContinuousMonitoringService
-		Documents            *documents.DocumentsService
-		FinancialTransaction *financialtransaction.FinancialTransactionService
-		General              *general.GeneralService
-		Inventory            *inventory.InventoryService
-		Accountancy          *accountancy.AccountancyService
-		Users                *users.UsersService
-		VAT                  *vat.VATService
-		Workflow             *workflow.WorkflowService
-		PurchaseEntry        *purchaseentry.PurchaseEntryService
-		Payroll              *payroll.PayrollService
-		Purchase             *purchase.PurchaseService
-		SalesOrder           *salesorder.SalesOrderService
-		Logistics            *logistics.LogisticsService
-		CRM                  *crm.CRMService
-		GeneralJournalEntry  *generaljournalentry.GeneralJournalEntryService
-		OpeningBalance       *openingbalance.OpeningBalanceService
-		Project              *project.ProjectService
-		Webhooks             *webhooks.WebhooksService
-		Cashflow             *cashflow.CashflowService
-		SalesInvoice         *salesinvoice.SalesInvoiceService
-		PurchaseOrder        *purchaseorder.PurchaseOrderService
-		Sales                *sales.SalesService
-		SalesEntry           *salesentry.SalesEntryService
-		Mailbox              *mailbox.MailboxService
-		Assets               *assets.AssetsService
-		Financial            *financial.FinancialService
-		HRM                  *hrm.HRMService
-		Manufacturing        *manufacturing.ManufacturingService
-		Subscription         *subscription.SubscriptionService
-		System               *system.SystemService
-		Activities           *activities.ActivitiesService
+	/* got, err := c.GetCurrentDivisionID(tt.args.ctx)
+	if (err != nil) != tt.wantErr {
+		t.Errorf("Client.GetCurrentDivisionID() error = %v, wantErr %v", err, tt.wantErr)
+		return
 	}
-	type args struct {
-		ctx context.Context
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    int
-		wantErr bool
-	}{}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			c := &Client{
-				client:               tt.fields.client,
-				Budget:               tt.fields.Budget,
-				Bulk:                 tt.fields.Bulk,
-				ContinuousMonitoring: tt.fields.ContinuousMonitoring,
-				Documents:            tt.fields.Documents,
-				FinancialTransaction: tt.fields.FinancialTransaction,
-				General:              tt.fields.General,
-				Inventory:            tt.fields.Inventory,
-				Accountancy:          tt.fields.Accountancy,
-				Users:                tt.fields.Users,
-				VAT:                  tt.fields.VAT,
-				Workflow:             tt.fields.Workflow,
-				PurchaseEntry:        tt.fields.PurchaseEntry,
-				Payroll:              tt.fields.Payroll,
-				Purchase:             tt.fields.Purchase,
-				SalesOrder:           tt.fields.SalesOrder,
-				Logistics:            tt.fields.Logistics,
-				CRM:                  tt.fields.CRM,
-				GeneralJournalEntry:  tt.fields.GeneralJournalEntry,
-				OpeningBalance:       tt.fields.OpeningBalance,
-				Project:              tt.fields.Project,
-				Webhooks:             tt.fields.Webhooks,
-				Cashflow:             tt.fields.Cashflow,
-				SalesInvoice:         tt.fields.SalesInvoice,
-				PurchaseOrder:        tt.fields.PurchaseOrder,
-				Sales:                tt.fields.Sales,
-				SalesEntry:           tt.fields.SalesEntry,
-				Mailbox:              tt.fields.Mailbox,
-				Assets:               tt.fields.Assets,
-				Financial:            tt.fields.Financial,
-				HRM:                  tt.fields.HRM,
-				Manufacturing:        tt.fields.Manufacturing,
-				Subscription:         tt.fields.Subscription,
-				System:               tt.fields.System,
-				Activities:           tt.fields.Activities,
-			}
-			got, err := c.GetCurrentDivisionID(tt.args.ctx)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Client.GetCurrentDivisionID() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("Client.GetCurrentDivisionID() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	if got != tt.want {
+		t.Errorf("Client.GetCurrentDivisionID() = %v, want %v", got, tt.want)
+	} */
 }
 
 func TestBool(t *testing.T) {
