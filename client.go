@@ -141,7 +141,8 @@ func NewClient(httpClient *http.Client) *Client {
 }
 
 // NewClientFromTokenSource is a wrapper around NewClient if you have a valid
-// token source. If no context is available you can use context.Background()
+// token source. It will create a http.Client from the oauth2.Tokensource.
+// If no context is available you can use context.Background()
 func NewClientFromTokenSource(ctx context.Context, tokenSource oauth2.TokenSource) *Client {
 	httpClient := oauth2.NewClient(ctx, tokenSource)
 	return NewClient(httpClient)

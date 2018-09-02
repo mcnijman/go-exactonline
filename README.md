@@ -13,11 +13,15 @@ import "github.com/mcnijman/go-exactonline"
 ```
 
 Note that this library doens't directly handle authentication, see [Authentication](#authentication).
+We first contstruct a client and then access the various API endpoints.
 
 ```go
 client := exactonline.NewClient(nil)
 
+// Get the last used division
 divisionID, err := client.GetCurrentDivisionID()
+
+// Fetch all transactions in the division
 transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, nil)
 ```
 
