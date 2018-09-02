@@ -15,6 +15,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"strconv"
 	"testing"
 	"time"
 
@@ -236,7 +237,7 @@ func TestDo_noContent(t *testing.T) {
 	}
 }
 
-func Test_handleResponseError(t *testing.T) {
+func Test_handleResponseError500(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -251,6 +252,33 @@ func Test_handleResponseError(t *testing.T) {
 	_, err := client.Do(context.Background(), req, &body)
 	if err == nil {
 		t.Fatal("Do expected an error")
+	}
+}
+
+func Test_handleResponseError400(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	errorCodes := []int{
+		http.StatusNotFound,
+		http.StatusForbidden,
+		http.StatusBadRequest,
+		http.StatusUnauthorized,
+	}
+
+	for _, code := range errorCodes {
+		mux.HandleFunc("/"+strconv.Itoa(code), func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(code)
+			fmt.Fprint(w, ``)
+		})
+
+		var body json.RawMessage
+
+		req, _ := client.NewRequest("GET", "/"+strconv.Itoa(code), nil)
+		_, err := client.Do(context.Background(), req, &body)
+		if err == nil {
+			t.Fatal("Do expected an error")
+		}
 	}
 }
 
