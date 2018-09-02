@@ -29,10 +29,6 @@ type {{.Name}} struct {
 {{end}} 
 }
 
-func (s *{{.Name}}) GetIdentifier() {{.PrimaryProperty.Type}} {
-	return *s.{{.PrimaryProperty.Name}}
-}
-
 {{ if (.HasMethod "GET")}}
 // List the {{.Name}} entities{{ if .NeedsDivision }} in the provided division{{end}}.
 // If all is true, all the paginated results are fetched; if false, list the first page.
