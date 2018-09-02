@@ -154,11 +154,16 @@ func TestNewClientFromTokenSource(t *testing.T) {
 		ctx         context.Context
 		tokenSource oauth2.TokenSource
 	}
+	ctx := context.Background()
+	tok := oauth2.StaticTokenSource(&oauth2.Token{})
+	c := oauth2.NewClient(ctx, tok)
 	tests := []struct {
 		name string
 		args args
 		want *Client
-	}{}
+	}{
+		{"1", args{ctx, tok}, NewClient(c)},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewClientFromTokenSource(tt.args.ctx, tt.args.tokenSource); !reflect.DeepEqual(got, tt.want) {
@@ -208,13 +213,23 @@ func TestClient_SetBaseURL(t *testing.T) {
 	}
 	type args struct {
 		baseURL string
+		u       *url.URL
 	}
+	c := api.NewClient(nil)
+	uri := "https://start.exactonline.nl/"
+	u, _ := url.Parse(uri)
+	uri2 := "https://start.exactonline.nl"
+	u2, _ := url.Parse(uri2)
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
-	}{}
+		name      string
+		fields    fields
+		args      args
+		wantErr   bool
+		wantEqual bool
+	}{
+		{"1", fields{client: c}, args{uri, u}, false, true},
+		{"1", fields{client: c}, args{uri2, u2}, false, false},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Client{
@@ -256,6 +271,10 @@ func TestClient_SetBaseURL(t *testing.T) {
 			}
 			if err := c.SetBaseURL(tt.args.baseURL); (err != nil) != tt.wantErr {
 				t.Errorf("Client.SetBaseURL() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if got, want := c.client.BaseURL, tt.args.u; reflect.DeepEqual(got, want) != tt.wantEqual {
+				t.Errorf("Client.SetBaseURL() got = %v, want %v", got, want)
 			}
 		})
 	}
@@ -302,11 +321,14 @@ func TestClient_SetUserAgent(t *testing.T) {
 	type args struct {
 		userAgent string
 	}
+	c := api.NewClient(nil)
 	tests := []struct {
 		name   string
 		fields fields
 		args   args
-	}{}
+	}{
+		{"1", fields{client: c}, args{"test user agent"}},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &Client{
@@ -347,6 +369,10 @@ func TestClient_SetUserAgent(t *testing.T) {
 				Activities:           tt.fields.Activities,
 			}
 			c.SetUserAgent(tt.args.userAgent)
+
+			if got, want := c.client.UserAgent, tt.args.userAgent; got != want {
+				t.Errorf("Client.SetUserAgent(%v) = %v, want %v", tt.args.userAgent, got, want)
+			}
 		})
 	}
 }

@@ -156,12 +156,12 @@ func NewClientFromTokenSource(ctx context.Context, tokenSource oauth2.TokenSourc
 // For each country, the Exact Online solution is deployed on a separate site.
 // Because of this, the Exact Online server URL is country dependent.
 // The Exact Online server URLs are:
-// The Netherlands: https://start.exactonline.nl (default)
-// Belgium: https://start.exactonline.be
-// Germany: https://start.exactonline.de
-// United Kingdom: https://start.exactonline.co.uk
-// United States of America: https://start.exactonline.com
-// Spain: https://start.exactonline.es
+//     - The Netherlands: https://start.exactonline.nl (default)
+//     - Belgium: https://start.exactonline.be
+//     - Germany: https://start.exactonline.de
+//     - United Kingdom: https://start.exactonline.co.uk
+//     - United States of America: https://start.exactonline.com
+//     - Spain: https://start.exactonline.es
 // Docs: https://support.exactonline.com/community/s/knowledge-base#All-All-DNO-Content-exact-online-sites
 func (c *Client) SetBaseURL(baseURL string) error {
 	baseEndpoint, err := url.Parse(baseURL)
