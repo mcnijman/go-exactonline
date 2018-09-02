@@ -47,19 +47,25 @@ func TestDate_unMarshalJSON(t *testing.T) {
 }
 
 func TestDate_unMarshalJSONEmpty(t *testing.T) {
-	tests := [][]byte{
-		[]byte(`null`),
-		[]byte(``),
-		[]byte(`""`),
-		[]byte(`/Date()/`),
+	tests := []struct {
+		v       []byte
+		wantErr bool
+	}{
+		{[]byte(`null`), false},
+		{[]byte(``), true},
+		{[]byte(`""`), false},
+		{[]byte(`/Date()/`), true},
 	}
 
 	for _, test := range tests {
 		var d Date
-		json.Unmarshal(test, &d)
+		err := json.Unmarshal(test.v, &d)
+		if (err != nil) != test.wantErr {
+			t.Errorf("Unmarshalled Date with value: %s should not return an error: %v", string(test.v), err)
+		}
 
 		if d.IsSet() {
-			t.Errorf("Unmarshalled Date with value: %s should return false for Date.IsSet", string(test))
+			t.Errorf("Unmarshalled Date with value: %s should return false for Date.IsSet", string(test.v))
 		}
 	}
 }

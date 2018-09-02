@@ -7,7 +7,9 @@ package exactonline
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"testing"
@@ -52,6 +54,29 @@ import (
 	"github.com/mcnijman/go-exactonline/types"
 	"golang.org/x/oauth2"
 )
+
+// setup sets up a test HTTP server along with a exactonline.Client that is
+// configured to talk to that test server. Tests should register handlers on
+// mux which provide mock responses for the API method being tested.
+func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown func()) {
+	// mux is the HTTP request multiplexer used with the test server.
+	mux = http.NewServeMux()
+
+	// We want to ensure that tests catch mistakes where the endpoint URL is
+	// specified as absolute rather than relative. It only makes a difference
+	// when there's a non-empty base URL path. So, use that. See issue #752.
+	apiHandler := http.NewServeMux()
+	apiHandler.Handle("/", mux)
+
+	// server is a test HTTP server used to provide mock API responses.
+	server := httptest.NewServer(apiHandler)
+
+	// client is the GitHub client being tested and is
+	// configured to use test server.
+	client = NewClient(nil)
+	client.SetBaseURL(server.URL + "/")
+	return client, mux, server.URL, server.Close
+}
 
 func TestNewClient(t *testing.T) {
 	type args struct {
@@ -380,15 +405,49 @@ func TestClient_SetUserAgent(t *testing.T) {
 	}
 }
 
-func TestClient_GetCurrentDivisionID(t *testing.T) {
-	/* got, err := c.GetCurrentDivisionID(tt.args.ctx)
-	if (err != nil) != tt.wantErr {
-		t.Errorf("Client.GetCurrentDivisionID() error = %v, wantErr %v", err, tt.wantErr)
-		return
+func testMethod(t *testing.T, r *http.Request, want string) {
+	if got := r.Method; got != want {
+		t.Errorf("Request method: %v, want %v", got, want)
 	}
-	if got != tt.want {
-		t.Errorf("Client.GetCurrentDivisionID() = %v, want %v", got, tt.want)
-	} */
+}
+func TestClient_GetCurrentDivisionID(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	want := 100
+
+	mux.HandleFunc("/api/v1/current/Me", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{ "d": { "__next": "", "results": [{ "CurrentDivision": 100 }]}}`)
+	})
+
+	ctx := context.Background()
+
+	got, err := c.GetCurrentDivisionID(ctx)
+	if err != nil {
+		t.Errorf("Client.GetCurrentDivisionID() error = %v", err)
+	}
+
+	if got != want {
+		t.Errorf("Client.GetCurrentDivisionID() = %v, want %v", got, want)
+	}
+}
+
+func TestClient_GetCurrentDivisionID_error(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/v1/current/Me", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{ "d": { "__next": "", "results": [{ "CurrentDivision": 100 }, { "CurrentDivision": 200 }]}}`)
+	})
+
+	ctx := context.Background()
+
+	_, err := c.GetCurrentDivisionID(ctx)
+	if err == nil {
+		t.Error("Client.GetCurrentDivisionID() want error but got nil")
+	}
 }
 
 func TestBool(t *testing.T) {
