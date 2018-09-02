@@ -433,7 +433,7 @@ func TestClient_GetCurrentDivisionID(t *testing.T) {
 	}
 }
 
-func TestClient_GetCurrentDivisionID_error(t *testing.T) {
+func TestClient_GetCurrentDivisionID_error_count(t *testing.T) {
 	c, mux, _, teardown := setup()
 	defer teardown()
 
@@ -441,6 +441,18 @@ func TestClient_GetCurrentDivisionID_error(t *testing.T) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{ "d": { "__next": "", "results": [{ "CurrentDivision": 100 }, { "CurrentDivision": 200 }]}}`)
 	})
+
+	ctx := context.Background()
+
+	_, err := c.GetCurrentDivisionID(ctx)
+	if err == nil {
+		t.Error("Client.GetCurrentDivisionID() want error but got nil")
+	}
+}
+
+func TestClient_GetCurrentDivisionID_error(t *testing.T) {
+	c, _, _, teardown := setup()
+	defer teardown()
 
 	ctx := context.Background()
 
