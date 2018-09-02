@@ -64,10 +64,6 @@ type Departments struct {
 	Notes *string `json:"Notes,omitempty"`
 }
 
-func (s *Departments) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Departments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DepartmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*Departments, error) {

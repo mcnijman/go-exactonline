@@ -112,10 +112,6 @@ type BillOfMaterialMaterials struct {
 	Type *int `json:"Type,omitempty"`
 }
 
-func (s *BillOfMaterialMaterials) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the BillOfMaterialMaterials entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BillOfMaterialMaterialsEndpoint) List(ctx context.Context, division int, all bool) ([]*BillOfMaterialMaterials, error) {

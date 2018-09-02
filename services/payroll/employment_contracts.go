@@ -109,10 +109,6 @@ type EmploymentContracts struct {
 	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
-func (s *EmploymentContracts) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the EmploymentContracts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *EmploymentContractsEndpoint) List(ctx context.Context, division int, all bool) ([]*EmploymentContracts, error) {

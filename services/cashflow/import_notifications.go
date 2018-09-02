@@ -55,10 +55,6 @@ type ImportNotifications struct {
 	RetriedOn *types.Date `json:"RetriedOn,omitempty"`
 }
 
-func (s *ImportNotifications) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the ImportNotifications entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ImportNotificationsEndpoint) List(ctx context.Context, division int, all bool) ([]*ImportNotifications, error) {

@@ -67,10 +67,6 @@ type ProjectRestrictionEmployees struct {
 	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
-func (s *ProjectRestrictionEmployees) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the ProjectRestrictionEmployees entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectRestrictionEmployeesEndpoint) List(ctx context.Context, division int, all bool) ([]*ProjectRestrictionEmployees, error) {

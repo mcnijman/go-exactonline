@@ -79,10 +79,6 @@ type ReportingBalance struct {
 	Type *int `json:"Type,omitempty"`
 }
 
-func (s *ReportingBalance) GetIdentifier() int64 {
-	return *s.ID
-}
-
 // List the ReportingBalance entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReportingBalanceEndpoint) List(ctx context.Context, division int, all bool) ([]*ReportingBalance, error) {

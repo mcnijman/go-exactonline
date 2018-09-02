@@ -67,10 +67,6 @@ type DivisionClasses struct {
 	SequenceNr *int `json:"SequenceNr,omitempty"`
 }
 
-func (s *DivisionClasses) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the DivisionClasses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DivisionClassesEndpoint) List(ctx context.Context, division int, all bool) ([]*DivisionClasses, error) {

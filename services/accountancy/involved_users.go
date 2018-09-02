@@ -97,10 +97,6 @@ type InvolvedUsers struct {
 	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
-func (s *InvolvedUsers) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the InvolvedUsers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *InvolvedUsersEndpoint) List(ctx context.Context, division int, all bool) ([]*InvolvedUsers, error) {

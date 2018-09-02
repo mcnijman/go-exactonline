@@ -76,10 +76,6 @@ type GeneralJournalEntries struct {
 	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
-func (s *GeneralJournalEntries) GetIdentifier() types.GUID {
-	return *s.EntryID
-}
-
 // List the GeneralJournalEntries entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GeneralJournalEntriesEndpoint) List(ctx context.Context, division int, all bool) ([]*GeneralJournalEntries, error) {

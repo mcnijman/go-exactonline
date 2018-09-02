@@ -43,10 +43,6 @@ type Currencies struct {
 	PricePrecision *float64 `json:"PricePrecision,omitempty"`
 }
 
-func (s *Currencies) GetIdentifier() string {
-	return *s.Code
-}
-
 // List the Currencies entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CurrenciesEndpoint) List(ctx context.Context, division int, all bool) ([]*Currencies, error) {

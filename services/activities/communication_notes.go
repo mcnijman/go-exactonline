@@ -106,10 +106,6 @@ type CommunicationNotes struct {
 	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
-func (s *CommunicationNotes) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the CommunicationNotes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CommunicationNotesEndpoint) List(ctx context.Context, division int, all bool) ([]*CommunicationNotes, error) {

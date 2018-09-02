@@ -58,10 +58,6 @@ type GLAccountClassificationMappings struct {
 	GLSchemeID *types.GUID `json:"GLSchemeID,omitempty"`
 }
 
-func (s *GLAccountClassificationMappings) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the GLAccountClassificationMappings entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GLAccountClassificationMappingsEndpoint) List(ctx context.Context, division int, all bool) ([]*GLAccountClassificationMappings, error) {

@@ -130,10 +130,6 @@ type Journals struct {
 	Type *int `json:"Type,omitempty"`
 }
 
-func (s *Journals) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Journals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *JournalsEndpoint) List(ctx context.Context, division int, all bool) ([]*Journals, error) {

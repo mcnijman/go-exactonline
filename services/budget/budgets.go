@@ -100,10 +100,6 @@ type Budgets struct {
 	ReportingYear *int `json:"ReportingYear,omitempty"`
 }
 
-func (s *Budgets) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Budgets entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BudgetsEndpoint) List(ctx context.Context, division int, all bool) ([]*Budgets, error) {

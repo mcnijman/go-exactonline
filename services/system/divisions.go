@@ -187,10 +187,6 @@ type Divisions struct {
 	Website *string `json:"Website,omitempty"`
 }
 
-func (s *Divisions) GetIdentifier() int {
-	return *s.Code
-}
-
 // List the Divisions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DivisionsEndpoint) List(ctx context.Context, division int, all bool) ([]*Divisions, error) {

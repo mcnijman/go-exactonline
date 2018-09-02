@@ -46,10 +46,6 @@ type CurrentYearProcessed struct {
 	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 }
 
-func (s *CurrentYearProcessed) GetIdentifier() int {
-	return *s.Division
-}
-
 // List the CurrentYearProcessed entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CurrentYearProcessedEndpoint) List(ctx context.Context, division int, all bool) ([]*CurrentYearProcessed, error) {

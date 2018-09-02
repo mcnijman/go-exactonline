@@ -160,10 +160,6 @@ type TimeTransactions struct {
 	Type *int `json:"Type,omitempty"`
 }
 
-func (s *TimeTransactions) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the TimeTransactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeTransactionsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeTransactions, error) {

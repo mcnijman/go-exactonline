@@ -172,10 +172,6 @@ type PurchaseOrders struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
-func (s *PurchaseOrders) GetIdentifier() types.GUID {
-	return *s.PurchaseOrderID
-}
-
 // List the PurchaseOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PurchaseOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*PurchaseOrders, error) {

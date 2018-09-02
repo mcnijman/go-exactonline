@@ -166,10 +166,6 @@ type ShopOrderRoutingStepPlans struct {
 	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
-func (s *ShopOrderRoutingStepPlans) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the ShopOrderRoutingStepPlans entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrderRoutingStepPlansEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrderRoutingStepPlans, error) {

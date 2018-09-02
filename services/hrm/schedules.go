@@ -97,10 +97,6 @@ type Schedules struct {
 	StartWeek *int `json:"StartWeek,omitempty"`
 }
 
-func (s *Schedules) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Schedules entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SchedulesEndpoint) List(ctx context.Context, division int, all bool) ([]*Schedules, error) {

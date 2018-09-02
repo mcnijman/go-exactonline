@@ -43,10 +43,6 @@ type DocumentAttachments struct {
 	Url *string `json:"Url,omitempty"`
 }
 
-func (s *DocumentAttachments) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the DocumentAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentAttachments, error) {

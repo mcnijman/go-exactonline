@@ -67,10 +67,6 @@ type SubscriptionRestrictionItems struct {
 	SubscriptionNumber *int `json:"SubscriptionNumber,omitempty"`
 }
 
-func (s *SubscriptionRestrictionItems) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the SubscriptionRestrictionItems entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubscriptionRestrictionItemsEndpoint) List(ctx context.Context, division int, all bool) ([]*SubscriptionRestrictionItems, error) {

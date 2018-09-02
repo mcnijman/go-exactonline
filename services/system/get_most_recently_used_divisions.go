@@ -187,10 +187,6 @@ type GetMostRecentlyUsedDivisions struct {
 	Website *string `json:"Website,omitempty"`
 }
 
-func (s *GetMostRecentlyUsedDivisions) GetIdentifier() int {
-	return *s.Code
-}
-
 // List the GetMostRecentlyUsedDivisions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GetMostRecentlyUsedDivisionsEndpoint) List(ctx context.Context, division int, all bool) ([]*GetMostRecentlyUsedDivisions, error) {

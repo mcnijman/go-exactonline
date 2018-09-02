@@ -112,10 +112,6 @@ type Me struct {
 	UserName *string `json:"UserName,omitempty"`
 }
 
-func (s *Me) GetIdentifier() types.GUID {
-	return *s.UserID
-}
-
 // List the Me entities.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MeEndpoint) List(ctx context.Context, all bool) ([]*Me, error) {

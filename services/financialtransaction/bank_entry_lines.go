@@ -157,10 +157,6 @@ type BankEntryLines struct {
 	VATType *string `json:"VATType,omitempty"`
 }
 
-func (s *BankEntryLines) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the BankEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BankEntryLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*BankEntryLines, error) {

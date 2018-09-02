@@ -85,10 +85,6 @@ type AssemblyOrders struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
-func (s *AssemblyOrders) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AssemblyOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AssemblyOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*AssemblyOrders, error) {

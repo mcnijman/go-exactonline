@@ -157,10 +157,6 @@ type CashEntryLines struct {
 	VATType *string `json:"VATType,omitempty"`
 }
 
-func (s *CashEntryLines) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the CashEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CashEntryLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*CashEntryLines, error) {

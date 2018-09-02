@@ -229,10 +229,6 @@ type Payments struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
-func (s *Payments) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Payments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PaymentsEndpoint) List(ctx context.Context, division int, all bool) ([]*Payments, error) {

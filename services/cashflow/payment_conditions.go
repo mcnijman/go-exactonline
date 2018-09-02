@@ -91,10 +91,6 @@ type PaymentConditions struct {
 	VATCalculation *string `json:"VATCalculation,omitempty"`
 }
 
-func (s *PaymentConditions) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the PaymentConditions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PaymentConditionsEndpoint) List(ctx context.Context, division int, all bool) ([]*PaymentConditions, error) {

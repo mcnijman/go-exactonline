@@ -46,10 +46,6 @@ type AddressStates struct {
 	State *string `json:"State,omitempty"`
 }
 
-func (s *AddressStates) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AddressStates entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AddressStatesEndpoint) List(ctx context.Context, division int, all bool) ([]*AddressStates, error) {

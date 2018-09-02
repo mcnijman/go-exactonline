@@ -79,10 +79,6 @@ type BankEntries struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
-func (s *BankEntries) GetIdentifier() types.GUID {
-	return *s.EntryID
-}
-
 // List the BankEntries entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BankEntriesEndpoint) List(ctx context.Context, division int, all bool) ([]*BankEntries, error) {

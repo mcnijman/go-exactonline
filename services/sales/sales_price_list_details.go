@@ -106,10 +106,6 @@ type SalesPriceListDetails struct {
 	Unit *string `json:"Unit,omitempty"`
 }
 
-func (s *SalesPriceListDetails) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the SalesPriceListDetails entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SalesPriceListDetailsEndpoint) List(ctx context.Context, division int, all bool) ([]*SalesPriceListDetails, error) {

@@ -61,10 +61,6 @@ type GLSchemes struct {
 	TargetNamespace *string `json:"TargetNamespace,omitempty"`
 }
 
-func (s *GLSchemes) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the GLSchemes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GLSchemesEndpoint) List(ctx context.Context, division int, all bool) ([]*GLSchemes, error) {

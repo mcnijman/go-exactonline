@@ -211,10 +211,6 @@ type SalesOrders struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
-func (s *SalesOrders) GetIdentifier() types.GUID {
-	return *s.OrderID
-}
-
 // List the SalesOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SalesOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*SalesOrders, error) {

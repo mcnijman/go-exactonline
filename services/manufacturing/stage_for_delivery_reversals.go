@@ -88,10 +88,6 @@ type StageForDeliveryReversals struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
-func (s *StageForDeliveryReversals) GetIdentifier() types.GUID {
-	return *s.Id
-}
-
 // List the StageForDeliveryReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StageForDeliveryReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*StageForDeliveryReversals, error) {

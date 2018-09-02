@@ -100,10 +100,6 @@ type OperationResources struct {
 	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
-func (s *OperationResources) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the OperationResources entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *OperationResourcesEndpoint) List(ctx context.Context, division int, all bool) ([]*OperationResources, error) {

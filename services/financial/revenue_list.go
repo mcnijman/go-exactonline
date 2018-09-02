@@ -30,10 +30,6 @@ type RevenueList struct {
 	Amount *float64 `json:"Amount,omitempty"`
 }
 
-func (s *RevenueList) GetIdentifier() int {
-	return *s.Period
-}
-
 // List the RevenueList entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *RevenueListEndpoint) List(ctx context.Context, division int, all bool) ([]*RevenueList, error) {

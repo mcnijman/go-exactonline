@@ -94,10 +94,6 @@ type SerialNumbers struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
-func (s *SerialNumbers) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the SerialNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SerialNumbersEndpoint) List(ctx context.Context, division int, all bool) ([]*SerialNumbers, error) {

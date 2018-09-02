@@ -64,10 +64,6 @@ type AccountantInfo struct {
 	Website *string `json:"Website,omitempty"`
 }
 
-func (s *AccountantInfo) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AccountantInfo entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountantInfoEndpoint) List(ctx context.Context, division int, all bool) ([]*AccountantInfo, error) {

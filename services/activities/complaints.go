@@ -97,10 +97,6 @@ type Complaints struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
-func (s *Complaints) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Complaints entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ComplaintsEndpoint) List(ctx context.Context, division int, all bool) ([]*Complaints, error) {

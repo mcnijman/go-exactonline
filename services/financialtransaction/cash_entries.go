@@ -70,10 +70,6 @@ type CashEntries struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
-func (s *CashEntries) GetIdentifier() types.GUID {
-	return *s.EntryID
-}
-
 // List the CashEntries entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CashEntriesEndpoint) List(ctx context.Context, division int, all bool) ([]*CashEntries, error) {

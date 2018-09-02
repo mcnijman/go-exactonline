@@ -76,10 +76,6 @@ type AgingPayablesList struct {
 	TotalAmount *float64 `json:"TotalAmount,omitempty"`
 }
 
-func (s *AgingPayablesList) GetIdentifier() types.GUID {
-	return *s.AccountId
-}
-
 // List the AgingPayablesList entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AgingPayablesListEndpoint) List(ctx context.Context, division int, all bool) ([]*AgingPayablesList, error) {

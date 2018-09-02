@@ -70,10 +70,6 @@ type Returns struct {
 	Year *int `json:"Year,omitempty"`
 }
 
-func (s *Returns) GetIdentifier() types.GUID {
-	return *s.DocumentID
-}
-
 // List the Returns entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReturnsEndpoint) List(ctx context.Context, division int, all bool) ([]*Returns, error) {

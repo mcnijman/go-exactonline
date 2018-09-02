@@ -58,10 +58,6 @@ type DocumentFolders struct {
 	ParentFolder *types.GUID `json:"ParentFolder,omitempty"`
 }
 
-func (s *DocumentFolders) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the DocumentFolders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentFoldersEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentFolders, error) {

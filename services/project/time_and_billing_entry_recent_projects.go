@@ -37,10 +37,6 @@ type TimeAndBillingEntryRecentProjects struct {
 	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
-func (s *TimeAndBillingEntryRecentProjects) GetIdentifier() types.GUID {
-	return *s.ProjectId
-}
-
 // List the TimeAndBillingEntryRecentProjects entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingEntryRecentProjectsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeAndBillingEntryRecentProjects, error) {

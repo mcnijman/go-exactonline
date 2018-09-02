@@ -82,10 +82,6 @@ type IndicatorBalances struct {
 	ValueTo *float64 `json:"ValueTo,omitempty"`
 }
 
-func (s *IndicatorBalances) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the IndicatorBalances entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorBalancesEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorBalances, error) {

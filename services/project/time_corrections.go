@@ -58,10 +58,6 @@ type TimeCorrections struct {
 	Quantity *float64 `json:"Quantity,omitempty"`
 }
 
-func (s *TimeCorrections) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the TimeCorrections entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeCorrectionsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeCorrections, error) {

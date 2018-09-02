@@ -91,10 +91,6 @@ type IndicatorDifferenceByPeriods struct {
 	ValueTo *float64 `json:"ValueTo,omitempty"`
 }
 
-func (s *IndicatorDifferenceByPeriods) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the IndicatorDifferenceByPeriods entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorDifferenceByPeriodsEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorDifferenceByPeriods, error) {

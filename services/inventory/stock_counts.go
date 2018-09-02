@@ -91,10 +91,6 @@ type StockCounts struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
-func (s *StockCounts) GetIdentifier() types.GUID {
-	return *s.StockCountID
-}
-
 // List the StockCounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StockCountsEndpoint) List(ctx context.Context, division int, all bool) ([]*StockCounts, error) {

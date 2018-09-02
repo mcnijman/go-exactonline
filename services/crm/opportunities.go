@@ -172,10 +172,6 @@ type Opportunities struct {
 	SalesTypeDescription *string `json:"SalesTypeDescription,omitempty"`
 }
 
-func (s *Opportunities) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Opportunities entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *OpportunitiesEndpoint) List(ctx context.Context, division int, all bool) ([]*Opportunities, error) {

@@ -115,10 +115,6 @@ type Tasks struct {
 	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
-func (s *Tasks) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Tasks entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TasksEndpoint) List(ctx context.Context, division int, all bool) ([]*Tasks, error) {

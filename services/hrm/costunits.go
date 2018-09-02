@@ -58,10 +58,6 @@ type Costunits struct {
 	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
-func (s *Costunits) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the Costunits entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CostunitsEndpoint) List(ctx context.Context, division int, all bool) ([]*Costunits, error) {

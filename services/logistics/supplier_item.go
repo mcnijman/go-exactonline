@@ -118,10 +118,6 @@ type SupplierItem struct {
 	SupplierItemCode *string `json:"SupplierItemCode,omitempty"`
 }
 
-func (s *SupplierItem) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the SupplierItem entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SupplierItemEndpoint) List(ctx context.Context, division int, all bool) ([]*SupplierItem, error) {

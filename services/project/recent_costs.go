@@ -100,10 +100,6 @@ type RecentCosts struct {
 	WeekNumber *int `json:"WeekNumber,omitempty"`
 }
 
-func (s *RecentCosts) GetIdentifier() int {
-	return *s.Id
-}
-
 // List the RecentCosts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *RecentCostsEndpoint) List(ctx context.Context, division int, all bool) ([]*RecentCosts, error) {

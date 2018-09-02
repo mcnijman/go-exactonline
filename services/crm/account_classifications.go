@@ -61,10 +61,6 @@ type AccountClassifications struct {
 	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
-func (s *AccountClassifications) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AccountClassifications entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountClassificationsEndpoint) List(ctx context.Context, division int, all bool) ([]*AccountClassifications, error) {

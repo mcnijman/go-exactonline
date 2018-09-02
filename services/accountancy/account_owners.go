@@ -70,10 +70,6 @@ type AccountOwners struct {
 	Shares *float64 `json:"Shares,omitempty"`
 }
 
-func (s *AccountOwners) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AccountOwners entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountOwnersEndpoint) List(ctx context.Context, division int, all bool) ([]*AccountOwners, error) {

@@ -52,10 +52,6 @@ type DocumentTypes struct {
 	TypeCategory *int `json:"TypeCategory,omitempty"`
 }
 
-func (s *DocumentTypes) GetIdentifier() int {
-	return *s.ID
-}
-
 // List the DocumentTypes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentTypesEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentTypes, error) {

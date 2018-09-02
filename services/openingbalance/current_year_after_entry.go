@@ -46,10 +46,6 @@ type CurrentYearAfterEntry struct {
 	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 }
 
-func (s *CurrentYearAfterEntry) GetIdentifier() int {
-	return *s.Division
-}
-
 // List the CurrentYearAfterEntry entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CurrentYearAfterEntryEndpoint) List(ctx context.Context, division int, all bool) ([]*CurrentYearAfterEntry, error) {

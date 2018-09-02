@@ -121,10 +121,6 @@ type MailMessagesSent struct {
 	Type *int `json:"Type,omitempty"`
 }
 
-func (s *MailMessagesSent) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the MailMessagesSent entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MailMessagesSentEndpoint) List(ctx context.Context, division int, all bool) ([]*MailMessagesSent, error) {

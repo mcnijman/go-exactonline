@@ -64,10 +64,6 @@ type AllocationRule struct {
 	Words *string `json:"Words,omitempty"`
 }
 
-func (s *AllocationRule) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AllocationRule entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AllocationRuleEndpoint) List(ctx context.Context, division int, all bool) ([]*AllocationRule, error) {

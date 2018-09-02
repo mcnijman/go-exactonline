@@ -85,10 +85,6 @@ type AbsenceRegistrationTransactions struct {
 	Status *int `json:"Status,omitempty"`
 }
 
-func (s *AbsenceRegistrationTransactions) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the AbsenceRegistrationTransactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AbsenceRegistrationTransactionsEndpoint) List(ctx context.Context, division int, all bool) ([]*AbsenceRegistrationTransactions, error) {

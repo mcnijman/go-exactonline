@@ -72,10 +72,6 @@ type ProfitLossOverview struct {
 	RevenuePreviousYearPeriod *float64 `json:"RevenuePreviousYearPeriod,omitempty"`
 }
 
-func (s *ProfitLossOverview) GetIdentifier() int {
-	return *s.CurrentYear
-}
-
 // List the ProfitLossOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProfitLossOverviewEndpoint) List(ctx context.Context, division int, all bool) ([]*ProfitLossOverview, error) {

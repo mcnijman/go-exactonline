@@ -106,10 +106,6 @@ type MaterialReversals struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
-func (s *MaterialReversals) GetIdentifier() types.GUID {
-	return *s.ReversalStockTransactionId
-}
-
 // List the MaterialReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MaterialReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*MaterialReversals, error) {

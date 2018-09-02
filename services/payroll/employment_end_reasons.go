@@ -27,10 +27,6 @@ type EmploymentEndReasons struct {
 	Description *string `json:"Description,omitempty"`
 }
 
-func (s *EmploymentEndReasons) GetIdentifier() int {
-	return *s.ID
-}
-
 // List the EmploymentEndReasons entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *EmploymentEndReasonsEndpoint) List(ctx context.Context, division int, all bool) ([]*EmploymentEndReasons, error) {

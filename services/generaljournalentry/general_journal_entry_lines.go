@@ -163,10 +163,6 @@ type GeneralJournalEntryLines struct {
 	VATType *string `json:"VATType,omitempty"`
 }
 
-func (s *GeneralJournalEntryLines) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the GeneralJournalEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GeneralJournalEntryLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*GeneralJournalEntryLines, error) {

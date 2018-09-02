@@ -67,10 +67,6 @@ type PriceLists struct {
 	Notes *string `json:"Notes,omitempty"`
 }
 
-func (s *PriceLists) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the PriceLists entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PriceListsEndpoint) List(ctx context.Context, division int, all bool) ([]*PriceLists, error) {

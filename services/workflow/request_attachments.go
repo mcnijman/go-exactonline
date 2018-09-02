@@ -43,10 +43,6 @@ type RequestAttachments struct {
 	Request *types.GUID `json:"Request,omitempty"`
 }
 
-func (s *RequestAttachments) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the RequestAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *RequestAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*RequestAttachments, error) {

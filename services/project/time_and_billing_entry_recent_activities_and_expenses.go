@@ -37,10 +37,6 @@ type TimeAndBillingEntryRecentActivitiesAndExpenses struct {
 	ParentDescription *string `json:"ParentDescription,omitempty"`
 }
 
-func (s *TimeAndBillingEntryRecentActivitiesAndExpenses) GetIdentifier() types.GUID {
-	return *s.ID
-}
-
 // List the TimeAndBillingEntryRecentActivitiesAndExpenses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeAndBillingEntryRecentActivitiesAndExpenses, error) {
