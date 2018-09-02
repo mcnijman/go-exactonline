@@ -6,7 +6,6 @@
 package types
 
 import (
-	"encoding/json"
 	"regexp"
 	"strconv"
 	"time"
@@ -19,7 +18,7 @@ type Date struct {
 
 // IsSet returns a boolean if the Date is actually set.
 func (d *Date) IsSet() bool {
-	return d.UnixNano() != (time.Time{}).UnixNano()
+	return !d.IsZero()
 }
 
 // UnmarshalJSON unmarshals the date format returned from the
@@ -44,9 +43,9 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 // MarshalJSON marshals the date to a format expected by the
 // Exact Online API.
 func (d *Date) MarshalJSON() ([]byte, error) {
-	if !d.IsSet() {
-		return json.Marshal(nil)
+	if d.IsZero() {
+		return []byte("null"), nil
 	}
 
-	return json.Marshal(d.Time)
+	return d.Time.MarshalJSON()
 }

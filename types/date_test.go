@@ -18,6 +18,12 @@ func TestDate_isSet(t *testing.T) {
 	if d.IsSet() {
 		t.Error("Empty Date should return false for Date.IsSet")
 	}
+
+	d2 := &Date{time.Now()}
+
+	if !d2.IsSet() {
+		t.Error("Non-empty Date should return true for Date.IsSet")
+	}
 }
 
 func TestDate_unMarshalJSON(t *testing.T) {
@@ -81,6 +87,17 @@ func TestDate_MarshalJSON(t *testing.T) {
 	}
 	if string(b2) != want2 {
 		t.Errorf("String is not valid json: got %s, want %s", string(b2), want2)
+	}
+
+	v3 := Date{}
+	want3 := `null`
+
+	b3, err3 := v3.MarshalJSON()
+	if err3 != nil {
+		t.Errorf("Unable to marshal JSON for %v", v2)
+	}
+	if string(b3) != want3 {
+		t.Errorf("String is not valid json: got %s, want %s", string(b3), want3)
 	}
 }
 
