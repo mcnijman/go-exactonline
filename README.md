@@ -52,7 +52,8 @@ Other available divisions can be fecthed through te following enpoints:
 ```go
 // To get all divisions which are accessible for the user that granted the app permission, use:
 divisions, err := client.System.Divisions.List(context.Background(), true)
-// or if you need to retrieve the divisions for the current license, of the user that granted the app permission, use:
+// or if you need to retrieve the divisions for the current license, of the user that granted
+// the app permission, use:
 divisions, err := client.HRM.Divisions.List(context.Background(), true)
 ```
 
