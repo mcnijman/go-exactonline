@@ -4,7 +4,7 @@
 // license that can be found in the LICENSE file.
 
 /*
-Package go-exactonline provides a client for using the Exact Online API.
+Package exactonline provides a client for using the Exact Online API.
 
 Usage:
 

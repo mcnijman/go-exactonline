@@ -13,7 +13,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
+	"github.com/gofrs/uuid"
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/services/accountancy"
 	"github.com/mcnijman/go-exactonline/services/activities"
@@ -49,6 +51,7 @@ import (
 	"github.com/mcnijman/go-exactonline/services/vat"
 	"github.com/mcnijman/go-exactonline/services/webhooks"
 	"github.com/mcnijman/go-exactonline/services/workflow"
+	"github.com/mcnijman/go-exactonline/types"
 	"golang.org/x/oauth2"
 )
 
@@ -194,6 +197,18 @@ func (c *Client) GetCurrentDivisionID(ctx context.Context) (int, error) {
 // to store v and returns a pointer to it.
 func Bool(v bool) *bool { return &v }
 
+// Date is a helper routine that allocates a new types.Date value
+// to store v and returns a pointer to it.
+func Date(v time.Time) *types.Date { return &types.Date{Time: v} }
+
+// Float64 is a helper routine that allocates a new float64 value
+// to store v and returns a pointer to it.
+func Float64(v float64) *float64 { return &v }
+
+// GUID is a helper routine that allocates a new types.GUID value
+// to store v and returns a pointer to it.
+func GUID(v uuid.UUID) *types.GUID { return &types.GUID{UUID: v} }
+
 // Int is a helper routine that allocates a new int value
 // to store v and returns a pointer to it.
 func Int(v int) *int { return &v }
@@ -205,3 +220,7 @@ func Int64(v int64) *int64 { return &v }
 // String is a helper routine that allocates a new string value
 // to store v and returns a pointer to it.
 func String(v string) *string { return &v }
+
+// URL is a helper routine that allocates a new types.URL value
+// to store v and returns a pointer to it.
+func URL(v *url.URL) *types.URL { return &types.URL{URL: v} }

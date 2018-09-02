@@ -8,10 +8,12 @@ package exactonline
 import (
 	"context"
 	"net/http"
+	"net/url"
 	"reflect"
 	"testing"
 	"time"
 
+	"github.com/gofrs/uuid"
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/services/accountancy"
 	"github.com/mcnijman/go-exactonline/services/activities"
@@ -47,6 +49,7 @@ import (
 	"github.com/mcnijman/go-exactonline/services/vat"
 	"github.com/mcnijman/go-exactonline/services/webhooks"
 	"github.com/mcnijman/go-exactonline/services/workflow"
+	"github.com/mcnijman/go-exactonline/types"
 	"golang.org/x/oauth2"
 )
 
@@ -451,14 +454,17 @@ func TestBool(t *testing.T) {
 	type args struct {
 		v bool
 	}
+	b := true
 	tests := []struct {
 		name string
 		args args
 		want *bool
-	}{}
+	}{
+		{"1", args{b}, &b},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Bool(tt.args.v); got != tt.want {
+			if got := Bool(tt.args.v); *got != *tt.want {
 				t.Errorf("Bool() = %v, want %v", got, tt.want)
 			}
 		})
@@ -469,14 +475,17 @@ func TestInt(t *testing.T) {
 	type args struct {
 		v int
 	}
+	i := 1000
 	tests := []struct {
 		name string
 		args args
 		want *int
-	}{}
+	}{
+		{"1", args{i}, &i},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Int(tt.args.v); got != tt.want {
+			if got := Int(tt.args.v); *got != *tt.want {
 				t.Errorf("Int() = %v, want %v", got, tt.want)
 			}
 		})
@@ -487,14 +496,17 @@ func TestInt64(t *testing.T) {
 	type args struct {
 		v int64
 	}
+	i := int64(1000)
 	tests := []struct {
 		name string
 		args args
 		want *int64
-	}{}
+	}{
+		{"1", args{i}, &i},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Int64(tt.args.v); got != tt.want {
+			if got := Int64(tt.args.v); *got != *tt.want {
 				t.Errorf("Int64() = %v, want %v", got, tt.want)
 			}
 		})
@@ -505,15 +517,102 @@ func TestString(t *testing.T) {
 	type args struct {
 		v string
 	}
+	s := "teststring"
 	tests := []struct {
 		name string
 		args args
 		want *string
-	}{}
+	}{
+		{"1", args{s}, &s},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := String(tt.args.v); got != tt.want {
+			if got := String(tt.args.v); *got != *tt.want {
 				t.Errorf("String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDate(t *testing.T) {
+	type args struct {
+		v time.Time
+	}
+	d := time.Now()
+	tests := []struct {
+		name string
+		args args
+		want *types.Date
+	}{
+		{"1", args{d}, &types.Date{Time: d}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Date(tt.args.v); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Date() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFloat64(t *testing.T) {
+	type args struct {
+		v float64
+	}
+	f := float64(10.12)
+	tests := []struct {
+		name string
+		args args
+		want *float64
+	}{
+		{"1", args{f}, &f},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Float64(tt.args.v); *got != *tt.want {
+				t.Errorf("Float64() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGUID(t *testing.T) {
+	type args struct {
+		v uuid.UUID
+	}
+	u := uuid.Must(uuid.NewV4())
+	tests := []struct {
+		name string
+		args args
+		want *types.GUID
+	}{
+		{"1", args{u}, &types.GUID{UUID: u}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GUID(tt.args.v); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GUID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestURL(t *testing.T) {
+	type args struct {
+		v *url.URL
+	}
+	u, _ := url.Parse("https://start.exactonline.nl")
+	tests := []struct {
+		name string
+		args args
+		want *types.URL
+	}{
+		{"1", args{u}, &types.URL{URL: u}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := URL(tt.args.v); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("URL() = %v, want %v", got, tt.want)
 			}
 		})
 	}
