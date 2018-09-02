@@ -26,17 +26,16 @@ func TestNewBulkService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.DocumentsDocumentAttachments == nil {
-		t.Error("Property DocumentsDocumentAttachments should not be nil")
-	}
-	if s.DocumentsDocuments == nil {
-		t.Error("Property DocumentsDocuments should not be nil")
-	}
-	if s.FinancialTransactionLines == nil {
-		t.Error("Property FinancialTransactionLines should not be nil")
-	}
-	if s.SalesOrderSalesOrderLines == nil {
-		t.Error("Property SalesOrderSalesOrderLines should not be nil")
+	want := &BulkService{client: c}
+	want.common.client = c
+
+	want.DocumentsDocumentAttachments = (*DocumentsDocumentAttachmentsEndpoint)(&want.common)
+	want.DocumentsDocuments = (*DocumentsDocumentsEndpoint)(&want.common)
+	want.FinancialTransactionLines = (*FinancialTransactionLinesEndpoint)(&want.common)
+	want.SalesOrderSalesOrderLines = (*SalesOrderSalesOrderLinesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

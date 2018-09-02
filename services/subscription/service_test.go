@@ -26,26 +26,19 @@ func TestNewSubscriptionService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.SubscriptionLines == nil {
-		t.Error("Property SubscriptionLines should not be nil")
-	}
-	if s.SubscriptionLineTypes == nil {
-		t.Error("Property SubscriptionLineTypes should not be nil")
-	}
-	if s.SubscriptionReasonCodes == nil {
-		t.Error("Property SubscriptionReasonCodes should not be nil")
-	}
-	if s.SubscriptionRestrictionEmployees == nil {
-		t.Error("Property SubscriptionRestrictionEmployees should not be nil")
-	}
-	if s.SubscriptionRestrictionItems == nil {
-		t.Error("Property SubscriptionRestrictionItems should not be nil")
-	}
-	if s.Subscriptions == nil {
-		t.Error("Property Subscriptions should not be nil")
-	}
-	if s.SubscriptionTypes == nil {
-		t.Error("Property SubscriptionTypes should not be nil")
+	want := &SubscriptionService{client: c}
+	want.common.client = c
+
+	want.SubscriptionLines = (*SubscriptionLinesEndpoint)(&want.common)
+	want.SubscriptionLineTypes = (*SubscriptionLineTypesEndpoint)(&want.common)
+	want.SubscriptionReasonCodes = (*SubscriptionReasonCodesEndpoint)(&want.common)
+	want.SubscriptionRestrictionEmployees = (*SubscriptionRestrictionEmployeesEndpoint)(&want.common)
+	want.SubscriptionRestrictionItems = (*SubscriptionRestrictionItemsEndpoint)(&want.common)
+	want.Subscriptions = (*SubscriptionsEndpoint)(&want.common)
+	want.SubscriptionTypes = (*SubscriptionTypesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

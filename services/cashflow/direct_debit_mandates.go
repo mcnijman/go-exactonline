@@ -83,14 +83,11 @@ type DirectDebitMandates struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DirectDebitMandatesEndpoint) List(ctx context.Context, division int, all bool) ([]*DirectDebitMandates, error) {
 	var entities []*DirectDebitMandates
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/DirectDebitMandates?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/DirectDebitMandates?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

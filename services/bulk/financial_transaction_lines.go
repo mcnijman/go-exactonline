@@ -233,14 +233,11 @@ type FinancialTransactionLines struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *FinancialTransactionLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*FinancialTransactionLines, error) {
 	var entities []*FinancialTransactionLines
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

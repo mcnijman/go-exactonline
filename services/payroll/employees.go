@@ -227,14 +227,11 @@ type Employees struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *EmployeesEndpoint) List(ctx context.Context, division int, all bool) ([]*Employees, error) {
 	var entities []*Employees
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/Employees?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/Employees?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

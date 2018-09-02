@@ -26,23 +26,18 @@ func TestNewMailboxService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.DefaultMailbox == nil {
-		t.Error("Property DefaultMailbox should not be nil")
-	}
-	if s.Mailboxes == nil {
-		t.Error("Property Mailboxes should not be nil")
-	}
-	if s.MailMessageAttachments == nil {
-		t.Error("Property MailMessageAttachments should not be nil")
-	}
-	if s.MailMessagesReceived == nil {
-		t.Error("Property MailMessagesReceived should not be nil")
-	}
-	if s.MailMessagesSent == nil {
-		t.Error("Property MailMessagesSent should not be nil")
-	}
-	if s.PreferredMailbox == nil {
-		t.Error("Property PreferredMailbox should not be nil")
+	want := &MailboxService{client: c}
+	want.common.client = c
+
+	want.DefaultMailbox = (*DefaultMailboxEndpoint)(&want.common)
+	want.Mailboxes = (*MailboxesEndpoint)(&want.common)
+	want.MailMessageAttachments = (*MailMessageAttachmentsEndpoint)(&want.common)
+	want.MailMessagesReceived = (*MailMessagesReceivedEndpoint)(&want.common)
+	want.MailMessagesSent = (*MailMessagesSentEndpoint)(&want.common)
+	want.PreferredMailbox = (*PreferredMailboxEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

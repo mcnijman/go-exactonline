@@ -26,14 +26,15 @@ func TestNewUsersService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.UserRoles == nil {
-		t.Error("Property UserRoles should not be nil")
-	}
-	if s.UserRolesPerDivision == nil {
-		t.Error("Property UserRolesPerDivision should not be nil")
-	}
-	if s.Users == nil {
-		t.Error("Property Users should not be nil")
+	want := &UsersService{client: c}
+	want.common.client = c
+
+	want.UserRoles = (*UserRolesEndpoint)(&want.common)
+	want.UserRolesPerDivision = (*UserRolesPerDivisionEndpoint)(&want.common)
+	want.Users = (*UsersEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

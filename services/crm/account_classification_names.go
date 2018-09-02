@@ -59,14 +59,11 @@ type AccountClassificationNames struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AccountClassificationNamesEndpoint) List(ctx context.Context, division int, all bool) ([]*AccountClassificationNames, error) {
 	var entities []*AccountClassificationNames
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/AccountClassificationNames?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/AccountClassificationNames?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

@@ -26,11 +26,14 @@ func TestNewPurchaseService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.PurchaseInvoiceLines == nil {
-		t.Error("Property PurchaseInvoiceLines should not be nil")
-	}
-	if s.PurchaseInvoices == nil {
-		t.Error("Property PurchaseInvoices should not be nil")
+	want := &PurchaseService{client: c}
+	want.common.client = c
+
+	want.PurchaseInvoiceLines = (*PurchaseInvoiceLinesEndpoint)(&want.common)
+	want.PurchaseInvoices = (*PurchaseInvoicesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

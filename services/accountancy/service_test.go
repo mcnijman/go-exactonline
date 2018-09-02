@@ -26,23 +26,18 @@ func TestNewAccountancyService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AccountInvolvedAccounts == nil {
-		t.Error("Property AccountInvolvedAccounts should not be nil")
-	}
-	if s.AccountOwners == nil {
-		t.Error("Property AccountOwners should not be nil")
-	}
-	if s.InvolvedUserRoles == nil {
-		t.Error("Property InvolvedUserRoles should not be nil")
-	}
-	if s.InvolvedUsers == nil {
-		t.Error("Property InvolvedUsers should not be nil")
-	}
-	if s.SolutionLinks == nil {
-		t.Error("Property SolutionLinks should not be nil")
-	}
-	if s.TaskTypes == nil {
-		t.Error("Property TaskTypes should not be nil")
+	want := &AccountancyService{client: c}
+	want.common.client = c
+
+	want.AccountInvolvedAccounts = (*AccountInvolvedAccountsEndpoint)(&want.common)
+	want.AccountOwners = (*AccountOwnersEndpoint)(&want.common)
+	want.InvolvedUserRoles = (*InvolvedUserRolesEndpoint)(&want.common)
+	want.InvolvedUsers = (*InvolvedUsersEndpoint)(&want.common)
+	want.SolutionLinks = (*SolutionLinksEndpoint)(&want.common)
+	want.TaskTypes = (*TaskTypesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

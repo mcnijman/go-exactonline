@@ -13,11 +13,16 @@ func TestNew{{.Name}}Service(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
+	want := &{{.Name}}Service{client: c}
+	want.common.client = c
+
     {{range .Endpoints}}
-    if s.{{.Name}} == nil {
-        t.Error("Property {{.Name}} should not be nil")
-    }
+	want.{{.Name}} = (*{{.EndpointServiceName}})(&want.common)
     {{- end}}
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
+	}
 }
 
 // setup sets up a test HTTP server along with a exactonline.Client that is

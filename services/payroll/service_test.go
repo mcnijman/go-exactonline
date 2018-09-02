@@ -26,32 +26,21 @@ func TestNewPayrollService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.ActiveEmployments == nil {
-		t.Error("Property ActiveEmployments should not be nil")
-	}
-	if s.Employees == nil {
-		t.Error("Property Employees should not be nil")
-	}
-	if s.EmploymentContractFlexPhases == nil {
-		t.Error("Property EmploymentContractFlexPhases should not be nil")
-	}
-	if s.EmploymentContracts == nil {
-		t.Error("Property EmploymentContracts should not be nil")
-	}
-	if s.EmploymentEndReasons == nil {
-		t.Error("Property EmploymentEndReasons should not be nil")
-	}
-	if s.EmploymentOrganizations == nil {
-		t.Error("Property EmploymentOrganizations should not be nil")
-	}
-	if s.Employments == nil {
-		t.Error("Property Employments should not be nil")
-	}
-	if s.EmploymentSalaries == nil {
-		t.Error("Property EmploymentSalaries should not be nil")
-	}
-	if s.TaxEmploymentEndFlexCodes == nil {
-		t.Error("Property TaxEmploymentEndFlexCodes should not be nil")
+	want := &PayrollService{client: c}
+	want.common.client = c
+
+	want.ActiveEmployments = (*ActiveEmploymentsEndpoint)(&want.common)
+	want.Employees = (*EmployeesEndpoint)(&want.common)
+	want.EmploymentContractFlexPhases = (*EmploymentContractFlexPhasesEndpoint)(&want.common)
+	want.EmploymentContracts = (*EmploymentContractsEndpoint)(&want.common)
+	want.EmploymentEndReasons = (*EmploymentEndReasonsEndpoint)(&want.common)
+	want.EmploymentOrganizations = (*EmploymentOrganizationsEndpoint)(&want.common)
+	want.Employments = (*EmploymentsEndpoint)(&want.common)
+	want.EmploymentSalaries = (*EmploymentSalariesEndpoint)(&want.common)
+	want.TaxEmploymentEndFlexCodes = (*TaxEmploymentEndFlexCodesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

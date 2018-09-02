@@ -26,14 +26,15 @@ func TestNewAssetsService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AssetGroups == nil {
-		t.Error("Property AssetGroups should not be nil")
-	}
-	if s.Assets == nil {
-		t.Error("Property Assets should not be nil")
-	}
-	if s.DepreciationMethods == nil {
-		t.Error("Property DepreciationMethods should not be nil")
+	want := &AssetsService{client: c}
+	want.common.client = c
+
+	want.AssetGroups = (*AssetGroupsEndpoint)(&want.common)
+	want.Assets = (*AssetsEndpoint)(&want.common)
+	want.DepreciationMethods = (*DepreciationMethodsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

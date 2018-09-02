@@ -34,14 +34,11 @@ type GLTransactionTypes struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GLTransactionTypesEndpoint) List(ctx context.Context, division int, all bool) ([]*GLTransactionTypes, error) {
 	var entities []*GLTransactionTypes
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

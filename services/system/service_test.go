@@ -26,20 +26,17 @@ func TestNewSystemService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AccountantInfo == nil {
-		t.Error("Property AccountantInfo should not be nil")
-	}
-	if s.AvailableFeatures == nil {
-		t.Error("Property AvailableFeatures should not be nil")
-	}
-	if s.Divisions == nil {
-		t.Error("Property Divisions should not be nil")
-	}
-	if s.GetMostRecentlyUsedDivisions == nil {
-		t.Error("Property GetMostRecentlyUsedDivisions should not be nil")
-	}
-	if s.Me == nil {
-		t.Error("Property Me should not be nil")
+	want := &SystemService{client: c}
+	want.common.client = c
+
+	want.AccountantInfo = (*AccountantInfoEndpoint)(&want.common)
+	want.AvailableFeatures = (*AvailableFeaturesEndpoint)(&want.common)
+	want.Divisions = (*DivisionsEndpoint)(&want.common)
+	want.GetMostRecentlyUsedDivisions = (*GetMostRecentlyUsedDivisionsEndpoint)(&want.common)
+	want.Me = (*MeEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

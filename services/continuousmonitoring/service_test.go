@@ -26,32 +26,21 @@ func TestNewContinuousMonitoringService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.IndicatorBalances == nil {
-		t.Error("Property IndicatorBalances should not be nil")
-	}
-	if s.IndicatorDeviatingAmountEntereds == nil {
-		t.Error("Property IndicatorDeviatingAmountEntereds should not be nil")
-	}
-	if s.IndicatorDifferenceByPeriods == nil {
-		t.Error("Property IndicatorDifferenceByPeriods should not be nil")
-	}
-	if s.IndicatorDifferentVatCodes == nil {
-		t.Error("Property IndicatorDifferentVatCodes should not be nil")
-	}
-	if s.IndicatorGLAccounts == nil {
-		t.Error("Property IndicatorGLAccounts should not be nil")
-	}
-	if s.IndicatorLiquidities == nil {
-		t.Error("Property IndicatorLiquidities should not be nil")
-	}
-	if s.IndicatorSignals == nil {
-		t.Error("Property IndicatorSignals should not be nil")
-	}
-	if s.IndicatorStates == nil {
-		t.Error("Property IndicatorStates should not be nil")
-	}
-	if s.IndicatorUsageOfJournals == nil {
-		t.Error("Property IndicatorUsageOfJournals should not be nil")
+	want := &ContinuousMonitoringService{client: c}
+	want.common.client = c
+
+	want.IndicatorBalances = (*IndicatorBalancesEndpoint)(&want.common)
+	want.IndicatorDeviatingAmountEntereds = (*IndicatorDeviatingAmountEnteredsEndpoint)(&want.common)
+	want.IndicatorDifferenceByPeriods = (*IndicatorDifferenceByPeriodsEndpoint)(&want.common)
+	want.IndicatorDifferentVatCodes = (*IndicatorDifferentVatCodesEndpoint)(&want.common)
+	want.IndicatorGLAccounts = (*IndicatorGLAccountsEndpoint)(&want.common)
+	want.IndicatorLiquidities = (*IndicatorLiquiditiesEndpoint)(&want.common)
+	want.IndicatorSignals = (*IndicatorSignalsEndpoint)(&want.common)
+	want.IndicatorStates = (*IndicatorStatesEndpoint)(&want.common)
+	want.IndicatorUsageOfJournals = (*IndicatorUsageOfJournalsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

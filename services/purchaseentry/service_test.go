@@ -26,11 +26,14 @@ func TestNewPurchaseEntryService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.PurchaseEntries == nil {
-		t.Error("Property PurchaseEntries should not be nil")
-	}
-	if s.PurchaseEntryLines == nil {
-		t.Error("Property PurchaseEntryLines should not be nil")
+	want := &PurchaseEntryService{client: c}
+	want.common.client = c
+
+	want.PurchaseEntries = (*PurchaseEntriesEndpoint)(&want.common)
+	want.PurchaseEntryLines = (*PurchaseEntryLinesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

@@ -26,11 +26,14 @@ func TestNewBudgetService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.Budgets == nil {
-		t.Error("Property Budgets should not be nil")
-	}
-	if s.BudgetScenarios == nil {
-		t.Error("Property BudgetScenarios should not be nil")
+	want := &BudgetService{client: c}
+	want.common.client = c
+
+	want.Budgets = (*BudgetsEndpoint)(&want.common)
+	want.BudgetScenarios = (*BudgetScenariosEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

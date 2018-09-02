@@ -26,62 +26,31 @@ func TestNewFinancialService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AgingOverview == nil {
-		t.Error("Property AgingOverview should not be nil")
-	}
-	if s.AgingPayablesList == nil {
-		t.Error("Property AgingPayablesList should not be nil")
-	}
-	if s.AgingReceivablesList == nil {
-		t.Error("Property AgingReceivablesList should not be nil")
-	}
-	if s.ExchangeRates == nil {
-		t.Error("Property ExchangeRates should not be nil")
-	}
-	if s.FinancialPeriods == nil {
-		t.Error("Property FinancialPeriods should not be nil")
-	}
-	if s.GLAccountClassificationMappings == nil {
-		t.Error("Property GLAccountClassificationMappings should not be nil")
-	}
-	if s.GLAccounts == nil {
-		t.Error("Property GLAccounts should not be nil")
-	}
-	if s.GLClassifications == nil {
-		t.Error("Property GLClassifications should not be nil")
-	}
-	if s.GLSchemes == nil {
-		t.Error("Property GLSchemes should not be nil")
-	}
-	if s.GLTransactionTypes == nil {
-		t.Error("Property GLTransactionTypes should not be nil")
-	}
-	if s.Journals == nil {
-		t.Error("Property Journals should not be nil")
-	}
-	if s.JournalStatusList == nil {
-		t.Error("Property JournalStatusList should not be nil")
-	}
-	if s.OutstandingInvoicesOverview == nil {
-		t.Error("Property OutstandingInvoicesOverview should not be nil")
-	}
-	if s.PayablesList == nil {
-		t.Error("Property PayablesList should not be nil")
-	}
-	if s.ProfitLossOverview == nil {
-		t.Error("Property ProfitLossOverview should not be nil")
-	}
-	if s.ReceivablesList == nil {
-		t.Error("Property ReceivablesList should not be nil")
-	}
-	if s.ReportingBalance == nil {
-		t.Error("Property ReportingBalance should not be nil")
-	}
-	if s.Returns == nil {
-		t.Error("Property Returns should not be nil")
-	}
-	if s.RevenueList == nil {
-		t.Error("Property RevenueList should not be nil")
+	want := &FinancialService{client: c}
+	want.common.client = c
+
+	want.AgingOverview = (*AgingOverviewEndpoint)(&want.common)
+	want.AgingPayablesList = (*AgingPayablesListEndpoint)(&want.common)
+	want.AgingReceivablesList = (*AgingReceivablesListEndpoint)(&want.common)
+	want.ExchangeRates = (*ExchangeRatesEndpoint)(&want.common)
+	want.FinancialPeriods = (*FinancialPeriodsEndpoint)(&want.common)
+	want.GLAccountClassificationMappings = (*GLAccountClassificationMappingsEndpoint)(&want.common)
+	want.GLAccounts = (*GLAccountsEndpoint)(&want.common)
+	want.GLClassifications = (*GLClassificationsEndpoint)(&want.common)
+	want.GLSchemes = (*GLSchemesEndpoint)(&want.common)
+	want.GLTransactionTypes = (*GLTransactionTypesEndpoint)(&want.common)
+	want.Journals = (*JournalsEndpoint)(&want.common)
+	want.JournalStatusList = (*JournalStatusListEndpoint)(&want.common)
+	want.OutstandingInvoicesOverview = (*OutstandingInvoicesOverviewEndpoint)(&want.common)
+	want.PayablesList = (*PayablesListEndpoint)(&want.common)
+	want.ProfitLossOverview = (*ProfitLossOverviewEndpoint)(&want.common)
+	want.ReceivablesList = (*ReceivablesListEndpoint)(&want.common)
+	want.ReportingBalance = (*ReportingBalanceEndpoint)(&want.common)
+	want.Returns = (*ReturnsEndpoint)(&want.common)
+	want.RevenueList = (*RevenueListEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

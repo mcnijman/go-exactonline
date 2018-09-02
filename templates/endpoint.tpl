@@ -35,19 +35,16 @@ type {{.Name}} struct {
 func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} all bool) ([]*{{.Name}}, error) {
 	var entities []*{{.Name}}
 	{{- if .NeedsDivision}}
-	u, err := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", division)
+	u, _ := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", division) // #nosec
 	{{else}}
-	u, err := s.client.ResolveURL("{{.URL}}?$select=*")
+	u, _ := s.client.ResolveURL("{{.URL}}?$select=*") // #nosec
 	{{end -}}
 	
-	if err != nil {
-		return nil, err
-	}
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }
 {{end}}

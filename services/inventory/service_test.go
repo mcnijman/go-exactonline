@@ -26,41 +26,24 @@ func TestNewInventoryService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AssemblyOrders == nil {
-		t.Error("Property AssemblyOrders should not be nil")
-	}
-	if s.BatchNumbers == nil {
-		t.Error("Property BatchNumbers should not be nil")
-	}
-	if s.ItemWarehousePlanningDetails == nil {
-		t.Error("Property ItemWarehousePlanningDetails should not be nil")
-	}
-	if s.ItemWarehouses == nil {
-		t.Error("Property ItemWarehouses should not be nil")
-	}
-	if s.ItemWarehouseStorageLocations == nil {
-		t.Error("Property ItemWarehouseStorageLocations should not be nil")
-	}
-	if s.SerialNumbers == nil {
-		t.Error("Property SerialNumbers should not be nil")
-	}
-	if s.StockBatchNumbers == nil {
-		t.Error("Property StockBatchNumbers should not be nil")
-	}
-	if s.StockCountLines == nil {
-		t.Error("Property StockCountLines should not be nil")
-	}
-	if s.StockCounts == nil {
-		t.Error("Property StockCounts should not be nil")
-	}
-	if s.StockSerialNumbers == nil {
-		t.Error("Property StockSerialNumbers should not be nil")
-	}
-	if s.StorageLocations == nil {
-		t.Error("Property StorageLocations should not be nil")
-	}
-	if s.Warehouses == nil {
-		t.Error("Property Warehouses should not be nil")
+	want := &InventoryService{client: c}
+	want.common.client = c
+
+	want.AssemblyOrders = (*AssemblyOrdersEndpoint)(&want.common)
+	want.BatchNumbers = (*BatchNumbersEndpoint)(&want.common)
+	want.ItemWarehousePlanningDetails = (*ItemWarehousePlanningDetailsEndpoint)(&want.common)
+	want.ItemWarehouses = (*ItemWarehousesEndpoint)(&want.common)
+	want.ItemWarehouseStorageLocations = (*ItemWarehouseStorageLocationsEndpoint)(&want.common)
+	want.SerialNumbers = (*SerialNumbersEndpoint)(&want.common)
+	want.StockBatchNumbers = (*StockBatchNumbersEndpoint)(&want.common)
+	want.StockCountLines = (*StockCountLinesEndpoint)(&want.common)
+	want.StockCounts = (*StockCountsEndpoint)(&want.common)
+	want.StockSerialNumbers = (*StockSerialNumbersEndpoint)(&want.common)
+	want.StorageLocations = (*StorageLocationsEndpoint)(&want.common)
+	want.Warehouses = (*WarehousesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

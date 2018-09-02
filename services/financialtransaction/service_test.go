@@ -26,23 +26,18 @@ func TestNewFinancialTransactionService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.BankEntries == nil {
-		t.Error("Property BankEntries should not be nil")
-	}
-	if s.BankEntryLines == nil {
-		t.Error("Property BankEntryLines should not be nil")
-	}
-	if s.CashEntries == nil {
-		t.Error("Property CashEntries should not be nil")
-	}
-	if s.CashEntryLines == nil {
-		t.Error("Property CashEntryLines should not be nil")
-	}
-	if s.TransactionLines == nil {
-		t.Error("Property TransactionLines should not be nil")
-	}
-	if s.Transactions == nil {
-		t.Error("Property Transactions should not be nil")
+	want := &FinancialTransactionService{client: c}
+	want.common.client = c
+
+	want.BankEntries = (*BankEntriesEndpoint)(&want.common)
+	want.BankEntryLines = (*BankEntryLinesEndpoint)(&want.common)
+	want.CashEntries = (*CashEntriesEndpoint)(&want.common)
+	want.CashEntryLines = (*CashEntryLinesEndpoint)(&want.common)
+	want.TransactionLines = (*TransactionLinesEndpoint)(&want.common)
+	want.Transactions = (*TransactionsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

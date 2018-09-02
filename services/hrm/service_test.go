@@ -26,47 +26,26 @@ func TestNewHRMService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AbsenceRegistrations == nil {
-		t.Error("Property AbsenceRegistrations should not be nil")
-	}
-	if s.AbsenceRegistrationTransactions == nil {
-		t.Error("Property AbsenceRegistrationTransactions should not be nil")
-	}
-	if s.Costcenters == nil {
-		t.Error("Property Costcenters should not be nil")
-	}
-	if s.Costunits == nil {
-		t.Error("Property Costunits should not be nil")
-	}
-	if s.Departments == nil {
-		t.Error("Property Departments should not be nil")
-	}
-	if s.DivisionClasses == nil {
-		t.Error("Property DivisionClasses should not be nil")
-	}
-	if s.DivisionClassNames == nil {
-		t.Error("Property DivisionClassNames should not be nil")
-	}
-	if s.DivisionClassValues == nil {
-		t.Error("Property DivisionClassValues should not be nil")
-	}
-	if s.Divisions == nil {
-		t.Error("Property Divisions should not be nil")
-	}
-	if s.JobGroups == nil {
-		t.Error("Property JobGroups should not be nil")
-	}
-	if s.JobTitles == nil {
-		t.Error("Property JobTitles should not be nil")
-	}
-	if s.LeaveBuildUpRegistrations == nil {
-		t.Error("Property LeaveBuildUpRegistrations should not be nil")
-	}
-	if s.LeaveRegistrations == nil {
-		t.Error("Property LeaveRegistrations should not be nil")
-	}
-	if s.Schedules == nil {
-		t.Error("Property Schedules should not be nil")
+	want := &HRMService{client: c}
+	want.common.client = c
+
+	want.AbsenceRegistrations = (*AbsenceRegistrationsEndpoint)(&want.common)
+	want.AbsenceRegistrationTransactions = (*AbsenceRegistrationTransactionsEndpoint)(&want.common)
+	want.Costcenters = (*CostcentersEndpoint)(&want.common)
+	want.Costunits = (*CostunitsEndpoint)(&want.common)
+	want.Departments = (*DepartmentsEndpoint)(&want.common)
+	want.DivisionClasses = (*DivisionClassesEndpoint)(&want.common)
+	want.DivisionClassNames = (*DivisionClassNamesEndpoint)(&want.common)
+	want.DivisionClassValues = (*DivisionClassValuesEndpoint)(&want.common)
+	want.Divisions = (*DivisionsEndpoint)(&want.common)
+	want.JobGroups = (*JobGroupsEndpoint)(&want.common)
+	want.JobTitles = (*JobTitlesEndpoint)(&want.common)
+	want.LeaveBuildUpRegistrations = (*LeaveBuildUpRegistrationsEndpoint)(&want.common)
+	want.LeaveRegistrations = (*LeaveRegistrationsEndpoint)(&want.common)
+	want.Schedules = (*SchedulesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

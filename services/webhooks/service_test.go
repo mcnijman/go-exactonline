@@ -26,8 +26,13 @@ func TestNewWebhooksService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.WebhookSubscriptions == nil {
-		t.Error("Property WebhookSubscriptions should not be nil")
+	want := &WebhooksService{client: c}
+	want.common.client = c
+
+	want.WebhookSubscriptions = (*WebhookSubscriptionsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

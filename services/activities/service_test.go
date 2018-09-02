@@ -26,20 +26,17 @@ func TestNewActivitiesService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.CommunicationNotes == nil {
-		t.Error("Property CommunicationNotes should not be nil")
-	}
-	if s.Complaints == nil {
-		t.Error("Property Complaints should not be nil")
-	}
-	if s.Events == nil {
-		t.Error("Property Events should not be nil")
-	}
-	if s.ServiceRequests == nil {
-		t.Error("Property ServiceRequests should not be nil")
-	}
-	if s.Tasks == nil {
-		t.Error("Property Tasks should not be nil")
+	want := &ActivitiesService{client: c}
+	want.common.client = c
+
+	want.CommunicationNotes = (*CommunicationNotesEndpoint)(&want.common)
+	want.Complaints = (*ComplaintsEndpoint)(&want.common)
+	want.Events = (*EventsEndpoint)(&want.common)
+	want.ServiceRequests = (*ServiceRequestsEndpoint)(&want.common)
+	want.Tasks = (*TasksEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

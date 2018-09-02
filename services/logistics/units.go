@@ -53,14 +53,11 @@ type Units struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *UnitsEndpoint) List(ctx context.Context, division int, all bool) ([]*Units, error) {
 	var entities []*Units
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

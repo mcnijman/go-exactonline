@@ -26,14 +26,15 @@ func TestNewSalesService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.PriceLists == nil {
-		t.Error("Property PriceLists should not be nil")
-	}
-	if s.SalesPriceListDetails == nil {
-		t.Error("Property SalesPriceListDetails should not be nil")
-	}
-	if s.ShippingMethods == nil {
-		t.Error("Property ShippingMethods should not be nil")
+	want := &SalesService{client: c}
+	want.common.client = c
+
+	want.PriceLists = (*PriceListsEndpoint)(&want.common)
+	want.SalesPriceListDetails = (*SalesPriceListDetailsEndpoint)(&want.common)
+	want.ShippingMethods = (*ShippingMethodsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

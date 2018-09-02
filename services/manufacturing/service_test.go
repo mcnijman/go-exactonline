@@ -26,65 +26,32 @@ func TestNewManufacturingService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.BillOfMaterialMaterials == nil {
-		t.Error("Property BillOfMaterialMaterials should not be nil")
-	}
-	if s.BillOfMaterialVersions == nil {
-		t.Error("Property BillOfMaterialVersions should not be nil")
-	}
-	if s.ByProductReceipts == nil {
-		t.Error("Property ByProductReceipts should not be nil")
-	}
-	if s.ByProductReversals == nil {
-		t.Error("Property ByProductReversals should not be nil")
-	}
-	if s.MaterialIssues == nil {
-		t.Error("Property MaterialIssues should not be nil")
-	}
-	if s.MaterialReversals == nil {
-		t.Error("Property MaterialReversals should not be nil")
-	}
-	if s.OperationResources == nil {
-		t.Error("Property OperationResources should not be nil")
-	}
-	if s.Operations == nil {
-		t.Error("Property Operations should not be nil")
-	}
-	if s.ProductionAreas == nil {
-		t.Error("Property ProductionAreas should not be nil")
-	}
-	if s.ShopOrderMaterialPlans == nil {
-		t.Error("Property ShopOrderMaterialPlans should not be nil")
-	}
-	if s.ShopOrderReceipts == nil {
-		t.Error("Property ShopOrderReceipts should not be nil")
-	}
-	if s.ShopOrderReversals == nil {
-		t.Error("Property ShopOrderReversals should not be nil")
-	}
-	if s.ShopOrderRoutingStepPlans == nil {
-		t.Error("Property ShopOrderRoutingStepPlans should not be nil")
-	}
-	if s.ShopOrders == nil {
-		t.Error("Property ShopOrders should not be nil")
-	}
-	if s.StageForDeliveryReceipts == nil {
-		t.Error("Property StageForDeliveryReceipts should not be nil")
-	}
-	if s.StageForDeliveryReversals == nil {
-		t.Error("Property StageForDeliveryReversals should not be nil")
-	}
-	if s.SubOrderReceipts == nil {
-		t.Error("Property SubOrderReceipts should not be nil")
-	}
-	if s.SubOrderReversals == nil {
-		t.Error("Property SubOrderReversals should not be nil")
-	}
-	if s.TimeTransactions == nil {
-		t.Error("Property TimeTransactions should not be nil")
-	}
-	if s.Workcenters == nil {
-		t.Error("Property Workcenters should not be nil")
+	want := &ManufacturingService{client: c}
+	want.common.client = c
+
+	want.BillOfMaterialMaterials = (*BillOfMaterialMaterialsEndpoint)(&want.common)
+	want.BillOfMaterialVersions = (*BillOfMaterialVersionsEndpoint)(&want.common)
+	want.ByProductReceipts = (*ByProductReceiptsEndpoint)(&want.common)
+	want.ByProductReversals = (*ByProductReversalsEndpoint)(&want.common)
+	want.MaterialIssues = (*MaterialIssuesEndpoint)(&want.common)
+	want.MaterialReversals = (*MaterialReversalsEndpoint)(&want.common)
+	want.OperationResources = (*OperationResourcesEndpoint)(&want.common)
+	want.Operations = (*OperationsEndpoint)(&want.common)
+	want.ProductionAreas = (*ProductionAreasEndpoint)(&want.common)
+	want.ShopOrderMaterialPlans = (*ShopOrderMaterialPlansEndpoint)(&want.common)
+	want.ShopOrderReceipts = (*ShopOrderReceiptsEndpoint)(&want.common)
+	want.ShopOrderReversals = (*ShopOrderReversalsEndpoint)(&want.common)
+	want.ShopOrderRoutingStepPlans = (*ShopOrderRoutingStepPlansEndpoint)(&want.common)
+	want.ShopOrders = (*ShopOrdersEndpoint)(&want.common)
+	want.StageForDeliveryReceipts = (*StageForDeliveryReceiptsEndpoint)(&want.common)
+	want.StageForDeliveryReversals = (*StageForDeliveryReversalsEndpoint)(&want.common)
+	want.SubOrderReceipts = (*SubOrderReceiptsEndpoint)(&want.common)
+	want.SubOrderReversals = (*SubOrderReversalsEndpoint)(&want.common)
+	want.TimeTransactions = (*TimeTransactionsEndpoint)(&want.common)
+	want.Workcenters = (*WorkcentersEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

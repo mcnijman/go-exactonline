@@ -26,26 +26,19 @@ func TestNewDocumentsService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.DocumentAttachments == nil {
-		t.Error("Property DocumentAttachments should not be nil")
-	}
-	if s.DocumentCategories == nil {
-		t.Error("Property DocumentCategories should not be nil")
-	}
-	if s.DocumentFolders == nil {
-		t.Error("Property DocumentFolders should not be nil")
-	}
-	if s.Documents == nil {
-		t.Error("Property Documents should not be nil")
-	}
-	if s.DocumentTypeCategories == nil {
-		t.Error("Property DocumentTypeCategories should not be nil")
-	}
-	if s.DocumentTypeFolders == nil {
-		t.Error("Property DocumentTypeFolders should not be nil")
-	}
-	if s.DocumentTypes == nil {
-		t.Error("Property DocumentTypes should not be nil")
+	want := &DocumentsService{client: c}
+	want.common.client = c
+
+	want.DocumentAttachments = (*DocumentAttachmentsEndpoint)(&want.common)
+	want.DocumentCategories = (*DocumentCategoriesEndpoint)(&want.common)
+	want.DocumentFolders = (*DocumentFoldersEndpoint)(&want.common)
+	want.Documents = (*DocumentsEndpoint)(&want.common)
+	want.DocumentTypeCategories = (*DocumentTypeCategoriesEndpoint)(&want.common)
+	want.DocumentTypeFolders = (*DocumentTypeFoldersEndpoint)(&want.common)
+	want.DocumentTypes = (*DocumentTypesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

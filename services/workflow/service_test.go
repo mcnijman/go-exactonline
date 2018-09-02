@@ -26,8 +26,13 @@ func TestNewWorkflowService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.RequestAttachments == nil {
-		t.Error("Property RequestAttachments should not be nil")
+	want := &WorkflowService{client: c}
+	want.common.client = c
+
+	want.RequestAttachments = (*RequestAttachmentsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

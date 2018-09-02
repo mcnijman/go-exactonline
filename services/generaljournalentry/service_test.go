@@ -26,11 +26,14 @@ func TestNewGeneralJournalEntryService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.GeneralJournalEntries == nil {
-		t.Error("Property GeneralJournalEntries should not be nil")
-	}
-	if s.GeneralJournalEntryLines == nil {
-		t.Error("Property GeneralJournalEntryLines should not be nil")
+	want := &GeneralJournalEntryService{client: c}
+	want.common.client = c
+
+	want.GeneralJournalEntries = (*GeneralJournalEntriesEndpoint)(&want.common)
+	want.GeneralJournalEntryLines = (*GeneralJournalEntryLinesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

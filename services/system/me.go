@@ -116,14 +116,11 @@ type Me struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MeEndpoint) List(ctx context.Context, all bool) ([]*Me, error) {
 	var entities []*Me
-	u, err := s.client.ResolveURL("/api/v1/current/Me?$select=*")
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolveURL("/api/v1/current/Me?$select=*") // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

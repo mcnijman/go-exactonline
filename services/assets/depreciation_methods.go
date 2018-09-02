@@ -86,14 +86,11 @@ type DepreciationMethods struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DepreciationMethodsEndpoint) List(ctx context.Context, division int, all bool) ([]*DepreciationMethods, error) {
 	var entities []*DepreciationMethods
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

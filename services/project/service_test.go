@@ -26,80 +26,37 @@ func TestNewProjectService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.CostTransactions == nil {
-		t.Error("Property CostTransactions should not be nil")
-	}
-	if s.HourCostTypes == nil {
-		t.Error("Property HourCostTypes should not be nil")
-	}
-	if s.InvoiceTerms == nil {
-		t.Error("Property InvoiceTerms should not be nil")
-	}
-	if s.ProjectBudgetTypes == nil {
-		t.Error("Property ProjectBudgetTypes should not be nil")
-	}
-	if s.ProjectHourBudgets == nil {
-		t.Error("Property ProjectHourBudgets should not be nil")
-	}
-	if s.ProjectPlanning == nil {
-		t.Error("Property ProjectPlanning should not be nil")
-	}
-	if s.ProjectPlanningRecurring == nil {
-		t.Error("Property ProjectPlanningRecurring should not be nil")
-	}
-	if s.ProjectRestrictionEmployees == nil {
-		t.Error("Property ProjectRestrictionEmployees should not be nil")
-	}
-	if s.ProjectRestrictionItems == nil {
-		t.Error("Property ProjectRestrictionItems should not be nil")
-	}
-	if s.ProjectRestrictionRebillings == nil {
-		t.Error("Property ProjectRestrictionRebillings should not be nil")
-	}
-	if s.Projects == nil {
-		t.Error("Property Projects should not be nil")
-	}
-	if s.RecentCosts == nil {
-		t.Error("Property RecentCosts should not be nil")
-	}
-	if s.RecentHours == nil {
-		t.Error("Property RecentHours should not be nil")
-	}
-	if s.TimeAndBillingAccountDetails == nil {
-		t.Error("Property TimeAndBillingAccountDetails should not be nil")
-	}
-	if s.TimeAndBillingActivitiesAndExpenses == nil {
-		t.Error("Property TimeAndBillingActivitiesAndExpenses should not be nil")
-	}
-	if s.TimeAndBillingEntryAccounts == nil {
-		t.Error("Property TimeAndBillingEntryAccounts should not be nil")
-	}
-	if s.TimeAndBillingEntryProjects == nil {
-		t.Error("Property TimeAndBillingEntryProjects should not be nil")
-	}
-	if s.TimeAndBillingEntryRecentAccounts == nil {
-		t.Error("Property TimeAndBillingEntryRecentAccounts should not be nil")
-	}
-	if s.TimeAndBillingEntryRecentActivitiesAndExpenses == nil {
-		t.Error("Property TimeAndBillingEntryRecentActivitiesAndExpenses should not be nil")
-	}
-	if s.TimeAndBillingEntryRecentHourCostTypes == nil {
-		t.Error("Property TimeAndBillingEntryRecentHourCostTypes should not be nil")
-	}
-	if s.TimeAndBillingEntryRecentProjects == nil {
-		t.Error("Property TimeAndBillingEntryRecentProjects should not be nil")
-	}
-	if s.TimeAndBillingItemDetails == nil {
-		t.Error("Property TimeAndBillingItemDetails should not be nil")
-	}
-	if s.TimeAndBillingProjectDetails == nil {
-		t.Error("Property TimeAndBillingProjectDetails should not be nil")
-	}
-	if s.TimeCorrections == nil {
-		t.Error("Property TimeCorrections should not be nil")
-	}
-	if s.TimeTransactions == nil {
-		t.Error("Property TimeTransactions should not be nil")
+	want := &ProjectService{client: c}
+	want.common.client = c
+
+	want.CostTransactions = (*CostTransactionsEndpoint)(&want.common)
+	want.HourCostTypes = (*HourCostTypesEndpoint)(&want.common)
+	want.InvoiceTerms = (*InvoiceTermsEndpoint)(&want.common)
+	want.ProjectBudgetTypes = (*ProjectBudgetTypesEndpoint)(&want.common)
+	want.ProjectHourBudgets = (*ProjectHourBudgetsEndpoint)(&want.common)
+	want.ProjectPlanning = (*ProjectPlanningEndpoint)(&want.common)
+	want.ProjectPlanningRecurring = (*ProjectPlanningRecurringEndpoint)(&want.common)
+	want.ProjectRestrictionEmployees = (*ProjectRestrictionEmployeesEndpoint)(&want.common)
+	want.ProjectRestrictionItems = (*ProjectRestrictionItemsEndpoint)(&want.common)
+	want.ProjectRestrictionRebillings = (*ProjectRestrictionRebillingsEndpoint)(&want.common)
+	want.Projects = (*ProjectsEndpoint)(&want.common)
+	want.RecentCosts = (*RecentCostsEndpoint)(&want.common)
+	want.RecentHours = (*RecentHoursEndpoint)(&want.common)
+	want.TimeAndBillingAccountDetails = (*TimeAndBillingAccountDetailsEndpoint)(&want.common)
+	want.TimeAndBillingActivitiesAndExpenses = (*TimeAndBillingActivitiesAndExpensesEndpoint)(&want.common)
+	want.TimeAndBillingEntryAccounts = (*TimeAndBillingEntryAccountsEndpoint)(&want.common)
+	want.TimeAndBillingEntryProjects = (*TimeAndBillingEntryProjectsEndpoint)(&want.common)
+	want.TimeAndBillingEntryRecentAccounts = (*TimeAndBillingEntryRecentAccountsEndpoint)(&want.common)
+	want.TimeAndBillingEntryRecentActivitiesAndExpenses = (*TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint)(&want.common)
+	want.TimeAndBillingEntryRecentHourCostTypes = (*TimeAndBillingEntryRecentHourCostTypesEndpoint)(&want.common)
+	want.TimeAndBillingEntryRecentProjects = (*TimeAndBillingEntryRecentProjectsEndpoint)(&want.common)
+	want.TimeAndBillingItemDetails = (*TimeAndBillingItemDetailsEndpoint)(&want.common)
+	want.TimeAndBillingProjectDetails = (*TimeAndBillingProjectDetailsEndpoint)(&want.common)
+	want.TimeCorrections = (*TimeCorrectionsEndpoint)(&want.common)
+	want.TimeTransactions = (*TimeTransactionsEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

@@ -26,53 +26,28 @@ func TestNewCRMService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AccountClasses == nil {
-		t.Error("Property AccountClasses should not be nil")
-	}
-	if s.AccountClassificationNames == nil {
-		t.Error("Property AccountClassificationNames should not be nil")
-	}
-	if s.AccountClassifications == nil {
-		t.Error("Property AccountClassifications should not be nil")
-	}
-	if s.Accounts == nil {
-		t.Error("Property Accounts should not be nil")
-	}
-	if s.Addresses == nil {
-		t.Error("Property Addresses should not be nil")
-	}
-	if s.AddressStates == nil {
-		t.Error("Property AddressStates should not be nil")
-	}
-	if s.BankAccounts == nil {
-		t.Error("Property BankAccounts should not be nil")
-	}
-	if s.Contacts == nil {
-		t.Error("Property Contacts should not be nil")
-	}
-	if s.Documents == nil {
-		t.Error("Property Documents should not be nil")
-	}
-	if s.DocumentsAttachments == nil {
-		t.Error("Property DocumentsAttachments should not be nil")
-	}
-	if s.HostingOpportunities == nil {
-		t.Error("Property HostingOpportunities should not be nil")
-	}
-	if s.Opportunities == nil {
-		t.Error("Property Opportunities should not be nil")
-	}
-	if s.OpportunityContacts == nil {
-		t.Error("Property OpportunityContacts should not be nil")
-	}
-	if s.QuotationLines == nil {
-		t.Error("Property QuotationLines should not be nil")
-	}
-	if s.Quotations == nil {
-		t.Error("Property Quotations should not be nil")
-	}
-	if s.ReasonCodes == nil {
-		t.Error("Property ReasonCodes should not be nil")
+	want := &CRMService{client: c}
+	want.common.client = c
+
+	want.AccountClasses = (*AccountClassesEndpoint)(&want.common)
+	want.AccountClassificationNames = (*AccountClassificationNamesEndpoint)(&want.common)
+	want.AccountClassifications = (*AccountClassificationsEndpoint)(&want.common)
+	want.Accounts = (*AccountsEndpoint)(&want.common)
+	want.Addresses = (*AddressesEndpoint)(&want.common)
+	want.AddressStates = (*AddressStatesEndpoint)(&want.common)
+	want.BankAccounts = (*BankAccountsEndpoint)(&want.common)
+	want.Contacts = (*ContactsEndpoint)(&want.common)
+	want.Documents = (*DocumentsEndpoint)(&want.common)
+	want.DocumentsAttachments = (*DocumentsAttachmentsEndpoint)(&want.common)
+	want.HostingOpportunities = (*HostingOpportunitiesEndpoint)(&want.common)
+	want.Opportunities = (*OpportunitiesEndpoint)(&want.common)
+	want.OpportunityContacts = (*OpportunityContactsEndpoint)(&want.common)
+	want.QuotationLines = (*QuotationLinesEndpoint)(&want.common)
+	want.Quotations = (*QuotationsEndpoint)(&want.common)
+	want.ReasonCodes = (*ReasonCodesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

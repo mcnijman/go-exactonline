@@ -26,8 +26,13 @@ func TestNewGeneralService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.Currencies == nil {
-		t.Error("Property Currencies should not be nil")
+	want := &GeneralService{client: c}
+	want.common.client = c
+
+	want.Currencies = (*CurrenciesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

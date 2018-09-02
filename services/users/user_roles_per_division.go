@@ -71,14 +71,11 @@ type UserRolesPerDivision struct {
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *UserRolesPerDivisionEndpoint) List(ctx context.Context, division int, all bool) ([]*UserRolesPerDivision, error) {
 	var entities []*UserRolesPerDivision
-	u, err := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserRolesPerDivision?$select=*", division)
-	if err != nil {
-		return nil, err
-	}
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserRolesPerDivision?$select=*", division) // #nosec
 	if all {
-		err = s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
+		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err = s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
 	return entities, err
 }

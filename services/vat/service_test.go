@@ -26,11 +26,14 @@ func TestNewVATService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.VATCodes == nil {
-		t.Error("Property VATCodes should not be nil")
-	}
-	if s.VatPercentages == nil {
-		t.Error("Property VatPercentages should not be nil")
+	want := &VATService{client: c}
+	want.common.client = c
+
+	want.VATCodes = (*VATCodesEndpoint)(&want.common)
+	want.VatPercentages = (*VatPercentagesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

@@ -26,14 +26,15 @@ func TestNewSalesInvoiceService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.Layouts == nil {
-		t.Error("Property Layouts should not be nil")
-	}
-	if s.SalesInvoiceLines == nil {
-		t.Error("Property SalesInvoiceLines should not be nil")
-	}
-	if s.SalesInvoices == nil {
-		t.Error("Property SalesInvoices should not be nil")
+	want := &SalesInvoiceService{client: c}
+	want.common.client = c
+
+	want.Layouts = (*LayoutsEndpoint)(&want.common)
+	want.SalesInvoiceLines = (*SalesInvoiceLinesEndpoint)(&want.common)
+	want.SalesInvoices = (*SalesInvoicesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

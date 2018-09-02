@@ -26,29 +26,20 @@ func TestNewCashflowService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.AllocationRule == nil {
-		t.Error("Property AllocationRule should not be nil")
-	}
-	if s.Banks == nil {
-		t.Error("Property Banks should not be nil")
-	}
-	if s.DirectDebitMandates == nil {
-		t.Error("Property DirectDebitMandates should not be nil")
-	}
-	if s.ImportNotificationDetails == nil {
-		t.Error("Property ImportNotificationDetails should not be nil")
-	}
-	if s.ImportNotifications == nil {
-		t.Error("Property ImportNotifications should not be nil")
-	}
-	if s.PaymentConditions == nil {
-		t.Error("Property PaymentConditions should not be nil")
-	}
-	if s.Payments == nil {
-		t.Error("Property Payments should not be nil")
-	}
-	if s.Receivables == nil {
-		t.Error("Property Receivables should not be nil")
+	want := &CashflowService{client: c}
+	want.common.client = c
+
+	want.AllocationRule = (*AllocationRuleEndpoint)(&want.common)
+	want.Banks = (*BanksEndpoint)(&want.common)
+	want.DirectDebitMandates = (*DirectDebitMandatesEndpoint)(&want.common)
+	want.ImportNotificationDetails = (*ImportNotificationDetailsEndpoint)(&want.common)
+	want.ImportNotifications = (*ImportNotificationsEndpoint)(&want.common)
+	want.PaymentConditions = (*PaymentConditionsEndpoint)(&want.common)
+	want.Payments = (*PaymentsEndpoint)(&want.common)
+	want.Receivables = (*ReceivablesEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 

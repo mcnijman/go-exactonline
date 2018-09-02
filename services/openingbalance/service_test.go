@@ -26,17 +26,16 @@ func TestNewOpeningBalanceService(t *testing.T) {
 		t.Error("Clients are supposed to be the same")
 	}
 
-	if s.CurrentYearAfterEntry == nil {
-		t.Error("Property CurrentYearAfterEntry should not be nil")
-	}
-	if s.CurrentYearProcessed == nil {
-		t.Error("Property CurrentYearProcessed should not be nil")
-	}
-	if s.PreviousYearAfterEntry == nil {
-		t.Error("Property PreviousYearAfterEntry should not be nil")
-	}
-	if s.PreviousYearProcessed == nil {
-		t.Error("Property PreviousYearProcessed should not be nil")
+	want := &OpeningBalanceService{client: c}
+	want.common.client = c
+
+	want.CurrentYearAfterEntry = (*CurrentYearAfterEntryEndpoint)(&want.common)
+	want.CurrentYearProcessed = (*CurrentYearProcessedEndpoint)(&want.common)
+	want.PreviousYearAfterEntry = (*PreviousYearAfterEntryEndpoint)(&want.common)
+	want.PreviousYearProcessed = (*PreviousYearProcessedEndpoint)(&want.common)
+
+	if !reflect.DeepEqual(s, want) {
+		t.Error("Clients are supposed to be the same")
 	}
 }
 
