@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/mcnijman/go-exactonline/types"
 )
@@ -233,6 +234,51 @@ func TestDo_noContent(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Do returned unexpected error: %v", err)
 	}
+}
+
+func Test_handleResponseError(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, `{"error": {"code": "","message": {"lang": "","value": "Can't delete: Account 58 - Used in: Administrations"}}}`)
+	})
+
+	var body json.RawMessage
+
+	req, _ := client.NewRequest("GET", ".", nil)
+	_, err := client.Do(context.Background(), req, &body)
+	if err == nil {
+		t.Fatal("Do expected an error")
+	}
+}
+
+func Test_doContextError(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(50 * time.Microsecond)
+		fmt.Fprint(w, `test`)
+	})
+
+	var body json.RawMessage
+
+	ctxe := context.Background()
+	ctx, cancel := context.WithTimeout(ctxe, 1*time.Microsecond)
+
+	req, _ := client.NewRequest("GET", ".", nil)
+	_, err := client.Do(ctx, req, &body)
+
+	if err == nil {
+		t.Fatal("Do expected an error")
+	}
+
+	if !reflect.DeepEqual(err, ctx.Err()) {
+		t.Fatalf("err should be a context error, error = %+v, ctx.Err() = %+v", err, ctx.Err())
+	}
+	cancel()
 }
 
 func testMethod(t *testing.T, r *http.Request, want string) {

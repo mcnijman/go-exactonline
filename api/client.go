@@ -203,7 +203,7 @@ func unmarshalRawMessages(m []json.RawMessage, v interface{}) error {
 }
 
 func handleResponseError(r *http.Response, u string) error {
-	if r.StatusCode == 500 {
+	if r.StatusCode == http.StatusInternalServerError {
 		var e InternalServerErrorResponse
 		f := json.NewDecoder(r.Body).Decode(e)
 		if f != nil {
@@ -214,8 +214,8 @@ func handleResponseError(r *http.Response, u string) error {
 			u, e.Error.Message.Value)
 	}
 
-	if r.StatusCode == 400 || r.StatusCode == 401 || r.StatusCode == 403 ||
-		r.StatusCode == 404 {
+	if r.StatusCode == http.StatusBadRequest || r.StatusCode == http.StatusUnauthorized ||
+		r.StatusCode == http.StatusForbidden || r.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("%s: ListRequestAndDo for %s", r.Status, u)
 	}
 
