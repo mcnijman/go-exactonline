@@ -47,8 +47,8 @@ This library uses symantic versions using git tags. However since this library i
 
 ## TODO ##
 
-- Implement all CRUD operations
-- Helpers for odata types creation
+- Implement all CRUD operations (currently only `List` is supported)
+- Add support for non standard endpoints
 - Integration tests
 - Error handling
 - Web hooks support
