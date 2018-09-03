@@ -8,6 +8,7 @@ package documents
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -45,9 +46,11 @@ type DocumentAttachments struct {
 
 // List the DocumentAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *DocumentAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentAttachments, error) {
+func (s *DocumentAttachmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*DocumentAttachments, error) {
 	var entities []*DocumentAttachments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

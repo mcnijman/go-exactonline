@@ -8,6 +8,7 @@ package bulk
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -141,9 +142,11 @@ type DocumentsDocuments struct {
 
 // List the DocumentsDocuments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *DocumentsDocumentsEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentsDocuments, error) {
+func (s *DocumentsDocumentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*DocumentsDocuments, error) {
 	var entities []*DocumentsDocuments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Documents/Documents?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Documents/Documents", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

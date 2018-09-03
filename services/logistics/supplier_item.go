@@ -8,6 +8,7 @@ package logistics
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -120,9 +121,11 @@ type SupplierItem struct {
 
 // List the SupplierItem entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SupplierItemEndpoint) List(ctx context.Context, division int, all bool) ([]*SupplierItem, error) {
+func (s *SupplierItemEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SupplierItem, error) {
 	var entities []*SupplierItem
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SupplierItem?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SupplierItem", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

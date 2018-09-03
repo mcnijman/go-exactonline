@@ -32,13 +32,15 @@ type {{.Name}} struct {
 {{ if (.HasMethod "GET")}}
 // List the {{.Name}} entities{{ if .NeedsDivision }} in the provided division{{end}}.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} all bool) ([]*{{.Name}}, error) {
+func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} all bool, o *api.ListOptions) ([]*{{.Name}}, error) {
 	var entities []*{{.Name}}
 	{{- if .NeedsDivision}}
-	u, _ := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("{{.URL}}", division) // #nosec
 	{{else}}
-	u, _ := s.client.ResolveURL("{{.URL}}?$select=*") // #nosec
+	u, _ := s.client.ResolveURL("{{.URL}}") // #nosec
 	{{end -}}
+
+  api.AddListOptionsToURL(u, o)
 	
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)

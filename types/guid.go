@@ -42,3 +42,8 @@ func (g *GUID) String() string {
 	}
 	return g.UUID.String()
 }
+
+// IsSet checks if the GUID/uuid actually exists
+func (g *GUID) IsSet() bool {
+	return g.UUID != uuid.Nil
+}

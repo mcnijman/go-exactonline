@@ -12,14 +12,22 @@ func Test{{.EndpointServiceName}}_List_all(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", 0)
+  opts1 := api.NewListOptions()
+  opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("{{.URL}}", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
+  api.AddListOptionsToURL(u, opts1)
+
+  opts2 := api.NewListOptions()
+  opts2.Select.Add("*")
+  opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$skiptoken=foo", e2)
 	}
+  api.AddListOptionsToURL(u, opts2)
 
 	{{ if eq .PrimaryProperty.Type "types.GUID"}}
 	g := types.NewGUID()
@@ -74,7 +82,7 @@ func Test{{.EndpointServiceName}}_List_all(t *testing.T) {
 	})
 	{{end}}
 
-	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} true)
+	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} true, opts1)
 	if err != nil {
 		t.Errorf("{{.EndpointServiceName}}.List returned error: %v", err)
 	}
@@ -91,14 +99,22 @@ func Test{{.EndpointServiceName}}_List(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("{{.URL}}?$select=*", 0)
+  opts1 := api.NewListOptions()
+  opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("{{.URL}}", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}?$skiptoken=foo", 0)
+  api.AddListOptionsToURL(u, opts1)
+
+  opts2 := api.NewListOptions()
+  opts2.Select.Add("*")
+  opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("{{.URL}}", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$skiptoken=foo", e2)
 	}
+  api.AddListOptionsToURL(u2, opts2)
 	{{ if eq .PrimaryProperty.Type "types.GUID"}}
 	g := types.NewGUID()
 	gs := g.String()
@@ -136,7 +152,7 @@ func Test{{.EndpointServiceName}}_List(t *testing.T) {
 	})
 	{{end}}
 
-	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} false)
+	entities, err := s.{{.Name}}.List(context.Background(),{{ if .NeedsDivision}} 0,{{end}} false, opts1)
 	if err != nil {
 		t.Errorf("{{.EndpointServiceName}}.List returned error: %v", err)
 	}

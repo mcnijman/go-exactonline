@@ -8,6 +8,7 @@ package cashflow
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -231,9 +232,11 @@ type Payments struct {
 
 // List the Payments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *PaymentsEndpoint) List(ctx context.Context, division int, all bool) ([]*Payments, error) {
+func (s *PaymentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Payments, error) {
 	var entities []*Payments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/Payments?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/Payments", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -105,9 +106,11 @@ type Workcenters struct {
 
 // List the Workcenters entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *WorkcentersEndpoint) List(ctx context.Context, division int, all bool) ([]*Workcenters, error) {
+func (s *WorkcentersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Workcenters, error) {
 	var entities []*Workcenters
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/Workcenters?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/Workcenters", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

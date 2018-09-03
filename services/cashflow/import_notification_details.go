@@ -8,6 +8,7 @@ package cashflow
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -51,9 +52,11 @@ type ImportNotificationDetails struct {
 
 // List the ImportNotificationDetails entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ImportNotificationDetailsEndpoint) List(ctx context.Context, division int, all bool) ([]*ImportNotificationDetails, error) {
+func (s *ImportNotificationDetailsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ImportNotificationDetails, error) {
 	var entities []*ImportNotificationDetails
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotificationDetails", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

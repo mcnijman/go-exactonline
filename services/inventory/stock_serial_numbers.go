@@ -8,6 +8,7 @@ package inventory
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -111,9 +112,11 @@ type StockSerialNumbers struct {
 
 // List the StockSerialNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *StockSerialNumbersEndpoint) List(ctx context.Context, division int, all bool) ([]*StockSerialNumbers, error) {
+func (s *StockSerialNumbersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StockSerialNumbers, error) {
 	var entities []*StockSerialNumbers
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -8,6 +8,7 @@ package accountancy
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -72,9 +73,11 @@ type SolutionLinks struct {
 
 // List the SolutionLinks entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SolutionLinksEndpoint) List(ctx context.Context, division int, all bool) ([]*SolutionLinks, error) {
+func (s *SolutionLinksEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SolutionLinks, error) {
 	var entities []*SolutionLinks
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/SolutionLinks?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/accountancy/SolutionLinks", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

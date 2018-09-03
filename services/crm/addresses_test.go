@@ -13,6 +13,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -22,14 +23,22 @@ func TestAddressesEndpoint_List_all(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses?$select=*", 0)
+	opts1 := api.NewListOptions()
+	opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in AddressesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Addresses?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses?$skiptoken=foo", 0)
+	api.AddListOptionsToURL(u, opts1)
+
+	opts2 := api.NewListOptions()
+	opts2.Select.Add("*")
+	opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in AddressesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Addresses?$skiptoken=foo", e2)
 	}
+	api.AddListOptionsToURL(u, opts2)
 
 	g := types.NewGUID()
 	gs := g.String()
@@ -43,7 +52,7 @@ func TestAddressesEndpoint_List_all(t *testing.T) {
 		}
 	})
 
-	entities, err := s.Addresses.List(context.Background(), 0, true)
+	entities, err := s.Addresses.List(context.Background(), 0, true, opts1)
 	if err != nil {
 		t.Errorf("AddressesEndpoint.List returned error: %v", err)
 	}
@@ -60,14 +69,22 @@ func TestAddressesEndpoint_List(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses?$select=*", 0)
+	opts1 := api.NewListOptions()
+	opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in AddressesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Addresses?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses?$skiptoken=foo", 0)
+	api.AddListOptionsToURL(u, opts1)
+
+	opts2 := api.NewListOptions()
+	opts2.Select.Add("*")
+	opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in AddressesEndpoint.List returned error: %v, with url /api/v1/{division}/crm/Addresses?$skiptoken=foo", e2)
 	}
+	api.AddListOptionsToURL(u2, opts2)
 
 	g := types.NewGUID()
 	gs := g.String()
@@ -77,7 +94,7 @@ func TestAddressesEndpoint_List(t *testing.T) {
 		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
 	})
 
-	entities, err := s.Addresses.List(context.Background(), 0, false)
+	entities, err := s.Addresses.List(context.Background(), 0, false, opts1)
 	if err != nil {
 		t.Errorf("AddressesEndpoint.List returned error: %v", err)
 	}

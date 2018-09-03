@@ -8,6 +8,7 @@ package subscription
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -102,9 +103,11 @@ type SubscriptionLines struct {
 
 // List the SubscriptionLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SubscriptionLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*SubscriptionLines, error) {
+func (s *SubscriptionLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubscriptionLines, error) {
 	var entities []*SubscriptionLines
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

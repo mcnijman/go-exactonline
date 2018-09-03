@@ -8,6 +8,7 @@ package assets
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -105,9 +106,11 @@ type AssetGroups struct {
 
 // List the AssetGroups entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *AssetGroupsEndpoint) List(ctx context.Context, division int, all bool) ([]*AssetGroups, error) {
+func (s *AssetGroupsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AssetGroups, error) {
 	var entities []*AssetGroups
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/AssetGroups?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/AssetGroups", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

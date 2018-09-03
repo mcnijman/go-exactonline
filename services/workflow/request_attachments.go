@@ -8,6 +8,7 @@ package workflow
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -45,9 +46,11 @@ type RequestAttachments struct {
 
 // List the RequestAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *RequestAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*RequestAttachments, error) {
+func (s *RequestAttachmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*RequestAttachments, error) {
 	var entities []*RequestAttachments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/workflow/RequestAttachments?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/workflow/RequestAttachments", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -8,6 +8,7 @@ package hrm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -66,9 +67,11 @@ type Departments struct {
 
 // List the Departments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *DepartmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*Departments, error) {
+func (s *DepartmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Departments, error) {
 	var entities []*Departments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Departments?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Departments", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

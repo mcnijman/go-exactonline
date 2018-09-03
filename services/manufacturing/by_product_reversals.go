@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -108,9 +109,11 @@ type ByProductReversals struct {
 
 // List the ByProductReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ByProductReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*ByProductReversals, error) {
+func (s *ByProductReversalsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ByProductReversals, error) {
 	var entities []*ByProductReversals
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReversals?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReversals", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

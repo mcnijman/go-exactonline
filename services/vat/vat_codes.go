@@ -8,6 +8,7 @@ package vat
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -150,9 +151,11 @@ type VATCodes struct {
 
 // List the VATCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *VATCodesEndpoint) List(ctx context.Context, division int, all bool) ([]*VATCodes, error) {
+func (s *VATCodesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*VATCodes, error) {
 	var entities []*VATCodes
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

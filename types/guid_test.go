@@ -84,3 +84,27 @@ func TestGUID_String(t *testing.T) {
 		})
 	}
 }
+
+func TestGUID_IsSet(t *testing.T) {
+	type fields struct {
+		UUID uuid.UUID
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{"1", fields{}, false},
+		{"1", fields{uuid.Must(uuid.NewV4())}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			g := &GUID{
+				UUID: tt.fields.UUID,
+			}
+			if got := g.IsSet(); got != tt.want {
+				t.Errorf("GUID.IsSet() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

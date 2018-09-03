@@ -8,6 +8,7 @@ package purchaseorder
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -174,9 +175,11 @@ type PurchaseOrders struct {
 
 // List the PurchaseOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *PurchaseOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*PurchaseOrders, error) {
+func (s *PurchaseOrdersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PurchaseOrders, error) {
 	var entities []*PurchaseOrders
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrders?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrders", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

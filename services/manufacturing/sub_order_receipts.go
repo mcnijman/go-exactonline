@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -105,9 +106,11 @@ type SubOrderReceipts struct {
 
 // List the SubOrderReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SubOrderReceiptsEndpoint) List(ctx context.Context, division int, all bool) ([]*SubOrderReceipts, error) {
+func (s *SubOrderReceiptsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubOrderReceipts, error) {
 	var entities []*SubOrderReceipts
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReceipts?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReceipts", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

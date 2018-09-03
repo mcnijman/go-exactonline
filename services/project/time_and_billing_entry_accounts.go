@@ -8,6 +8,7 @@ package project
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -33,9 +34,11 @@ type TimeAndBillingEntryAccounts struct {
 
 // List the TimeAndBillingEntryAccounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *TimeAndBillingEntryAccountsEndpoint) List(ctx context.Context, division int, all bool) ([]*TimeAndBillingEntryAccounts, error) {
+func (s *TimeAndBillingEntryAccountsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*TimeAndBillingEntryAccounts, error) {
 	var entities []*TimeAndBillingEntryAccounts
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryAccounts?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryAccounts", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

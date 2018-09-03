@@ -8,6 +8,7 @@ package documents
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -39,9 +40,11 @@ type DocumentCategories struct {
 
 // List the DocumentCategories entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *DocumentCategoriesEndpoint) List(ctx context.Context, division int, all bool) ([]*DocumentCategories, error) {
+func (s *DocumentCategoriesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*DocumentCategories, error) {
 	var entities []*DocumentCategories
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentCategories?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentCategories", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

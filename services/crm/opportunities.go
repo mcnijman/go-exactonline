@@ -8,6 +8,7 @@ package crm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -174,9 +175,11 @@ type Opportunities struct {
 
 // List the Opportunities entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *OpportunitiesEndpoint) List(ctx context.Context, division int, all bool) ([]*Opportunities, error) {
+func (s *OpportunitiesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Opportunities, error) {
 	var entities []*Opportunities
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Opportunities", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

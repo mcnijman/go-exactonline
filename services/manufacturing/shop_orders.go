@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -201,9 +202,11 @@ type ShopOrders struct {
 
 // List the ShopOrders entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ShopOrdersEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrders, error) {
+func (s *ShopOrdersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ShopOrders, error) {
 	var entities []*ShopOrders
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrders?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrders", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

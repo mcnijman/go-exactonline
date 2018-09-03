@@ -8,6 +8,7 @@ package mailbox
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -60,9 +61,11 @@ type MailMessageAttachments struct {
 
 // List the MailMessageAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *MailMessageAttachmentsEndpoint) List(ctx context.Context, division int, all bool) ([]*MailMessageAttachments, error) {
+func (s *MailMessageAttachmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*MailMessageAttachments, error) {
 	var entities []*MailMessageAttachments
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

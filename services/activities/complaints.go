@@ -8,6 +8,7 @@ package activities
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -99,9 +100,11 @@ type Complaints struct {
 
 // List the Complaints entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ComplaintsEndpoint) List(ctx context.Context, division int, all bool) ([]*Complaints, error) {
+func (s *ComplaintsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Complaints, error) {
 	var entities []*Complaints
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Complaints?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Complaints", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

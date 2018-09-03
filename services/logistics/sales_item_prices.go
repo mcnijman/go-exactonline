@@ -8,6 +8,7 @@ package logistics
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -96,9 +97,11 @@ type SalesItemPrices struct {
 
 // List the SalesItemPrices entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SalesItemPricesEndpoint) List(ctx context.Context, division int, all bool) ([]*SalesItemPrices, error) {
+func (s *SalesItemPricesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SalesItemPrices, error) {
 	var entities []*SalesItemPrices
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

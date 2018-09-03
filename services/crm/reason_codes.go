@@ -8,6 +8,7 @@ package crm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -69,9 +70,11 @@ type ReasonCodes struct {
 
 // List the ReasonCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ReasonCodesEndpoint) List(ctx context.Context, division int, all bool) ([]*ReasonCodes, error) {
+func (s *ReasonCodesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ReasonCodes, error) {
 	var entities []*ReasonCodes
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/ReasonCodes?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/ReasonCodes", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

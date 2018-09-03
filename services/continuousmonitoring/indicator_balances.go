@@ -8,6 +8,7 @@ package continuousmonitoring
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -84,9 +85,11 @@ type IndicatorBalances struct {
 
 // List the IndicatorBalances entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *IndicatorBalancesEndpoint) List(ctx context.Context, division int, all bool) ([]*IndicatorBalances, error) {
+func (s *IndicatorBalancesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*IndicatorBalances, error) {
 	var entities []*IndicatorBalances
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorBalances", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

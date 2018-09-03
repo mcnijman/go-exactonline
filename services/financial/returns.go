@@ -8,6 +8,7 @@ package financial
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -72,9 +73,11 @@ type Returns struct {
 
 // List the Returns entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ReturnsEndpoint) List(ctx context.Context, division int, all bool) ([]*Returns, error) {
+func (s *ReturnsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Returns, error) {
 	var entities []*Returns
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/Returns?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/Returns", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

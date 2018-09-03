@@ -8,6 +8,7 @@ package financial
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -60,9 +61,11 @@ type GLAccountClassificationMappings struct {
 
 // List the GLAccountClassificationMappings entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *GLAccountClassificationMappingsEndpoint) List(ctx context.Context, division int, all bool) ([]*GLAccountClassificationMappings, error) {
+func (s *GLAccountClassificationMappingsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GLAccountClassificationMappings, error) {
 	var entities []*GLAccountClassificationMappings
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -8,6 +8,7 @@ package hrm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -99,9 +100,11 @@ type LeaveRegistrations struct {
 
 // List the LeaveRegistrations entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *LeaveRegistrationsEndpoint) List(ctx context.Context, division int, all bool) ([]*LeaveRegistrations, error) {
+func (s *LeaveRegistrationsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*LeaveRegistrations, error) {
 	var entities []*LeaveRegistrations
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/LeaveRegistrations?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/LeaveRegistrations", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

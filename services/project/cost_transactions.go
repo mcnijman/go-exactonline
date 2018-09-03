@@ -8,6 +8,7 @@ package project
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -153,9 +154,11 @@ type CostTransactions struct {
 
 // List the CostTransactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *CostTransactionsEndpoint) List(ctx context.Context, division int, all bool) ([]*CostTransactions, error) {
+func (s *CostTransactionsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*CostTransactions, error) {
 	var entities []*CostTransactions
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/CostTransactions?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/CostTransactions", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -23,7 +23,7 @@ ctx := context.Background()
 divisionID, err := client.GetCurrentDivisionID(ctx)
 
 // Fetch all transactions in the division
-transactions, err := client.FinancialTransaction.Transactions.List(ctx, divisionID, false)
+transactions, err := client.FinancialTransaction.Transactions.List(ctx, divisionID, false, nil)
 ```
 
 ## Authentication ##
@@ -51,10 +51,10 @@ Other available divisions can be fecthed through te following enpoints:
 
 ```go
 // To get all divisions which are accessible for the user that granted the app permission, use:
-divisions, err := client.System.Divisions.List(context.Background(), true)
+divisions, err := client.System.Divisions.List(context.Background(), true, nil)
 // or if you need to retrieve the divisions for the current license, of the user that granted
 // the app permission, use:
-divisions, err := client.HRM.Divisions.List(context.Background(), true)
+divisions, err := client.HRM.Divisions.List(context.Background(), true, nil)
 ```
 
 ## Pagination ##

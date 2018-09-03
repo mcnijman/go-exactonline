@@ -8,6 +8,7 @@ package subscription
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -63,9 +64,11 @@ type SubscriptionReasonCodes struct {
 
 // List the SubscriptionReasonCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *SubscriptionReasonCodesEndpoint) List(ctx context.Context, division int, all bool) ([]*SubscriptionReasonCodes, error) {
+func (s *SubscriptionReasonCodesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubscriptionReasonCodes, error) {
 	var entities []*SubscriptionReasonCodes
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionReasonCodes?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionReasonCodes", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

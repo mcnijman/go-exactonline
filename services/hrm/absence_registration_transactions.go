@@ -8,6 +8,7 @@ package hrm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -87,9 +88,11 @@ type AbsenceRegistrationTransactions struct {
 
 // List the AbsenceRegistrationTransactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *AbsenceRegistrationTransactionsEndpoint) List(ctx context.Context, division int, all bool) ([]*AbsenceRegistrationTransactions, error) {
+func (s *AbsenceRegistrationTransactionsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AbsenceRegistrationTransactions, error) {
 	var entities []*AbsenceRegistrationTransactions
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

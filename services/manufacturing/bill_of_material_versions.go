@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -99,9 +100,11 @@ type BillOfMaterialVersions struct {
 
 // List the BillOfMaterialVersions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *BillOfMaterialVersionsEndpoint) List(ctx context.Context, division int, all bool) ([]*BillOfMaterialVersions, error) {
+func (s *BillOfMaterialVersionsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*BillOfMaterialVersions, error) {
 	var entities []*BillOfMaterialVersions
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialVersions?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialVersions", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

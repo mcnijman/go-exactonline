@@ -8,6 +8,7 @@ package budget
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -63,9 +64,11 @@ type BudgetScenarios struct {
 
 // List the BudgetScenarios entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *BudgetScenariosEndpoint) List(ctx context.Context, division int, all bool) ([]*BudgetScenarios, error) {
+func (s *BudgetScenariosEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*BudgetScenarios, error) {
 	var entities []*BudgetScenarios
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/budget/BudgetScenarios?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/budget/BudgetScenarios", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

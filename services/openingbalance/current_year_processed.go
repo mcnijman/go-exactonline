@@ -8,6 +8,7 @@ package openingbalance
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -48,9 +49,11 @@ type CurrentYearProcessed struct {
 
 // List the CurrentYearProcessed entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *CurrentYearProcessedEndpoint) List(ctx context.Context, division int, all bool) ([]*CurrentYearProcessed, error) {
+func (s *CurrentYearProcessedEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*CurrentYearProcessed, error) {
 	var entities []*CurrentYearProcessed
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

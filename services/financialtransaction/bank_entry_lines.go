@@ -8,6 +8,7 @@ package financialtransaction
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -159,9 +160,11 @@ type BankEntryLines struct {
 
 // List the BankEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *BankEntryLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*BankEntryLines, error) {
+func (s *BankEntryLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*BankEntryLines, error) {
 	var entities []*BankEntryLines
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/BankEntryLines?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/BankEntryLines", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

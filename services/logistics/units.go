@@ -8,6 +8,7 @@ package logistics
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -51,9 +52,11 @@ type Units struct {
 
 // List the Units entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *UnitsEndpoint) List(ctx context.Context, division int, all bool) ([]*Units, error) {
+func (s *UnitsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Units, error) {
 	var entities []*Units
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/Units", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

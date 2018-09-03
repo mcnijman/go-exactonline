@@ -13,6 +13,9 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/mcnijman/go-exactonline/api"
+	"github.com/mcnijman/go-exactonline/types"
 )
 
 func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
@@ -21,14 +24,22 @@ func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", 0)
+	opts1 := api.NewListOptions()
+	opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases?$skiptoken=foo", 0)
+	api.AddListOptionsToURL(u, opts1)
+
+	opts2 := api.NewListOptions()
+	opts2.Select.Add("*")
+	opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$skiptoken=foo", e2)
 	}
+	api.AddListOptionsToURL(u, opts2)
 
 	g := 100
 	gs := strconv.Itoa(g)
@@ -42,7 +53,7 @@ func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
 		}
 	})
 
-	entities, err := s.EmploymentContractFlexPhases.List(context.Background(), 0, true)
+	entities, err := s.EmploymentContractFlexPhases.List(context.Background(), 0, true, opts1)
 	if err != nil {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned error: %v", err)
 	}
@@ -59,14 +70,22 @@ func TestEmploymentContractFlexPhasesEndpoint_List(t *testing.T) {
 
 	acceptHeaders := []string{"application/json"}
 
-	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", 0)
+	opts1 := api.NewListOptions()
+	opts1.Select.Add("*")
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", e)
 	}
-	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases?$skiptoken=foo", 0)
+	api.AddListOptionsToURL(u, opts1)
+
+	opts2 := api.NewListOptions()
+	opts2.Select.Add("*")
+	opts2.SkipToken.Set(types.NewGUID())
+	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$skiptoken=foo", e2)
 	}
+	api.AddListOptionsToURL(u2, opts2)
 
 	g := 100
 	gs := strconv.Itoa(g)
@@ -76,7 +95,7 @@ func TestEmploymentContractFlexPhasesEndpoint_List(t *testing.T) {
 		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
-	entities, err := s.EmploymentContractFlexPhases.List(context.Background(), 0, false)
+	entities, err := s.EmploymentContractFlexPhases.List(context.Background(), 0, false, opts1)
 	if err != nil {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned error: %v", err)
 	}

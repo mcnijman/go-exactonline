@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -75,9 +76,11 @@ type ProductionAreas struct {
 
 // List the ProductionAreas entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ProductionAreasEndpoint) List(ctx context.Context, division int, all bool) ([]*ProductionAreas, error) {
+func (s *ProductionAreasEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ProductionAreas, error) {
 	var entities []*ProductionAreas
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ProductionAreas?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ProductionAreas", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

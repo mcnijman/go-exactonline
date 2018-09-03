@@ -8,6 +8,7 @@ package payroll
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -111,9 +112,11 @@ type EmploymentContracts struct {
 
 // List the EmploymentContracts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *EmploymentContractsEndpoint) List(ctx context.Context, division int, all bool) ([]*EmploymentContracts, error) {
+func (s *EmploymentContractsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*EmploymentContracts, error) {
 	var entities []*EmploymentContracts
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContracts?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContracts", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

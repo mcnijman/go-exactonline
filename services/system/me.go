@@ -8,6 +8,7 @@ package system
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -114,9 +115,11 @@ type Me struct {
 
 // List the Me entities.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *MeEndpoint) List(ctx context.Context, all bool) ([]*Me, error) {
+func (s *MeEndpoint) List(ctx context.Context, all bool, o *api.ListOptions) ([]*Me, error) {
 	var entities []*Me
-	u, _ := s.client.ResolveURL("/api/v1/current/Me?$select=*") // #nosec
+	u, _ := s.client.ResolveURL("/api/v1/current/Me") // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

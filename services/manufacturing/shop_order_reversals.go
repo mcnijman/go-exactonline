@@ -8,6 +8,7 @@ package manufacturing
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -102,9 +103,11 @@ type ShopOrderReversals struct {
 
 // List the ShopOrderReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *ShopOrderReversalsEndpoint) List(ctx context.Context, division int, all bool) ([]*ShopOrderReversals, error) {
+func (s *ShopOrderReversalsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ShopOrderReversals, error) {
 	var entities []*ShopOrderReversals
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderReversals?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderReversals", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

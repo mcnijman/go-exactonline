@@ -8,6 +8,7 @@ package hrm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -63,9 +64,11 @@ type Costcenters struct {
 
 // List the Costcenters entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *CostcentersEndpoint) List(ctx context.Context, division int, all bool) ([]*Costcenters, error) {
+func (s *CostcentersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Costcenters, error) {
 	var entities []*Costcenters
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costcenters?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costcenters", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

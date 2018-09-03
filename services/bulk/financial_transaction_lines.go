@@ -8,6 +8,7 @@ package bulk
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -231,9 +232,11 @@ type FinancialTransactionLines struct {
 
 // List the FinancialTransactionLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *FinancialTransactionLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*FinancialTransactionLines, error) {
+func (s *FinancialTransactionLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*FinancialTransactionLines, error) {
 	var entities []*FinancialTransactionLines
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

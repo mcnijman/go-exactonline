@@ -8,6 +8,7 @@ package financial
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -63,9 +64,11 @@ type FinancialPeriods struct {
 
 // List the FinancialPeriods entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *FinancialPeriodsEndpoint) List(ctx context.Context, division int, all bool) ([]*FinancialPeriods, error) {
+func (s *FinancialPeriodsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*FinancialPeriods, error) {
 	var entities []*FinancialPeriods
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/FinancialPeriods?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/FinancialPeriods", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

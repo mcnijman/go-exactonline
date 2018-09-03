@@ -8,6 +8,7 @@ package crm
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -465,9 +466,11 @@ type Accounts struct {
 
 // List the Accounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *AccountsEndpoint) List(ctx context.Context, division int, all bool) ([]*Accounts, error) {
+func (s *AccountsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Accounts, error) {
 	var entities []*Accounts
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Accounts?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Accounts", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

@@ -8,6 +8,7 @@ package generaljournalentry
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -165,9 +166,11 @@ type GeneralJournalEntryLines struct {
 
 // List the GeneralJournalEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *GeneralJournalEntryLinesEndpoint) List(ctx context.Context, division int, all bool) ([]*GeneralJournalEntryLines, error) {
+func (s *GeneralJournalEntryLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GeneralJournalEntryLines, error) {
 	var entities []*GeneralJournalEntryLines
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntryLines?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntryLines", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err

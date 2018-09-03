@@ -8,6 +8,7 @@ package inventory
 import (
 	"context"
 
+	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
 
@@ -111,9 +112,11 @@ type StockBatchNumbers struct {
 
 // List the StockBatchNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
-func (s *StockBatchNumbersEndpoint) List(ctx context.Context, division int, all bool) ([]*StockBatchNumbers, error) {
+func (s *StockBatchNumbersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StockBatchNumbers, error) {
 	var entities []*StockBatchNumbers
-	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers?$select=*", division) // #nosec
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockBatchNumbers", division) // #nosec
+	api.AddListOptionsToURL(u, o)
+
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
