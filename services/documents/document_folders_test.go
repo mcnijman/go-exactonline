@@ -38,7 +38,7 @@ func TestDocumentFoldersEndpoint_List_all(t *testing.T) {
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentFolders?$skiptoken=foo", e2)
 	}
-	api.AddListOptionsToURL(u, opts2)
+	api.AddListOptionsToURL(u2, opts2)
 
 	g := types.NewGUID()
 	gs := g.String()

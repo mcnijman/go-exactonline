@@ -27,7 +27,7 @@ func Test{{.EndpointServiceName}}_List_all(t *testing.T) {
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in {{.EndpointServiceName}}.List returned error: %v, with url {{.URL}}?$skiptoken=foo", e2)
 	}
-  api.AddListOptionsToURL(u, opts2)
+  api.AddListOptionsToURL(u2, opts2)
 
 	{{ if eq .PrimaryProperty.Type "types.GUID"}}
 	g := types.NewGUID()

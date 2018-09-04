@@ -39,7 +39,7 @@ func TestPayablesListEndpoint_List_all(t *testing.T) {
 	if e2 != nil {
 		t.Errorf("s.client.ResolvePathWithDivision in PayablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/PayablesList?$skiptoken=foo", e2)
 	}
-	api.AddListOptionsToURL(u, opts2)
+	api.AddListOptionsToURL(u2, opts2)
 
 	g := int64(100)
 	gs := strconv.Itoa(int(g))
