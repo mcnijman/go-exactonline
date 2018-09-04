@@ -7,6 +7,7 @@ package purchaseentry
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -116,7 +117,7 @@ type PurchaseEntries struct {
 	ProcessNumber *int `json:"ProcessNumber,omitempty"`
 
 	// PurchaseEntryLines:
-	PurchaseEntryLines *[]byte `json:"PurchaseEntryLines,omitempty"`
+	PurchaseEntryLines *json.RawMessage `json:"PurchaseEntryLines,omitempty"`
 
 	// Rate:
 	Rate *float64 `json:"Rate,omitempty"`

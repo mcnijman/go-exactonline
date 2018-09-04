@@ -10,9 +10,11 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,7 +27,6 @@ import (
 	"unicode"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/joncalhoun/pipe"
 )
 
 const endpointsURL = "https://start.exactonline.nl/docs/HlpRestAPIResources.aspx"
@@ -219,7 +220,7 @@ func getEndpointProperties(endpoint *endpoint) {
 		primary, _ := s.Attr("data-key")
 		t, _ := s.Attr("data-type")
 
-		nt := "[]byte"
+		nt := "json.RawMessage"
 		if ntt, ok := typesMapping[strings.TrimPrefix(t, "Edm.")]; ok {
 			nt = ntt
 		}
@@ -268,29 +269,25 @@ func main() {
 }
 
 func writeFile(tpl *template.Template, data interface{}, filePath string) {
-	rc, wc, errCh := pipe.Commands(
-		exec.Command("gofmt"),
-		exec.Command("goimports"),
-	)
+	cmd := exec.Command("goimports")
+	cmd.Stderr = os.Stdout
 
-	go func() {
-		select {
-		case err, ok := <-errCh:
-			if ok && err != nil {
-				panic(err)
-			}
-		}
-	}()
+	r, w := io.Pipe()
+	cmd.Stdin = r
 
-	err := tpl.Execute(wc, data)
+	var b bytes.Buffer
+	cmd.Stdout = &b
+
+	cmd.Start()
+
+	err := tpl.Execute(w, data)
 	dontPanic(err)
-	wc.Close()
+	w.Close()
 
-	bytes, rErr := ioutil.ReadAll(rc)
-	dontPanic(rErr)
+	cmd.Wait()
 
 	logf("    Writing %v...", filePath)
-	err = ioutil.WriteFile(filePath, bytes, 0644)
+	err = ioutil.WriteFile(filePath, b.Bytes(), 0644)
 	dontPanic(err)
 }
 

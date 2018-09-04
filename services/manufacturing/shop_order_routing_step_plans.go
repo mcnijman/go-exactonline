@@ -7,6 +7,7 @@ package manufacturing
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -152,7 +153,7 @@ type ShopOrderRoutingStepPlans struct {
 	SubcontractedLeadDays *int `json:"SubcontractedLeadDays,omitempty"`
 
 	// TimeTransactions: Collection of TimeTransactions
-	TimeTransactions *[]byte `json:"TimeTransactions,omitempty"`
+	TimeTransactions *json.RawMessage `json:"TimeTransactions,omitempty"`
 
 	// TotalCostDC: Total cost of the routing line
 	TotalCostDC *float64 `json:"TotalCostDC,omitempty"`

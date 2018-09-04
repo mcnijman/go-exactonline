@@ -7,6 +7,7 @@ package inventory
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -77,7 +78,7 @@ type StockCounts struct {
 	StockCountDate *types.Date `json:"StockCountDate,omitempty"`
 
 	// StockCountLines: Collection of stock count lines
-	StockCountLines *[]byte `json:"StockCountLines,omitempty"`
+	StockCountLines *json.RawMessage `json:"StockCountLines,omitempty"`
 
 	// StockCountNumber: Human readable id of the stock count
 	StockCountNumber *int `json:"StockCountNumber,omitempty"`

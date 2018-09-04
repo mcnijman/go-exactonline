@@ -7,6 +7,7 @@ package continuousmonitoring
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -56,7 +57,7 @@ type IndicatorUsageOfJournals struct {
 	ExternalCode *string `json:"ExternalCode,omitempty"`
 
 	// IndicatorGLAccounts: Collection of GL accounts
-	IndicatorGLAccounts *[]byte `json:"IndicatorGLAccounts,omitempty"`
+	IndicatorGLAccounts *json.RawMessage `json:"IndicatorGLAccounts,omitempty"`
 
 	// Journal: ID of journal
 	Journal *types.GUID `json:"Journal,omitempty"`

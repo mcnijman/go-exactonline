@@ -7,6 +7,7 @@ package crm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -143,7 +144,7 @@ type Quotations struct {
 	QuotationDate *types.Date `json:"QuotationDate,omitempty"`
 
 	// QuotationLines:
-	QuotationLines *[]byte `json:"QuotationLines,omitempty"`
+	QuotationLines *json.RawMessage `json:"QuotationLines,omitempty"`
 
 	// QuotationNumber:
 	QuotationNumber *int `json:"QuotationNumber,omitempty"`

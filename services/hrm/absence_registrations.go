@@ -7,6 +7,7 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,7 +30,7 @@ type AbsenceRegistrations struct {
 	ID *types.GUID `json:"ID,omitempty"`
 
 	// AbsenceRegistrationTransactions: Collection of absence registration transactions
-	AbsenceRegistrationTransactions *[]byte `json:"AbsenceRegistrationTransactions,omitempty"`
+	AbsenceRegistrationTransactions *json.RawMessage `json:"AbsenceRegistrationTransactions,omitempty"`
 
 	// Cause: Absence cause, only supported for the Netherland legislation
 	Cause *int `json:"Cause,omitempty"`

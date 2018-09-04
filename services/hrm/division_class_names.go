@@ -7,6 +7,7 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -47,7 +48,7 @@ type DivisionClassNames struct {
 	DescriptionTermID *int `json:"DescriptionTermID,omitempty"`
 
 	// DivisionClasses: Collection of classification properties
-	DivisionClasses *[]byte `json:"DivisionClasses,omitempty"`
+	DivisionClasses *json.RawMessage `json:"DivisionClasses,omitempty"`
 
 	// Modified: Last modified date
 	Modified *types.Date `json:"Modified,omitempty"`

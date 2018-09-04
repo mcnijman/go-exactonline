@@ -7,6 +7,7 @@ package activities
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -38,7 +39,7 @@ type Tasks struct {
 	ActionDate *types.Date `json:"ActionDate,omitempty"`
 
 	// Attachments: Attachments linked to the task
-	Attachments *[]byte `json:"Attachments,omitempty"`
+	Attachments *json.RawMessage `json:"Attachments,omitempty"`
 
 	// Contact: The contact person that is related to the task
 	Contact *types.GUID `json:"Contact,omitempty"`

@@ -7,6 +7,7 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -32,19 +33,19 @@ type Divisions struct {
 	BlockingStatus *int `json:"BlockingStatus,omitempty"`
 
 	// Class_01: First division classification. User should have access rights to view division classifications.
-	Class_01 *[]byte `json:"Class_01,omitempty"`
+	Class_01 *json.RawMessage `json:"Class_01,omitempty"`
 
 	// Class_02: Second division classification. User should have access rights to view division classifications.
-	Class_02 *[]byte `json:"Class_02,omitempty"`
+	Class_02 *json.RawMessage `json:"Class_02,omitempty"`
 
 	// Class_03: Third division classification. User should have access rights to view division classifications.
-	Class_03 *[]byte `json:"Class_03,omitempty"`
+	Class_03 *json.RawMessage `json:"Class_03,omitempty"`
 
 	// Class_04: Fourth division classification. User should have access rights to view division classifications.
-	Class_04 *[]byte `json:"Class_04,omitempty"`
+	Class_04 *json.RawMessage `json:"Class_04,omitempty"`
 
 	// Class_05: Fifth division classification. User should have access rights to view division classifications.
-	Class_05 *[]byte `json:"Class_05,omitempty"`
+	Class_05 *json.RawMessage `json:"Class_05,omitempty"`
 
 	// Country: Country of the division. Is used for determination of legislation
 	Country *string `json:"Country,omitempty"`

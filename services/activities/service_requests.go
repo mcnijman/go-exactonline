@@ -7,6 +7,7 @@ package activities
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -41,7 +42,7 @@ type ServiceRequests struct {
 	AssignedToFullName *string `json:"AssignedToFullName,omitempty"`
 
 	// Attachments: Attachments linked to the service request
-	Attachments *[]byte `json:"Attachments,omitempty"`
+	Attachments *json.RawMessage `json:"Attachments,omitempty"`
 
 	// Contact: The contact person that is related to the service request
 	Contact *types.GUID `json:"Contact,omitempty"`

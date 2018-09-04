@@ -7,6 +7,7 @@ package crm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -56,7 +57,7 @@ type Accounts struct {
 	AddressLine3 *string `json:"AddressLine3,omitempty"`
 
 	// BankAccounts:
-	BankAccounts *[]byte `json:"BankAccounts,omitempty"`
+	BankAccounts *json.RawMessage `json:"BankAccounts,omitempty"`
 
 	// Blocked:
 	Blocked *bool `json:"Blocked,omitempty"`

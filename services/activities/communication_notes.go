@@ -7,6 +7,7 @@ package activities
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -35,7 +36,7 @@ type CommunicationNotes struct {
 	AccountName *string `json:"AccountName,omitempty"`
 
 	// Attachments: Attachments linked to the communication note
-	Attachments *[]byte `json:"Attachments,omitempty"`
+	Attachments *json.RawMessage `json:"Attachments,omitempty"`
 
 	// Campaign: The campaign linked to the communication note
 	Campaign *types.GUID `json:"Campaign,omitempty"`

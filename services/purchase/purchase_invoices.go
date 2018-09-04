@@ -7,6 +7,7 @@ package purchase
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -74,7 +75,7 @@ type PurchaseInvoices struct {
 	PaymentReference *string `json:"PaymentReference,omitempty"`
 
 	// PurchaseInvoiceLines: The collection of lines that belong to the purchase invoice.
-	PurchaseInvoiceLines *[]byte `json:"PurchaseInvoiceLines,omitempty"`
+	PurchaseInvoiceLines *json.RawMessage `json:"PurchaseInvoiceLines,omitempty"`
 
 	// Remarks: The user can enter remarks related to the invoice here.
 	Remarks *string `json:"Remarks,omitempty"`

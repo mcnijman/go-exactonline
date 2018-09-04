@@ -7,6 +7,7 @@ package inventory
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -62,7 +63,7 @@ type AssemblyOrders struct {
 	OrderStatus *int `json:"OrderStatus,omitempty"`
 
 	// PartItems: Collection of part items for assembly order
-	PartItems *[]byte `json:"PartItems,omitempty"`
+	PartItems *json.RawMessage `json:"PartItems,omitempty"`
 
 	// PlannedQuantity: Planned quantity of the item to be assembled
 	PlannedQuantity *float64 `json:"PlannedQuantity,omitempty"`

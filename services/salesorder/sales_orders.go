@@ -7,6 +7,7 @@ package salesorder
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -170,7 +171,7 @@ type SalesOrders struct {
 	Remarks *string `json:"Remarks,omitempty"`
 
 	// SalesOrderLines:
-	SalesOrderLines *[]byte `json:"SalesOrderLines,omitempty"`
+	SalesOrderLines *json.RawMessage `json:"SalesOrderLines,omitempty"`
 
 	// Salesperson:
 	Salesperson *types.GUID `json:"Salesperson,omitempty"`

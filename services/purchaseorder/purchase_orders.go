@@ -7,6 +7,7 @@ package purchaseorder
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -116,7 +117,7 @@ type PurchaseOrders struct {
 	PurchaseAgentFullName *string `json:"PurchaseAgentFullName,omitempty"`
 
 	// PurchaseOrderLines:
-	PurchaseOrderLines *[]byte `json:"PurchaseOrderLines,omitempty"`
+	PurchaseOrderLines *json.RawMessage `json:"PurchaseOrderLines,omitempty"`
 
 	// ReceiptDate:
 	ReceiptDate *types.Date `json:"ReceiptDate,omitempty"`

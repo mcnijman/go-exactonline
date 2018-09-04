@@ -7,6 +7,7 @@ package project
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -56,7 +57,7 @@ type Projects struct {
 	BudgetedCosts *float64 `json:"BudgetedCosts,omitempty"`
 
 	// BudgetedHoursPerHourType: Collection of budgeted hours
-	BudgetedHoursPerHourType *[]byte `json:"BudgetedHoursPerHourType,omitempty"`
+	BudgetedHoursPerHourType *json.RawMessage `json:"BudgetedHoursPerHourType,omitempty"`
 
 	// BudgetedRevenue: Budgeted amount of revenue in the default currency of the company
 	BudgetedRevenue *float64 `json:"BudgetedRevenue,omitempty"`
@@ -119,7 +120,7 @@ type Projects struct {
 	InvoiceAsQuoted *bool `json:"InvoiceAsQuoted,omitempty"`
 
 	// InvoiceTerms: Collection of invoice terms
-	InvoiceTerms *[]byte `json:"InvoiceTerms,omitempty"`
+	InvoiceTerms *json.RawMessage `json:"InvoiceTerms,omitempty"`
 
 	// Manager: Responsible person for this project
 	Manager *types.GUID `json:"Manager,omitempty"`
@@ -155,13 +156,13 @@ type Projects struct {
 	PrepaidTypeDescription *string `json:"PrepaidTypeDescription,omitempty"`
 
 	// ProjectRestrictionEmployees: Collection of employee restrictions
-	ProjectRestrictionEmployees *[]byte `json:"ProjectRestrictionEmployees,omitempty"`
+	ProjectRestrictionEmployees *json.RawMessage `json:"ProjectRestrictionEmployees,omitempty"`
 
 	// ProjectRestrictionItems: Collection of item restrictions
-	ProjectRestrictionItems *[]byte `json:"ProjectRestrictionItems,omitempty"`
+	ProjectRestrictionItems *json.RawMessage `json:"ProjectRestrictionItems,omitempty"`
 
 	// ProjectRestrictionRebillings: Collection of rebilling restrictions
-	ProjectRestrictionRebillings *[]byte `json:"ProjectRestrictionRebillings,omitempty"`
+	ProjectRestrictionRebillings *json.RawMessage `json:"ProjectRestrictionRebillings,omitempty"`
 
 	// SalesTimeQuantity: Budgeted time. Total number of hours estimated for the fixed price project
 	SalesTimeQuantity *float64 `json:"SalesTimeQuantity,omitempty"`

@@ -7,6 +7,7 @@ package crm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -32,7 +33,7 @@ type Documents struct {
 	Account *types.GUID `json:"Account,omitempty"`
 
 	// Attachments: Attachments linked to the document. Binaries are not sent in the response.
-	Attachments *[]byte `json:"Attachments,omitempty"`
+	Attachments *json.RawMessage `json:"Attachments,omitempty"`
 
 	// Created: Creation date
 	Created *types.Date `json:"Created,omitempty"`

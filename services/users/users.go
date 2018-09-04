@@ -7,6 +7,7 @@ package users
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -128,10 +129,10 @@ type Users struct {
 	UserName *string `json:"UserName,omitempty"`
 
 	// UserRoles: Collection of user roles
-	UserRoles *[]byte `json:"UserRoles,omitempty"`
+	UserRoles *json.RawMessage `json:"UserRoles,omitempty"`
 
 	// UserRolesPerDivision: Collection of user roles per division
-	UserRolesPerDivision *[]byte `json:"UserRolesPerDivision,omitempty"`
+	UserRolesPerDivision *json.RawMessage `json:"UserRolesPerDivision,omitempty"`
 
 	// UserTypesList: Obsolete
 	UserTypesList *string `json:"UserTypesList,omitempty"`

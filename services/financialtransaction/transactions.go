@@ -7,6 +7,7 @@ package financialtransaction
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -98,7 +99,7 @@ type Transactions struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 
 	// TransactionLines:
-	TransactionLines *[]byte `json:"TransactionLines,omitempty"`
+	TransactionLines *json.RawMessage `json:"TransactionLines,omitempty"`
 
 	// Type:
 	Type *int `json:"Type,omitempty"`

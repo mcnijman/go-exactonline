@@ -7,6 +7,7 @@ package financialtransaction
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,7 +30,7 @@ type CashEntries struct {
 	EntryID *types.GUID `json:"EntryID,omitempty"`
 
 	// CashEntryLines:
-	CashEntryLines *[]byte `json:"CashEntryLines,omitempty"`
+	CashEntryLines *json.RawMessage `json:"CashEntryLines,omitempty"`
 
 	// ClosingBalanceFC:
 	ClosingBalanceFC *float64 `json:"ClosingBalanceFC,omitempty"`

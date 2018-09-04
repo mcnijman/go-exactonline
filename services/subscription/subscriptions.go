@@ -7,6 +7,7 @@ package subscription
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -137,13 +138,13 @@ type Subscriptions struct {
 	StartDate *types.Date `json:"StartDate,omitempty"`
 
 	// SubscriptionLines: Collection of subscription lines
-	SubscriptionLines *[]byte `json:"SubscriptionLines,omitempty"`
+	SubscriptionLines *json.RawMessage `json:"SubscriptionLines,omitempty"`
 
 	// SubscriptionRestrictionEmployees: Collection of restriction employees
-	SubscriptionRestrictionEmployees *[]byte `json:"SubscriptionRestrictionEmployees,omitempty"`
+	SubscriptionRestrictionEmployees *json.RawMessage `json:"SubscriptionRestrictionEmployees,omitempty"`
 
 	// SubscriptionRestrictionItems: Collection of restriction items
-	SubscriptionRestrictionItems *[]byte `json:"SubscriptionRestrictionItems,omitempty"`
+	SubscriptionRestrictionItems *json.RawMessage `json:"SubscriptionRestrictionItems,omitempty"`
 
 	// SubscriptionType: Reference to subscription type
 	SubscriptionType *types.GUID `json:"SubscriptionType,omitempty"`

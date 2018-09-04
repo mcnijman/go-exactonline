@@ -7,6 +7,7 @@ package inventory
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,7 +30,7 @@ type StockCountLines struct {
 	ID *types.GUID `json:"ID,omitempty"`
 
 	// BatchNumbers: The collection of batch numbers that belong to the items included in this stock count
-	BatchNumbers *[]byte `json:"BatchNumbers,omitempty"`
+	BatchNumbers *json.RawMessage `json:"BatchNumbers,omitempty"`
 
 	// CostPrice: Cost price of the item that is used to create the stock count
 	CostPrice *float64 `json:"CostPrice,omitempty"`
@@ -86,7 +87,7 @@ type StockCountLines struct {
 	QuantityNew *float64 `json:"QuantityNew,omitempty"`
 
 	// SerialNumbers: The collection of serial numbers that belong to the items included in this stock count
-	SerialNumbers *[]byte `json:"SerialNumbers,omitempty"`
+	SerialNumbers *json.RawMessage `json:"SerialNumbers,omitempty"`
 
 	// StockCountID: Identifies the stock count. All the lines of a stock count have the same StockCountID
 	StockCountID *types.GUID `json:"StockCountID,omitempty"`

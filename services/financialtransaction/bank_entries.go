@@ -7,6 +7,7 @@ package financialtransaction
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,7 +30,7 @@ type BankEntries struct {
 	EntryID *types.GUID `json:"EntryID,omitempty"`
 
 	// BankEntryLines:
-	BankEntryLines *[]byte `json:"BankEntryLines,omitempty"`
+	BankEntryLines *json.RawMessage `json:"BankEntryLines,omitempty"`
 
 	// BankStatementDocument:
 	BankStatementDocument *types.GUID `json:"BankStatementDocument,omitempty"`

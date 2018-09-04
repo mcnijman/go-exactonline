@@ -7,6 +7,7 @@ package purchaseorder
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,7 +30,7 @@ type GoodsReceiptLines struct {
 	ID *types.GUID `json:"ID,omitempty"`
 
 	// BatchNumbers: Collection of batch numbers
-	BatchNumbers *[]byte `json:"BatchNumbers,omitempty"`
+	BatchNumbers *json.RawMessage `json:"BatchNumbers,omitempty"`
 
 	// Created: Creation date
 	Created *types.Date `json:"Created,omitempty"`
@@ -110,7 +111,7 @@ type GoodsReceiptLines struct {
 	QuantityReceived *float64 `json:"QuantityReceived,omitempty"`
 
 	// SerialNumbers: Collection of serial numbers
-	SerialNumbers *[]byte `json:"SerialNumbers,omitempty"`
+	SerialNumbers *json.RawMessage `json:"SerialNumbers,omitempty"`
 
 	// SupplierItemCode: Supplier item code
 	SupplierItemCode *string `json:"SupplierItemCode,omitempty"`

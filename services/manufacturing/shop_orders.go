@@ -7,6 +7,7 @@ package manufacturing
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -137,7 +138,7 @@ type ShopOrders struct {
 	SalesOrderLineCount *int `json:"SalesOrderLineCount,omitempty"`
 
 	// SalesOrderLines: Collection of Sales order lines
-	SalesOrderLines *[]byte `json:"SalesOrderLines,omitempty"`
+	SalesOrderLines *json.RawMessage `json:"SalesOrderLines,omitempty"`
 
 	// ShopOrderByProductPlanBackflushCount: Number of shop order by-product plans, which are backflushed, for this shop order
 	ShopOrderByProductPlanBackflushCount *int `json:"ShopOrderByProductPlanBackflushCount,omitempty"`
@@ -158,7 +159,7 @@ type ShopOrders struct {
 	ShopOrderMaterialPlanCount *int `json:"ShopOrderMaterialPlanCount,omitempty"`
 
 	// ShopOrderMaterialPlans: Collection of Shop order Material plans
-	ShopOrderMaterialPlans *[]byte `json:"ShopOrderMaterialPlans,omitempty"`
+	ShopOrderMaterialPlans *json.RawMessage `json:"ShopOrderMaterialPlans,omitempty"`
 
 	// ShopOrderNumber: Unique number to indentify the shop order
 	ShopOrderNumber *int `json:"ShopOrderNumber,omitempty"`
@@ -176,7 +177,7 @@ type ShopOrders struct {
 	ShopOrderRoutingStepPlanCount *int `json:"ShopOrderRoutingStepPlanCount,omitempty"`
 
 	// ShopOrderRoutingStepPlans: Collection of Shop order Routing step plans
-	ShopOrderRoutingStepPlans *[]byte `json:"ShopOrderRoutingStepPlans,omitempty"`
+	ShopOrderRoutingStepPlans *json.RawMessage `json:"ShopOrderRoutingStepPlans,omitempty"`
 
 	// Status: Indicates the type of Shop Order: 10 Open, 20 In process, 30 Finished, 40 Completed
 	Status *int `json:"Status,omitempty"`

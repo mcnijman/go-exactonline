@@ -7,6 +7,7 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -29,31 +30,31 @@ type DivisionClassValues struct {
 	ID *types.GUID `json:"ID,omitempty"`
 
 	// Class_01: First classification
-	Class_01 *[]byte `json:"Class_01,omitempty"`
+	Class_01 *json.RawMessage `json:"Class_01,omitempty"`
 
 	// Class_01_ID: First classification ID
 	Class_01_ID *types.GUID `json:"Class_01_ID,omitempty"`
 
 	// Class_02: Second classification
-	Class_02 *[]byte `json:"Class_02,omitempty"`
+	Class_02 *json.RawMessage `json:"Class_02,omitempty"`
 
 	// Class_02_ID: Second classification ID
 	Class_02_ID *types.GUID `json:"Class_02_ID,omitempty"`
 
 	// Class_03: Third classification
-	Class_03 *[]byte `json:"Class_03,omitempty"`
+	Class_03 *json.RawMessage `json:"Class_03,omitempty"`
 
 	// Class_03_ID: Third classification ID
 	Class_03_ID *types.GUID `json:"Class_03_ID,omitempty"`
 
 	// Class_04: Fourth classification
-	Class_04 *[]byte `json:"Class_04,omitempty"`
+	Class_04 *json.RawMessage `json:"Class_04,omitempty"`
 
 	// Class_04_ID: Fourth classification ID
 	Class_04_ID *types.GUID `json:"Class_04_ID,omitempty"`
 
 	// Class_05: Fifth classification
-	Class_05 *[]byte `json:"Class_05,omitempty"`
+	Class_05 *json.RawMessage `json:"Class_05,omitempty"`
 
 	// Class_05_ID: Fifth classification ID
 	Class_05_ID *types.GUID `json:"Class_05_ID,omitempty"`

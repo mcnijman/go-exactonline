@@ -7,6 +7,7 @@ package salesinvoice
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -167,7 +168,7 @@ type SalesInvoices struct {
 	Remarks *string `json:"Remarks,omitempty"`
 
 	// SalesInvoiceLines:
-	SalesInvoiceLines *[]byte `json:"SalesInvoiceLines,omitempty"`
+	SalesInvoiceLines *json.RawMessage `json:"SalesInvoiceLines,omitempty"`
 
 	// Salesperson:
 	Salesperson *types.GUID `json:"Salesperson,omitempty"`

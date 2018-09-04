@@ -7,6 +7,7 @@ package salesentry
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -137,7 +138,7 @@ type SalesEntries struct {
 	Reversal *bool `json:"Reversal,omitempty"`
 
 	// SalesEntryLines:
-	SalesEntryLines *[]byte `json:"SalesEntryLines,omitempty"`
+	SalesEntryLines *json.RawMessage `json:"SalesEntryLines,omitempty"`
 
 	// Status:
 	Status *int `json:"Status,omitempty"`

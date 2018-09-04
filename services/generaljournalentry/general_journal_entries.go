@@ -7,6 +7,7 @@ package generaljournalentry
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -50,7 +51,7 @@ type GeneralJournalEntries struct {
 	FinancialYear *int `json:"FinancialYear,omitempty"`
 
 	// GeneralJournalEntryLines:
-	GeneralJournalEntryLines *[]byte `json:"GeneralJournalEntryLines,omitempty"`
+	GeneralJournalEntryLines *json.RawMessage `json:"GeneralJournalEntryLines,omitempty"`
 
 	// JournalCode:
 	JournalCode *string `json:"JournalCode,omitempty"`

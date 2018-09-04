@@ -7,6 +7,7 @@ package vat
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -143,7 +144,7 @@ type VATCodes struct {
 	VATPartialRatio *int `json:"VATPartialRatio,omitempty"`
 
 	// VATPercentages: VAT percentages. You can have several VAT percentages, with start and end dates
-	VATPercentages *[]byte `json:"VATPercentages,omitempty"`
+	VATPercentages *json.RawMessage `json:"VATPercentages,omitempty"`
 
 	// VATTransactionType: Indicates the type of transactions for which the VAT code may be used. B = Both, P = Purchase, S = Sales
 	VATTransactionType *string `json:"VATTransactionType,omitempty"`

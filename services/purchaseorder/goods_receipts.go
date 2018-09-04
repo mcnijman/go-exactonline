@@ -7,6 +7,7 @@ package purchaseorder
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -53,7 +54,7 @@ type GoodsReceipts struct {
 	EntryNumber *int `json:"EntryNumber,omitempty"`
 
 	// GoodsReceiptLines: Collection of receipt lines
-	GoodsReceiptLines *[]byte `json:"GoodsReceiptLines,omitempty"`
+	GoodsReceiptLines *json.RawMessage `json:"GoodsReceiptLines,omitempty"`
 
 	// Modified: Last modified date
 	Modified *types.Date `json:"Modified,omitempty"`

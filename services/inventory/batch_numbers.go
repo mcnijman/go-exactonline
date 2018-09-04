@@ -7,6 +7,7 @@ package inventory
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -74,10 +75,10 @@ type BatchNumbers struct {
 	Remarks *string `json:"Remarks,omitempty"`
 
 	// StorageLocations: Total quantity available per location
-	StorageLocations *[]byte `json:"StorageLocations,omitempty"`
+	StorageLocations *json.RawMessage `json:"StorageLocations,omitempty"`
 
 	// Warehouses: Total quantity available per warehouse
-	Warehouses *[]byte `json:"Warehouses,omitempty"`
+	Warehouses *json.RawMessage `json:"Warehouses,omitempty"`
 }
 
 // List the BatchNumbers entities in the provided division.

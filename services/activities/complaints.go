@@ -7,6 +7,7 @@ package activities
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -41,7 +42,7 @@ type Complaints struct {
 	AssignedToFullName *string `json:"AssignedToFullName,omitempty"`
 
 	// Attachments: Attachments linked to the complaint
-	Attachments *[]byte `json:"Attachments,omitempty"`
+	Attachments *json.RawMessage `json:"Attachments,omitempty"`
 
 	// Complaint: A short description of the complaint
 	Complaint *string `json:"Complaint,omitempty"`
