@@ -278,15 +278,18 @@ func writeFile(tpl *template.Template, data interface{}, filePath string) {
 	var b bytes.Buffer
 	cmd.Stdout = &b
 
-	cmd.Start()
-
-	err := tpl.Execute(w, data)
+	err := cmd.Start()
 	dontPanic(err)
-	w.Close()
 
-	cmd.Wait()
+	err = tpl.Execute(w, data)
+	dontPanic(err)
 
-	logf("    Writing %v...", filePath)
+	err = w.Close()
+	dontPanic(err)
+
+	err = cmd.Wait()
+	dontPanic(err)
+
 	err = ioutil.WriteFile(filePath, b.Bytes(), 0644)
 	dontPanic(err)
 }
