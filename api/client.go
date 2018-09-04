@@ -106,7 +106,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 // first decode it.
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
-	resp, err := c.client.Do(req)
+	resp, err := c.client.Do(req) // #nosec G107
 	if err != nil {
 		// If we got an error, and the context has been canceled,
 		// the context's error is probably more useful.
@@ -150,7 +150,7 @@ func (c *Client) NewRequestAndDo(ctx context.Context, method, urlStr string, bod
 	if e != nil {
 		return req, nil, e
 	}
-	res, err := c.Do(ctx, req, v)
+	res, err := c.Do(ctx, req, v) // #nosec G107
 	return req, res, err
 }
 
