@@ -134,7 +134,7 @@ func TestSelect_MarshalSchema(t *testing.T) {
 		{"2", fields{[]string{"bar", "foo"}}, "bar,foo"},
 		{"3", fields{[]string{"foo", "bar", "test"}}, "foo,bar,test"},
 		{"4", fields{[]string{"foo"}}, "foo"},
-		{"5", fields{}, ""},
+		{"5", fields{}, "*"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

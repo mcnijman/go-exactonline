@@ -210,8 +210,8 @@ func handleResponseError(r *http.Response, u string) error {
 			return fmt.Errorf("%s: ListRequestAndDo for %s, also encountered an error "+
 				"Unmarshalling the error response", r.Status, u)
 		}
-		return fmt.Errorf("%s: ListRequestAndDo for %s, with message %s", r.Status,
-			u, e.Error.Message.Value)
+		return fmt.Errorf("%s: ListRequestAndDo for %s, with message %s, err: %+v", r.Status,
+			u, e.Error.Message.Value, e)
 	}
 
 	if r.StatusCode == http.StatusBadRequest || r.StatusCode == http.StatusUnauthorized ||

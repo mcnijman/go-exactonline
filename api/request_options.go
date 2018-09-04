@@ -49,6 +49,9 @@ func (s *Select) Remove(field string) {
 
 // MarshalSchema marshals the options in a query string
 func (s *Select) MarshalSchema() string {
+	if len(s.v) == 0 {
+		return "*" // by default return all fields
+	}
 	return strings.Join(s.v, ",")
 }
 
