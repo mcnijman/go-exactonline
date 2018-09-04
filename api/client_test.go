@@ -366,3 +366,43 @@ func testJSONMarshal(t *testing.T, v interface{}, want string) {
 		t.Errorf("json.Unmarshal(%q) returned %s, want %s", want, u, v)
 	}
 }
+
+func TestClient_ResolvePathWithDivision(t *testing.T) {
+	type fields struct {
+		client    *http.Client
+		BaseURL   *url.URL
+		UserAgent string
+	}
+	type args struct {
+		path     string
+		division int
+	}
+	baseURL, _ := url.Parse("https://start.exactonline.nl/")
+	u1, _ := url.Parse("https://start.exactonline.nl/foo-1000")
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *url.URL
+		wantErr bool
+	}{
+		{"1", fields{http.DefaultClient, baseURL, "test useragen"}, args{"/foo-{division}", 1000}, u1, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &Client{
+				client:    tt.fields.client,
+				BaseURL:   tt.fields.BaseURL,
+				UserAgent: tt.fields.UserAgent,
+			}
+			got, err := c.ResolvePathWithDivision(tt.args.path, tt.args.division)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Client.ResolvePathWithDivision() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Client.ResolvePathWithDivision() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -14,11 +14,12 @@ Note that this library doens't directly handle authentication, see [Authenticati
 We first contstruct a client and then access the various API endpoints.
 
 	client := exactonline.NewClient(nil)
+	ctx := context.Background()
 
 	// Get the last used division
-	divisionID, err := client.GetCurrentDivisionID(context.Background())
+	divisionID, err := client.GetCurrentDivisionID(ctx)
 
 	// Fetch all transactions in the division
-	transactions, err := client.FinancialTransaction.Transactions.List(context.Background(), divisionID, false, nil)
+	transactions, err := client.FinancialTransaction.Transactions.List(ctx, divisionID, false, nil)
 */
 package exactonline
