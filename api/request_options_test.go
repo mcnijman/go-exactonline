@@ -534,6 +534,7 @@ func TestAddListOptionsToRequest(t *testing.T) {
 	r1, _ := http.NewRequest("GET", "/foo", nil)
 	r2, _ := http.NewRequest("GET", "/foo", nil)
 	r3, _ := http.NewRequest("GET", "/foo", nil)
+	r4, _ := http.NewRequest("GET", "/foo", nil)
 	tests := []struct {
 		name string
 		args args
@@ -551,6 +552,10 @@ func TestAddListOptionsToRequest(t *testing.T) {
 			r3,
 			&ListOptions{Select: &Select{[]string{"foo", "bar"}}, Top: &Top{uint(10)}},
 		}, "$select=foo%2Cbar&$top=10"},
+		{"4", args{
+			r4,
+			nil,
+		}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -571,6 +576,7 @@ func TestAddListOptionsToURL(t *testing.T) {
 	u1, _ := url.Parse("https://start.exactonline.nl/foobar")
 	u2, _ := url.Parse("https://start.exactonline.nl/foobar")
 	u3, _ := url.Parse("https://start.exactonline.nl/foobar")
+	u4, _ := url.Parse("https://start.exactonline.nl/foobar")
 	tests := []struct {
 		name string
 		args args
@@ -588,6 +594,10 @@ func TestAddListOptionsToURL(t *testing.T) {
 			u3,
 			&ListOptions{Select: &Select{[]string{"foo", "bar"}}, Top: &Top{uint(10)}},
 		}, "$select=foo%2Cbar&$top=10"},
+		{"4", args{
+			u4,
+			nil,
+		}, ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
