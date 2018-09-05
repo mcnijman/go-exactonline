@@ -185,7 +185,9 @@ func (c *Client) SetUserAgent(userAgent string) {
 // Other divisions available can be fetched through the `Client.System.Divisions` or
 // `Client.HRM.Divisions` endpoints.
 func (c *Client) GetCurrentDivisionID(ctx context.Context) (int, error) {
-	mes, err := c.System.Me.List(ctx, false, nil)
+	opts := api.NewListOptions()
+	opts.Select.Add("CurrentDivision")
+	mes, err := c.System.Me.List(ctx, false, opts)
 	if err != nil {
 		return 0, err
 	}
