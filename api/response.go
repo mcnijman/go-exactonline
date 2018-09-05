@@ -7,6 +7,8 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -32,14 +34,19 @@ type ListResponseSliced struct {
 	} `json:"d,omitempty"`
 }
 
-// InternalServerErrorResponse Holds the error 500 response data.
+// ErrorResponse Holds the json error response data.
 // Most of the time these are validation errors.
-type InternalServerErrorResponse struct {
-	Error struct {
+type ErrorResponse struct {
+	Response *http.Response
+	Err      struct {
 		Code    string `json:"code,omitempty"`
 		Message struct {
 			Lang  string `json:"lang,omitempty"`
 			Value string `json:"value,omitempty"`
 		}
 	} `json:"error,omitempty"`
+}
+
+func (e ErrorResponse) Error() string {
+	return fmt.Sprintf("Error %s: %s", e.Err.Code, e.Err.Message)
 }

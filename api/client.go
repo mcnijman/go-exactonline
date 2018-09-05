@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -120,7 +121,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	}
 	defer resp.Body.Close()
 
-	if err := handleResponseError(resp, req.URL.String()); err != nil {
+	if err := checkResponse(resp, req.URL.String()); err != nil {
 		return resp, err
 	}
 
@@ -202,22 +203,24 @@ func unmarshalRawMessages(m []json.RawMessage, v interface{}) error {
 	return err
 }
 
-func handleResponseError(r *http.Response, u string) error {
-	if r.StatusCode == http.StatusInternalServerError {
-		var e InternalServerErrorResponse
-		f := json.NewDecoder(r.Body).Decode(e)
-		if f != nil {
-			return fmt.Errorf("%s: ListRequestAndDo for %s, also encountered an error "+
-				"Unmarshalling the error response", r.Status, u)
-		}
-		return fmt.Errorf("%s: ListRequestAndDo for %s, with message %s, err: %+v", r.Status,
-			u, e.Error.Message.Value, e)
+func checkResponse(r *http.Response, u string) error {
+	if c := r.StatusCode; c >= 200 && c <= 299 {
+		return nil
 	}
 
-	if r.StatusCode == http.StatusBadRequest || r.StatusCode == http.StatusUnauthorized ||
-		r.StatusCode == http.StatusForbidden || r.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("%s: ListRequestAndDo for %s", r.Status, u)
+	errorResponse := &ErrorResponse{Response: r}
+	data, err := ioutil.ReadAll(r.Body)
+	if err == nil && data != nil {
+		json.Unmarshal(data, errorResponse)
 	}
 
-	return nil
+	return errorResponse
+
+	/* if err != nil {
+		return fmt.Errorf("%s: for %s, also encountered an error "+
+			"Unmarshalling the error response", r.Status, u)
+	}
+
+	return fmt.Errorf("%s: for %s, with message %s, err: %+v", r.Status,
+		u, e.Err.Message.Value, e) */
 }
