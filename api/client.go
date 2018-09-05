@@ -218,12 +218,4 @@ func checkResponse(r *http.Response, u string) error {
 	}
 
 	return errorResponse
-
-	/* if err != nil {
-		return fmt.Errorf("%s: for %s, also encountered an error "+
-			"Unmarshalling the error response", r.Status, u)
-	}
-
-	return fmt.Errorf("%s: for %s, with message %s, err: %+v", r.Status,
-		u, e.Err.Message.Value, e) */
 }

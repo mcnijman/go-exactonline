@@ -29,14 +29,34 @@ transactions, err := client.FinancialTransaction.Transactions.List(ctx, division
 ## Authentication ##
 
 This library doesn't directly handle authentication. You should provide a `http.Client` that handles the authentication for you.
-There are multiple ways to do this, however this is recommended way:
+There are multiple ways to do this, however these are the recommended ways:
 
 ```go
-ctx := context.Background()
-ts := oauth2.StaticTokenSource(
+tokenSource := oauth2.StaticTokenSource(
     &oauth2.Token{AccessToken: "... your access token ..."},
 )
-client := exactonline.NewClientFromTokenSource(ctx, ts)
+client := exactonline.NewClientFromTokenSource(context.Background(), tokenSource)
+```
+
+Or use your oauth2 configuration and the `oauth2` package will automatically refresh the token for you.
+
+```go
+token := &oauth2.Token{} // Your previously stored or fetched token
+
+ctx := context.Background()
+config := &oauth2.Config{
+    RedirectURL:  "the registered redirect URL",
+    ClientID:     "the registered client ID",
+    ClientSecret: "the registered client secret",
+    Endpoint: oauth2.Endpoint{
+        AuthURL:  "https://start.exactonline.nl/api/oauth2/auth",
+        TokenURL: "https://start.exactonline.nl/api/oauth2/token",
+    },
+}
+
+tokenSource := config.TokenSource(ctx, token) // this will refresh your access token if a valid refresh token is available
+httpClient := oauth2.NewClient(ctx, tokenSource) // Create a http.Client that you want to tweak or use exactonline.NewClientFromTokenSource
+client := exactonline.NewClient(nil)
 ```
 
 ## Divisions ##
