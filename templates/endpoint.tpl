@@ -24,9 +24,9 @@ type {{.Name}} struct {
 	{{- range $i, $e := .Description -}}
 	{{if $i}} //{{end}} {{ $e }}
 	{{- end}}
-	{{.Name}} *{{.Type}} `json:"{{.OriginalName}},omitempty"`
+	{{.Name}} *{{.Type}} `json:"{{.OriginalName}},{{if .NeedsStringJSON}}string,{{end}}omitempty"`
 	{{end -}}
-{{end}} 
+{{end}}
 }
 
 {{ if (.HasMethod "GET")}}

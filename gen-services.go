@@ -47,6 +47,16 @@ var (
 		"String":   "string",
 		"URL":      "types.URL",
 	}
+
+	needStringJSON = []struct {
+		Service  string
+		Endpoint string
+		Field    string
+	}{
+		{"System", "Me", "Legislation"},
+		{"System", "Divisions", "Hid"},
+	}
+
 	verbose = flag.Bool("v", false, "Print verbose log messages")
 
 	serviceTmpl      = template.Must(template.New("service.tpl").ParseFiles("./templates/service.tpl"))
@@ -56,12 +66,13 @@ var (
 )
 
 type property struct {
-	Name         string
-	OriginalName string
-	Description  []string
-	OriginalType string
-	Type         string
-	IsPrimary    bool
+	Name            string
+	OriginalName    string
+	Description     []string
+	OriginalType    string
+	Type            string
+	IsPrimary       bool
+	NeedsStringJSON bool
 }
 
 type endpoint struct {
@@ -227,15 +238,27 @@ func getEndpointProperties(endpoint *endpoint) {
 
 		desc := strings.TrimSpace(s.Parent().Parent().Children().Eq(5).Text())
 		properties = append(properties, property{
-			OriginalName: name,
-			Name:         strings.Title(name),
-			OriginalType: t,
-			Type:         nt,
-			Description:  strings.Split(desc, "\n"),
-			IsPrimary:    primary == "True", // strings.Contains(desc, "Primary key")
+			OriginalName:    name,
+			Name:            strings.Title(name),
+			OriginalType:    t,
+			Type:            nt,
+			Description:     strings.Split(desc, "\n"),
+			IsPrimary:       primary == "True", // strings.Contains(desc, "Primary key")
+			NeedsStringJSON: needsStringJson(endpoint, strings.Title(name)),
 		})
 	})
 	endpoint.Properties = properties
+}
+
+func needsStringJson(e *endpoint, propertyName string) bool {
+	for _, n := range needStringJSON {
+		if n.Service == e.Service &&
+			n.Endpoint == e.Name &&
+			n.Field == propertyName {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {

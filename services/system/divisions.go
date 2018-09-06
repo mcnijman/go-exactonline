@@ -120,7 +120,7 @@ type Divisions struct {
 	Fax *string `json:"Fax,omitempty"`
 
 	// Hid: Company number that is assigned by the customer
-	Hid *int64 `json:"Hid,omitempty"`
+	Hid *int64 `json:"Hid,string,omitempty"`
 
 	// IsMainDivision: True if the division is the main division
 	IsMainDivision *bool `json:"IsMainDivision,omitempty"`
