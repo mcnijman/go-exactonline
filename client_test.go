@@ -462,6 +462,57 @@ func TestClient_GetCurrentDivisionID_error(t *testing.T) {
 	}
 }
 
+func TestClient_GetMe(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/v1/current/Me", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{ "d": { "__next": "", "results": [{ "CurrentDivision": 100 }]}}`)
+	})
+
+	ctx := context.Background()
+
+	got, err := c.GetMe(ctx)
+	if err != nil {
+		t.Errorf("Client.GetMe() error = %v", err)
+	}
+
+	want := &system.Me{CurrentDivision: Int(100)}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Client.GetMe() = %v, want %v", got, want)
+	}
+}
+
+func TestClient_GetMe_error(t *testing.T) {
+	c, _, _, teardown := setup()
+	defer teardown()
+
+	ctx := context.Background()
+
+	_, err := c.GetMe(ctx)
+	if err == nil {
+		t.Error("Client.GetMe() want error but got nil")
+	}
+}
+
+func TestClient_GetMe_error_count(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/v1/current/Me", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{ "d": { "__next": "", "results": [{ "CurrentDivision": 100 }, { "CurrentDivision": 200 }]}}`)
+	})
+
+	ctx := context.Background()
+
+	_, err := c.GetMe(ctx)
+	if err == nil {
+		t.Error("Client.GetMe() want error but got nil")
+	}
+}
+
 func TestBool(t *testing.T) {
 	type args struct {
 		v bool

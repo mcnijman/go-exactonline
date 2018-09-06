@@ -185,16 +185,23 @@ func (c *Client) SetUserAgent(userAgent string) {
 // Other divisions available can be fetched through the `Client.System.Divisions` or
 // `Client.HRM.Divisions` endpoints.
 func (c *Client) GetCurrentDivisionID(ctx context.Context) (int, error) {
-	opts := api.NewListOptions()
-	opts.Select.Add("CurrentDivision")
-	mes, err := c.System.Me.List(ctx, false, opts)
+	me, err := c.GetMe(ctx)
 	if err != nil {
 		return 0, err
 	}
-	if len(mes) != 1 {
-		return 0, fmt.Errorf("System.Me response is supposed to have 1 entity, got %d", len(mes))
+	return *me.CurrentDivision, nil
+}
+
+// GetMe returns the current user
+func (c *Client) GetMe(ctx context.Context) (*system.Me, error) {
+	mes, err := c.System.Me.List(ctx, false, api.NewListOptions())
+	if err != nil {
+		return nil, err
 	}
-	return *mes[0].CurrentDivision, nil
+	if len(mes) != 1 {
+		return nil, fmt.Errorf("System.Me response is supposed to have 1 entity, got %d", len(mes))
+	}
+	return mes[0], nil
 }
 
 // Bool is a helper routine that allocates a new bool value
