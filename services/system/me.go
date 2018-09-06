@@ -74,7 +74,7 @@ type Me struct {
 	LastName *string `json:"LastName,omitempty"`
 
 	// Legislation: Legislation
-	Legislation *int64 `json:"Legislation,omitempty"`
+	Legislation *int64 `json:"Legislation,string,omitempty"`
 
 	// MiddleName: Middle name
 	MiddleName *string `json:"MiddleName,omitempty"`
