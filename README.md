@@ -10,8 +10,7 @@ go-exactonline is a Go client library for accessing the Exact Online API. This l
 import "github.com/mcnijman/go-exactonline"
 ```
 
-Note that this library doens't directly handle authentication, see [Authentication](#authentication).
-We first contstruct a client and then access the various API endpoints.
+We first contstruct a client and then access the various API endpoints. Note that this library doens't directly handle authentication, see [Authentication](#authentication).
 
 ```go
 client := exactonline.NewClient(nil)
@@ -81,6 +80,18 @@ divisions, err := client.HRM.Divisions.List(context.Background(), true, nil)
 
 By default GET requests are limited to [returning 60 records](https://support.exactonline.com/community/s/knowledge-base#All-All-DNO-Content-rest-restrictions). As a convenience the `List` method of most endpoints provide a boolean option to fetch all records / pages available.
 
+## Permissions ##
+
+Every endpoint has a method to check if the user has permission for that operation. ie:
+
+```go
+ctx := context.Background()
+divisionID := 1
+method := "GET"
+
+hasListPermission, err := client.FinancialTransaction.Transactions.UserHasRights(ctx, divisionID, method)
+```
+
 ## Bulk ##
 
 Some entities support bulk fetching. Bulk fetching will return a maximum of 1000 records per page. These endpoints are located in the Bulk service and return different types than the normal endpoints. This is due too the way this API is generated.
@@ -95,10 +106,9 @@ This library uses symantic versions using git tags. However since this library i
 
 ## TODO ##
 
-- Implement all CRUD operations (currently only `List` is supported)
 - Add support for non standard endpoints
 - Integration tests
-- Error handling
+- Better error handling
 - Web hooks support
 - Documentation and examples
 
