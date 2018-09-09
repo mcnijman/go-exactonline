@@ -190,7 +190,7 @@ func TestPurchaseEntryLinesEndpoint_Get(t *testing.T) {
 		{
 			"1",
 			args{context.Background(), 0, s1},
-			&PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			&PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -253,8 +253,8 @@ func TestPurchaseEntryLinesEndpoint_Create(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &PurchaseEntryLines{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&PurchaseEntryLines{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &PurchaseEntryLines{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseEntryLines{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -304,8 +304,8 @@ func TestPurchaseEntryLinesEndpoint_Update(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}

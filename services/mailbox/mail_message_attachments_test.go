@@ -190,7 +190,7 @@ func TestMailMessageAttachmentsEndpoint_Get(t *testing.T) {
 		{
 			"1",
 			args{context.Background(), 0, s1},
-			&MailMessageAttachments{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			&MailMessageAttachments{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -253,8 +253,8 @@ func TestMailMessageAttachmentsEndpoint_Create(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}

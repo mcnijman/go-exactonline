@@ -190,7 +190,7 @@ func TestPurchaseInvoicesEndpoint_Get(t *testing.T) {
 		{
 			"1",
 			args{context.Background(), 0, s1},
-			&PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			&PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -253,8 +253,8 @@ func TestPurchaseInvoicesEndpoint_Create(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &PurchaseInvoices{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&PurchaseInvoices{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &PurchaseInvoices{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseInvoices{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -304,8 +304,8 @@ func TestPurchaseInvoicesEndpoint_Update(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseInvoices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}

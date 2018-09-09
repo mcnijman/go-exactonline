@@ -190,7 +190,7 @@ func TestStockBatchNumbersEndpoint_Get(t *testing.T) {
 		{
 			"1",
 			args{context.Background(), 0, s1},
-			&StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			&StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -253,8 +253,8 @@ func TestStockBatchNumbersEndpoint_Create(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &StockBatchNumbers{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&StockBatchNumbers{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &StockBatchNumbers{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&StockBatchNumbers{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}
@@ -304,8 +304,8 @@ func TestStockBatchNumbersEndpoint_Update(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
-			&StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			args{context.Background(), 0, &StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&StockBatchNumbers{ID: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
 			false,
 		},
 	}

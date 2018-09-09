@@ -183,7 +183,7 @@ func Test{{.EndpointServiceName}}_Get(t *testing.T) {
 		{
 			"1",
 			args{context.Background(), 0, s1},
-			&{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
+			&{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
 			false,
 		},
 	}
@@ -248,8 +248,8 @@ func Test{{.EndpointServiceName}}_Create(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &{{.Name}}{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}}"}},
-			&{{.Name}}{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
+			args{context.Background(), 0, &{{.Name}}{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}}"}},
+			&{{.Name}}{MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
 			false,
 		},
 	}
@@ -301,8 +301,8 @@ func Test{{.EndpointServiceName}}_Update(t *testing.T) {
 	}{
 		{
 			"1",
-			args{context.Background(), 0, &{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}}"}},
-			&{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
+			args{context.Background(), 0, &{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}}"}},
+			&{{.Name}}{{"{"}}{{.PrimaryProperty.Name}}: s1, MetaData: &api.MetaData{URI: &types.URL{URL: &url.URL{Scheme: "https", Host: "start.exactonline.nl"{{"}}}}"}},
 			false,
 		},
 	}
