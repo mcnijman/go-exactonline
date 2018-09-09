@@ -25,6 +25,7 @@ type TimeAndBillingItemDetailsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingItemDetails
 type TimeAndBillingItemDetails struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -47,6 +48,14 @@ type TimeAndBillingItemDetails struct {
 	SalesPrice *float64 `json:"SalesPrice,omitempty"`
 }
 
+func (e *TimeAndBillingItemDetails) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *TimeAndBillingItemDetailsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/TimeAndBillingItemDetails", method)
+}
+
 // List the TimeAndBillingItemDetails entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingItemDetailsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*TimeAndBillingItemDetails, error) {
@@ -58,6 +67,19 @@ func (s *TimeAndBillingItemDetailsEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TimeAndBillingItemDetails entitiy in the provided division.
+func (s *TimeAndBillingItemDetailsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TimeAndBillingItemDetails, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingItemDetails", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TimeAndBillingItemDetails{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

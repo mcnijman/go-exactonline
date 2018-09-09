@@ -7,8 +7,10 @@ package project
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func TimeTransactionsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func TimeTransactionsEntityWithPopulatedPrimaryProperty() *TimeTransactions {
+	return &TimeTransactions{ID: TimeTransactionsPrimaryPropertySample()}
+}
+
+func TimeTransactionsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func TimeTransactionsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestTimeTransactionsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &TimeTransactions{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("TimeTransactionsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestTimeTransactionsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'project/TimeTransactions'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.TimeTransactions.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.TimeTransactions.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.TimeTransactions.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestTimeTransactionsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestTimeTransactionsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := TimeTransactionsPrimaryPropertySample()
+	gs := TimeTransactionsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestTimeTransactionsEndpoint_List_all(t *testing.T) {
 		t.Errorf("TimeTransactionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*TimeTransactions{{ID: &g}}
+	want := []*TimeTransactions{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("TimeTransactionsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestTimeTransactionsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/project/TimeTransactions?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestTimeTransactionsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/project/TimeTransactions?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := TimeTransactionsPrimaryPropertySample()
+	gs := TimeTransactionsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.TimeTransactions.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestTimeTransactionsEndpoint_List(t *testing.T) {
 		t.Errorf("TimeTransactionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*TimeTransactions{{ID: &g}}
+	want := []*TimeTransactions{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("TimeTransactionsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestTimeTransactionsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := TimeTransactionsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *TimeTransactions
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&TimeTransactions{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in TimeTransactionsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.TimeTransactions.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TimeTransactionsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("TimeTransactionsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestTimeTransactionsEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.TimeTransactions.New()
+	want := &TimeTransactions{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("TimeTransactionsEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestTimeTransactionsEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *TimeTransactions
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *TimeTransactions
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &TimeTransactions{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&TimeTransactions{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.Create returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.TimeTransactions.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TimeTransactionsEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("TimeTransactionsEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestTimeTransactionsEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *TimeTransactions
+	}
+	s1 := TimeTransactionsPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *TimeTransactions
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &TimeTransactions{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&TimeTransactions{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.Update returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in TimeTransactionsEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.TimeTransactions.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TimeTransactionsEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("TimeTransactionsEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestTimeTransactionsEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, TimeTransactionsPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/project/TimeTransactions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in TimeTransactionsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/project/TimeTransactions", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in TimeTransactionsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.TimeTransactions.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TimeTransactionsEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

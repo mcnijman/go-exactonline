@@ -7,8 +7,10 @@ package financial
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func GLTransactionTypesPrimaryPropertySample() *int {
+	v := 100
+	return &v
+}
+
+func GLTransactionTypesEntityWithPopulatedPrimaryProperty() *GLTransactionTypes {
+	return &GLTransactionTypes{ID: GLTransactionTypesPrimaryPropertySample()}
+}
+
+func GLTransactionTypesStringOfPrimaryProperty(v *int) string {
+	return strconv.Itoa(*v)
+}
+
+func GLTransactionTypesStringJSONOfPrimaryProperty(v *int) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestGLTransactionTypesEndpoint_GetPrimary(t *testing.T) {
+	var want int
+	n := &GLTransactionTypes{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("GLTransactionTypesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestGLTransactionTypesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financial/GLTransactionTypes'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.GLTransactionTypes.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.GLTransactionTypes.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.GLTransactionTypes.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestGLTransactionTypesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestGLTransactionTypesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := GLTransactionTypesPrimaryPropertySample()
+	gs := GLTransactionTypesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestGLTransactionTypesEndpoint_List_all(t *testing.T) {
 		t.Errorf("GLTransactionTypesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*GLTransactionTypes{{ID: &g}}
+	want := []*GLTransactionTypes{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("GLTransactionTypesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestGLTransactionTypesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestGLTransactionTypesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.List returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := GLTransactionTypesPrimaryPropertySample()
+	gs := GLTransactionTypesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestGLTransactionTypesEndpoint_List(t *testing.T) {
 		t.Errorf("GLTransactionTypesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*GLTransactionTypes{{ID: &g}}
+	want := []*GLTransactionTypes{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("GLTransactionTypesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestGLTransactionTypesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := GLTransactionTypesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *GLTransactionTypes
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&GLTransactionTypes{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in GLTransactionTypesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/financial/GLTransactionTypes", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in GLTransactionTypesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.GLTransactionTypes.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GLTransactionTypesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GLTransactionTypesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

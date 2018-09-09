@@ -7,8 +7,10 @@ package financial
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func JournalsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func JournalsEntityWithPopulatedPrimaryProperty() *Journals {
+	return &Journals{ID: JournalsPrimaryPropertySample()}
+}
+
+func JournalsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func JournalsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestJournalsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &Journals{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("JournalsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestJournalsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financial/Journals'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.Journals.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.Journals.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.Journals.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestJournalsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestJournalsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := JournalsPrimaryPropertySample()
+	gs := JournalsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestJournalsEndpoint_List_all(t *testing.T) {
 		t.Errorf("JournalsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*Journals{{ID: &g}}
+	want := []*Journals{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("JournalsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestJournalsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.List returned error: %v, with url /api/v1/{division}/financial/Journals?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.List returned error: %v, with url /api/v1/{division}/financial/Journals", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestJournalsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.List returned error: %v, with url /api/v1/{division}/financial/Journals?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.List returned error: %v, with url /api/v1/{division}/financial/Journals", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := JournalsPrimaryPropertySample()
+	gs := JournalsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.Journals.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestJournalsEndpoint_List(t *testing.T) {
 		t.Errorf("JournalsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*Journals{{ID: &g}}
+	want := []*Journals{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("JournalsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestJournalsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := JournalsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Journals
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&Journals{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/financial/Journals", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in JournalsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.Journals.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("JournalsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("JournalsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestJournalsEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.Journals.New()
+	want := &Journals{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("JournalsEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestJournalsEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *Journals
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Journals
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &Journals{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&Journals{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.Create returned error: %v, with url /api/v1/{division}/financial/Journals", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.Journals.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("JournalsEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("JournalsEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestJournalsEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *Journals
+	}
+	s1 := JournalsPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *Journals
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &Journals{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&Journals{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.Update returned error: %v, with url /api/v1/{division}/financial/Journals", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in JournalsEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.Journals.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("JournalsEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("JournalsEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestJournalsEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, JournalsPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/Journals", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in JournalsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/financial/Journals", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in JournalsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.Journals.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("JournalsEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

@@ -24,11 +24,20 @@ type ProjectBudgetTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectBudgetTypes
 type ProjectBudgetTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *int `json:"ID,omitempty"`
 
 	// Description: Description
 	Description *string `json:"Description,omitempty"`
+}
+
+func (e *ProjectBudgetTypes) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *ProjectBudgetTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/ProjectBudgetTypes", method)
 }
 
 // List the ProjectBudgetTypes entities in the provided division.
@@ -42,6 +51,19 @@ func (s *ProjectBudgetTypesEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ProjectBudgetTypes entitiy in the provided division.
+func (s *ProjectBudgetTypesEndpoint) Get(ctx context.Context, division int, id *int) (*ProjectBudgetTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectBudgetTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProjectBudgetTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

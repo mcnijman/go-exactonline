@@ -7,8 +7,10 @@ package payroll
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func EmploymentContractFlexPhasesPrimaryPropertySample() *int {
+	v := 100
+	return &v
+}
+
+func EmploymentContractFlexPhasesEntityWithPopulatedPrimaryProperty() *EmploymentContractFlexPhases {
+	return &EmploymentContractFlexPhases{ID: EmploymentContractFlexPhasesPrimaryPropertySample()}
+}
+
+func EmploymentContractFlexPhasesStringOfPrimaryProperty(v *int) string {
+	return strconv.Itoa(*v)
+}
+
+func EmploymentContractFlexPhasesStringJSONOfPrimaryProperty(v *int) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestEmploymentContractFlexPhasesEndpoint_GetPrimary(t *testing.T) {
+	var want int
+	n := &EmploymentContractFlexPhases{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("EmploymentContractFlexPhasesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestEmploymentContractFlexPhasesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'payroll/EmploymentContractFlexPhases'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.EmploymentContractFlexPhases.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.EmploymentContractFlexPhases.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.EmploymentContractFlexPhases.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := EmploymentContractFlexPhasesPrimaryPropertySample()
+	gs := EmploymentContractFlexPhasesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestEmploymentContractFlexPhasesEndpoint_List_all(t *testing.T) {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*EmploymentContractFlexPhases{{ID: &g}}
+	want := []*EmploymentContractFlexPhases{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestEmploymentContractFlexPhasesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestEmploymentContractFlexPhasesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.List returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := EmploymentContractFlexPhasesPrimaryPropertySample()
+	gs := EmploymentContractFlexPhasesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestEmploymentContractFlexPhasesEndpoint_List(t *testing.T) {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*EmploymentContractFlexPhases{{ID: &g}}
+	want := []*EmploymentContractFlexPhases{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("EmploymentContractFlexPhasesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestEmploymentContractFlexPhasesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := EmploymentContractFlexPhasesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *EmploymentContractFlexPhases
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&EmploymentContractFlexPhases{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in EmploymentContractFlexPhasesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/payroll/EmploymentContractFlexPhases", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in EmploymentContractFlexPhasesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.EmploymentContractFlexPhases.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("EmploymentContractFlexPhasesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("EmploymentContractFlexPhasesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

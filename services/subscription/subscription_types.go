@@ -25,6 +25,7 @@ type SubscriptionTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionTypes
 type SubscriptionTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -56,6 +57,14 @@ type SubscriptionTypes struct {
 	ModifierFullName *string `json:"ModifierFullName,omitempty"`
 }
 
+func (e *SubscriptionTypes) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *SubscriptionTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "subscription/SubscriptionTypes", method)
+}
+
 // List the SubscriptionTypes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubscriptionTypesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubscriptionTypes, error) {
@@ -67,6 +76,19 @@ func (s *SubscriptionTypesEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SubscriptionTypes entitiy in the provided division.
+func (s *SubscriptionTypesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SubscriptionTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubscriptionTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

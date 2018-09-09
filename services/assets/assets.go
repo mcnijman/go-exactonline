@@ -25,6 +25,7 @@ type AssetsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=AssetsAssets
 type Assets struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -185,6 +186,14 @@ type Assets struct {
 	TransactionEntryNo *int `json:"TransactionEntryNo,omitempty"`
 }
 
+func (e *Assets) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *AssetsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "assets/Assets", method)
+}
+
 // List the Assets entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AssetsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Assets, error) {
@@ -196,6 +205,19 @@ func (s *AssetsEndpoint) List(ctx context.Context, division int, all bool, o *ap
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Assets entitiy in the provided division.
+func (s *AssetsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Assets, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/Assets", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Assets{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

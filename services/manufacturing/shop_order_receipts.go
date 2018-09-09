@@ -25,6 +25,7 @@ type ShopOrderReceiptsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingShopOrderReceipts
 type ShopOrderReceipts struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// StockTransactionId: ID of stock transaction of this ShopOrderReceipt
 	StockTransactionId *types.GUID `json:"StockTransactionId,omitempty"`
 
@@ -113,6 +114,14 @@ type ShopOrderReceipts struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ShopOrderReceipts) GetPrimary() *types.GUID {
+	return e.StockTransactionId
+}
+
+func (s *ShopOrderReceiptsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/ShopOrderReceipts", method)
+}
+
 // List the ShopOrderReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrderReceiptsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ShopOrderReceipts, error) {
@@ -124,6 +133,35 @@ func (s *ShopOrderReceiptsEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ShopOrderReceipts entitiy in the provided division.
+func (s *ShopOrderReceiptsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ShopOrderReceipts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderReceipts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ShopOrderReceipts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ShopOrderReceipts entity
+func (s *ShopOrderReceiptsEndpoint) New() *ShopOrderReceipts {
+	return &ShopOrderReceipts{}
+}
+
+// Create the ShopOrderReceipts entity in the provided division.
+func (s *ShopOrderReceiptsEndpoint) Create(ctx context.Context, division int, entity *ShopOrderReceipts) (*ShopOrderReceipts, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderReceipts", division) // #nosec
+	e := &ShopOrderReceipts{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

@@ -25,6 +25,7 @@ type BudgetScenariosEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BudgetBudgetScenarios
 type BudgetScenarios struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -62,6 +63,14 @@ type BudgetScenarios struct {
 	ToYear *int `json:"ToYear,omitempty"`
 }
 
+func (e *BudgetScenarios) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *BudgetScenariosEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "budget/BudgetScenarios", method)
+}
+
 // List the BudgetScenarios entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BudgetScenariosEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*BudgetScenarios, error) {
@@ -73,6 +82,19 @@ func (s *BudgetScenariosEndpoint) List(ctx context.Context, division int, all bo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the BudgetScenarios entitiy in the provided division.
+func (s *BudgetScenariosEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*BudgetScenarios, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/budget/BudgetScenarios", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &BudgetScenarios{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

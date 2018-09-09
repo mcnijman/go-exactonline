@@ -7,6 +7,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/gofrs/uuid"
@@ -27,7 +28,10 @@ type GUID struct {
 func (g *GUID) UnmarshalJSON(b []byte) error {
 	s := []byte(strings.Replace(string(b), `"`, "", -1))
 	err := (&g.UUID).UnmarshalText(s)
-	return err
+	if err != nil {
+		return fmt.Errorf("GUID.UnmarshalJSON() error: %v", err)
+	}
+	return nil
 }
 
 // MarshalJSON marshals the url to a format expected by the
@@ -37,7 +41,7 @@ func (g *GUID) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GUID) String() string {
-	if g.UUID == uuid.Nil {
+	if !g.IsSet() {
 		return ""
 	}
 	return g.UUID.String()

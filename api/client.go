@@ -9,13 +9,17 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/mcnijman/go-exactonline/types"
 )
 
 const (
@@ -105,9 +109,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 // error if an API error has occurred. If v implements the io.Writer
 // interface, the raw response body will be written to v, without attempting to
 // first decode it.
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
 	req = req.WithContext(ctx)
-	resp, err := c.client.Do(req) // #nosec G107
+	res, err := c.client.Do(req) // #nosec G107
 	if err != nil {
 		// If we got an error, and the context has been canceled,
 		// the context's error is probably more useful.
@@ -119,20 +123,32 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
+	response := &Response{Response: res}
 
-	if err := checkResponse(resp, req.URL.String()); err != nil {
-		return resp, err
+	err = checkResponse(res, req.URL.String())
+	if err != nil {
+		return response, err
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil || len(body) == 0 {
+		return response, err
+	}
+
+	err = json.Unmarshal(body, response)
+	if err != nil {
+		return response, err
 	}
 
 	if v != nil {
 		if w, ok := v.(io.Writer); ok {
-			_, copyErr := io.Copy(w, resp.Body)
+			_, copyErr := io.Copy(w, res.Body)
 			if copyErr != nil {
 				err = copyErr
 			}
 		} else {
-			decErr := json.NewDecoder(resp.Body).Decode(v)
+			decErr := json.Unmarshal(response.Data, v)
 			if decErr == io.EOF {
 				decErr = nil // ignore EOF errors caused by empty response body
 			}
@@ -142,11 +158,11 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		}
 	}
 
-	return resp, err
+	return response, err
 }
 
 // NewRequestAndDo combines NewRequest and Do methods
-func (c *Client) NewRequestAndDo(ctx context.Context, method, urlStr string, body, v interface{}) (*http.Request, *http.Response, error) {
+func (c *Client) NewRequestAndDo(ctx context.Context, method, urlStr string, body, v interface{}) (*http.Request, *Response, error) {
 	req, e := c.NewRequest(method, urlStr, body)
 	if e != nil {
 		return req, nil, e
@@ -155,42 +171,44 @@ func (c *Client) NewRequestAndDo(ctx context.Context, method, urlStr string, bod
 	return req, res, err
 }
 
-// ListRequestAndDo combines NewRequestAndDo and unmarshalls in general ListResponse
-func (c *Client) ListRequestAndDo(ctx context.Context, urlStr string, v interface{}) (*ListResponse, *http.Request, *http.Response, error) {
-	var listResponse ListResponse
-	req, res, err := c.NewRequestAndDo(ctx, "GET", urlStr, nil, &listResponse)
-	if err != nil {
-		return nil, nil, nil, err
-	}
-
-	if v != nil {
-		err = json.Unmarshal(listResponse.Data.Results, v)
-	}
-
-	return &listResponse, req, res, err
-}
-
 // ListRequestAndDoAll requests all paginated pages ListRequestAndDo
 func (c *Client) ListRequestAndDoAll(ctx context.Context, urlStr string, v interface{}) error {
 	var s []json.RawMessage
-	f, _, _, err := c.ListRequestAndDo(ctx, urlStr, &s)
+	_, f, err := c.NewRequestAndDo(ctx, "GET", urlStr, nil, &s)
 	if err != nil {
 		return err
 	}
 
-	var next = f.Data.Next
-	for next != "" {
+	var next = f.NextPage
+	for next != nil {
 		var i []json.RawMessage
-		l, _, _, rErr := c.ListRequestAndDo(ctx, next, &i)
+		_, l, rErr := c.NewRequestAndDo(ctx, "GET", next.String(), nil, &i)
 		if rErr != nil {
 			return rErr
 		}
 		s = append(s, i...)
-		next = l.Data.Next
+		next = l.NextPage
 	}
 
 	err = unmarshalRawMessages(s, v)
 	return err
+}
+
+// UserHasRights checks for the given endpoints if the user has permissions to request that method
+// at that endpoint.
+func (c *Client) UserHasRights(ctx context.Context, division int, endpoint, method string) (bool, error) {
+	u, _ := c.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", division) // #nosec
+	q := u.Query()
+	q.Add("endpoint", fmt.Sprintf("'%s'", endpoint))
+	q.Add("method", method)
+	u.RawQuery = q.Encode()
+
+	v := struct {
+		UserHasRights bool `json:"UserHasRights,"`
+	}{}
+	_, _, err := c.NewRequestAndDo(ctx, "GET", u.String(), nil, &v)
+
+	return v.UserHasRights, err
 }
 
 func unmarshalRawMessages(m []json.RawMessage, v interface{}) error {
@@ -218,4 +236,26 @@ func checkResponse(r *http.Response, u string) error {
 	}
 
 	return errorResponse
+}
+
+// AddOdataKeyToURL will add the odata getter key to the url path
+func AddOdataKeyToURL(u *url.URL, k interface{}) (*url.URL, error) {
+	v := reflect.ValueOf(k)
+
+	if k == nil ||
+		v == reflect.Zero(reflect.TypeOf(k)) ||
+		(v.Kind() == reflect.Ptr && v.IsNil()) {
+		return nil, errors.New("Cannot add Nil value to URL")
+	}
+
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Type().String() == "types.GUID" {
+		g := v.Interface().(types.GUID)
+		return u.Parse(fmt.Sprintf("%s(guid'%s')", u.Path, g.String()))
+	}
+
+	return u.Parse(fmt.Sprintf("%s(%v)", u.Path, v.Interface()))
 }

@@ -25,6 +25,7 @@ type PurchaseInvoiceLinesEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchasePurchaseInvoiceLines
 type PurchaseInvoiceLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: A guid that uniqely identifies the invoice line.
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -107,6 +108,14 @@ type PurchaseInvoiceLines struct {
 	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 }
 
+func (e *PurchaseInvoiceLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PurchaseInvoiceLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "purchase/PurchaseInvoiceLines", method)
+}
+
 // List the PurchaseInvoiceLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PurchaseInvoiceLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PurchaseInvoiceLines, error) {
@@ -118,6 +127,35 @@ func (s *PurchaseInvoiceLinesEndpoint) List(ctx context.Context, division int, a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PurchaseInvoiceLines entitiy in the provided division.
+func (s *PurchaseInvoiceLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*PurchaseInvoiceLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchase/PurchaseInvoiceLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PurchaseInvoiceLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty PurchaseInvoiceLines entity
+func (s *PurchaseInvoiceLinesEndpoint) New() *PurchaseInvoiceLines {
+	return &PurchaseInvoiceLines{}
+}
+
+// Create the PurchaseInvoiceLines entity in the provided division.
+func (s *PurchaseInvoiceLinesEndpoint) Create(ctx context.Context, division int, entity *PurchaseInvoiceLines) (*PurchaseInvoiceLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchase/PurchaseInvoiceLines", division) // #nosec
+	e := &PurchaseInvoiceLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

@@ -26,6 +26,7 @@ type UsersEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=UsersUsers
 type Users struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// UserID: Primary key
 	UserID *types.GUID `json:"UserID,omitempty"`
 
@@ -138,6 +139,14 @@ type Users struct {
 	UserTypesList *string `json:"UserTypesList,omitempty"`
 }
 
+func (e *Users) GetPrimary() *types.GUID {
+	return e.UserID
+}
+
+func (s *UsersEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "users/Users", method)
+}
+
 // List the Users entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *UsersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Users, error) {
@@ -149,6 +158,19 @@ func (s *UsersEndpoint) List(ctx context.Context, division int, all bool, o *api
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Users entitiy in the provided division.
+func (s *UsersEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Users, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/users/Users", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Users{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

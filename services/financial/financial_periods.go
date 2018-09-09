@@ -25,6 +25,7 @@ type FinancialPeriodsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialFinancialPeriods
 type FinancialPeriods struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -62,6 +63,14 @@ type FinancialPeriods struct {
 	StartDate *types.Date `json:"StartDate,omitempty"`
 }
 
+func (e *FinancialPeriods) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *FinancialPeriodsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/FinancialPeriods", method)
+}
+
 // List the FinancialPeriods entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *FinancialPeriodsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*FinancialPeriods, error) {
@@ -73,6 +82,19 @@ func (s *FinancialPeriodsEndpoint) List(ctx context.Context, division int, all b
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the FinancialPeriods entitiy in the provided division.
+func (s *FinancialPeriodsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*FinancialPeriods, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/FinancialPeriods", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &FinancialPeriods{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

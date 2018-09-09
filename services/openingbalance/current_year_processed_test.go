@@ -7,8 +7,10 @@ package openingbalance
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func CurrentYearProcessedPrimaryPropertySample() *int {
+	v := 100
+	return &v
+}
+
+func CurrentYearProcessedEntityWithPopulatedPrimaryProperty() *CurrentYearProcessed {
+	return &CurrentYearProcessed{Division: CurrentYearProcessedPrimaryPropertySample()}
+}
+
+func CurrentYearProcessedStringOfPrimaryProperty(v *int) string {
+	return strconv.Itoa(*v)
+}
+
+func CurrentYearProcessedStringJSONOfPrimaryProperty(v *int) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestCurrentYearProcessedEndpoint_GetPrimary(t *testing.T) {
+	var want int
+	n := &CurrentYearProcessed{Division: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("CurrentYearProcessedEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestCurrentYearProcessedEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'CurrentYear/Processed'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.CurrentYearProcessed.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.CurrentYearProcessed.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.CurrentYearProcessed.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestCurrentYearProcessedEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestCurrentYearProcessedEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := CurrentYearProcessedPrimaryPropertySample()
+	gs := CurrentYearProcessedStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestCurrentYearProcessedEndpoint_List_all(t *testing.T) {
 		t.Errorf("CurrentYearProcessedEndpoint.List returned error: %v", err)
 	}
 
-	want := []*CurrentYearProcessed{{Division: &g}}
+	want := []*CurrentYearProcessed{{Division: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CurrentYearProcessedEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestCurrentYearProcessedEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.List returned error: %v, with url /api/v1/{division}/openingbalance/CurrentYear/Processed?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.List returned error: %v, with url /api/v1/{division}/openingbalance/CurrentYear/Processed", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestCurrentYearProcessedEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.List returned error: %v, with url /api/v1/{division}/openingbalance/CurrentYear/Processed?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.List returned error: %v, with url /api/v1/{division}/openingbalance/CurrentYear/Processed", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := CurrentYearProcessedPrimaryPropertySample()
+	gs := CurrentYearProcessedStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestCurrentYearProcessedEndpoint_List(t *testing.T) {
 		t.Errorf("CurrentYearProcessedEndpoint.List returned error: %v", err)
 	}
 
-	want := []*CurrentYearProcessed{{Division: &g}}
+	want := []*CurrentYearProcessed{{Division: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CurrentYearProcessedEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestCurrentYearProcessedEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := CurrentYearProcessedPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *CurrentYearProcessed
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&CurrentYearProcessed{Division: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/CurrentYear/Processed", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CurrentYearProcessedEndpoint.Delete() returned error: %v, with url /api/v1/{division}/openingbalance/CurrentYear/Processed", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in CurrentYearProcessedEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.CurrentYearProcessed.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CurrentYearProcessedEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CurrentYearProcessedEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

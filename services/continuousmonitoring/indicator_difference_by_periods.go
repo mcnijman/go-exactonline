@@ -7,6 +7,9 @@ package continuousmonitoring
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type IndicatorDifferenceByPeriodsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorDifferenceByPeriods
 type IndicatorDifferenceByPeriods struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -92,6 +96,14 @@ type IndicatorDifferenceByPeriods struct {
 	ValueTo *float64 `json:"ValueTo,omitempty"`
 }
 
+func (e *IndicatorDifferenceByPeriods) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *IndicatorDifferenceByPeriodsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "continuousmonitoring/IndicatorDifferenceByPeriods", method)
+}
+
 // List the IndicatorDifferenceByPeriods entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorDifferenceByPeriodsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*IndicatorDifferenceByPeriods, error) {
@@ -103,6 +115,69 @@ func (s *IndicatorDifferenceByPeriodsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the IndicatorDifferenceByPeriods entitiy in the provided division.
+func (s *IndicatorDifferenceByPeriodsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*IndicatorDifferenceByPeriods, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorDifferenceByPeriods", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &IndicatorDifferenceByPeriods{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty IndicatorDifferenceByPeriods entity
+func (s *IndicatorDifferenceByPeriodsEndpoint) New() *IndicatorDifferenceByPeriods {
+	return &IndicatorDifferenceByPeriods{}
+}
+
+// Create the IndicatorDifferenceByPeriods entity in the provided division.
+func (s *IndicatorDifferenceByPeriodsEndpoint) Create(ctx context.Context, division int, entity *IndicatorDifferenceByPeriods) (*IndicatorDifferenceByPeriods, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorDifferenceByPeriods", division) // #nosec
+	e := &IndicatorDifferenceByPeriods{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the IndicatorDifferenceByPeriods entity in the provided division.
+func (s *IndicatorDifferenceByPeriodsEndpoint) Update(ctx context.Context, division int, entity *IndicatorDifferenceByPeriods) (*IndicatorDifferenceByPeriods, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorDifferenceByPeriods", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &IndicatorDifferenceByPeriods{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the IndicatorDifferenceByPeriods entity in the provided division.
+func (s *IndicatorDifferenceByPeriodsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorDifferenceByPeriods", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

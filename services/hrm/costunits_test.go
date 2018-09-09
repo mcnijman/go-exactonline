@@ -7,8 +7,10 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func CostunitsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func CostunitsEntityWithPopulatedPrimaryProperty() *Costunits {
+	return &Costunits{ID: CostunitsPrimaryPropertySample()}
+}
+
+func CostunitsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func CostunitsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestCostunitsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &Costunits{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("CostunitsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestCostunitsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'hrm/Costunits'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.Costunits.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.Costunits.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.Costunits.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestCostunitsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestCostunitsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := CostunitsPrimaryPropertySample()
+	gs := CostunitsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestCostunitsEndpoint_List_all(t *testing.T) {
 		t.Errorf("CostunitsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*Costunits{{ID: &g}}
+	want := []*Costunits{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CostunitsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestCostunitsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/Costunits?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/Costunits", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestCostunitsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/Costunits?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/Costunits", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := CostunitsPrimaryPropertySample()
+	gs := CostunitsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.Costunits.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestCostunitsEndpoint_List(t *testing.T) {
 		t.Errorf("CostunitsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*Costunits{{ID: &g}}
+	want := []*Costunits{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CostunitsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestCostunitsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := CostunitsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Costunits
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&Costunits{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/hrm/Costunits", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in CostunitsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.Costunits.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CostunitsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CostunitsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCostunitsEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.Costunits.New()
+	want := &Costunits{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("CostunitsEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestCostunitsEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *Costunits
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Costunits
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &Costunits{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&Costunits{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.Create returned error: %v, with url /api/v1/{division}/hrm/Costunits", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.Costunits.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CostunitsEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CostunitsEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCostunitsEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *Costunits
+	}
+	s1 := CostunitsPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *Costunits
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &Costunits{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&Costunits{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.Update returned error: %v, with url /api/v1/{division}/hrm/Costunits", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in CostunitsEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.Costunits.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CostunitsEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CostunitsEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestCostunitsEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, CostunitsPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Costunits", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CostunitsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/hrm/Costunits", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in CostunitsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.Costunits.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CostunitsEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

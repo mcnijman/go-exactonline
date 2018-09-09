@@ -26,6 +26,7 @@ type GoodsReceiptLinesEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchaseOrderGoodsReceiptLines
 type GoodsReceiptLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The unique identifier of a stock transaction for a goods receipt line. A goods receipt line can be split into multiple storage locations. In this case, multiple storage locations will have the same stock transaction ID.
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -117,6 +118,14 @@ type GoodsReceiptLines struct {
 	SupplierItemCode *string `json:"SupplierItemCode,omitempty"`
 }
 
+func (e *GoodsReceiptLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *GoodsReceiptLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "purchaseorder/GoodsReceiptLines", method)
+}
+
 // List the GoodsReceiptLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GoodsReceiptLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GoodsReceiptLines, error) {
@@ -128,6 +137,35 @@ func (s *GoodsReceiptLinesEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the GoodsReceiptLines entitiy in the provided division.
+func (s *GoodsReceiptLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*GoodsReceiptLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/GoodsReceiptLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GoodsReceiptLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty GoodsReceiptLines entity
+func (s *GoodsReceiptLinesEndpoint) New() *GoodsReceiptLines {
+	return &GoodsReceiptLines{}
+}
+
+// Create the GoodsReceiptLines entity in the provided division.
+func (s *GoodsReceiptLinesEndpoint) Create(ctx context.Context, division int, entity *GoodsReceiptLines) (*GoodsReceiptLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/GoodsReceiptLines", division) // #nosec
+	e := &GoodsReceiptLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

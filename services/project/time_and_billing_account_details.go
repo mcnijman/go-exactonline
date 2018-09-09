@@ -25,11 +25,20 @@ type TimeAndBillingAccountDetailsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingAccountDetails
 type TimeAndBillingAccountDetails struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
 	// Name: Name
 	Name *string `json:"Name,omitempty"`
+}
+
+func (e *TimeAndBillingAccountDetails) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *TimeAndBillingAccountDetailsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/TimeAndBillingAccountDetails", method)
 }
 
 // List the TimeAndBillingAccountDetails entities in the provided division.
@@ -43,6 +52,19 @@ func (s *TimeAndBillingAccountDetailsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TimeAndBillingAccountDetails entitiy in the provided division.
+func (s *TimeAndBillingAccountDetailsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TimeAndBillingAccountDetails, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingAccountDetails", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TimeAndBillingAccountDetails{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

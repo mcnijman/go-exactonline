@@ -18,6 +18,7 @@ type {{.EndpointServiceName}} service
 // Methods: {{range .Methods}}{{.}} {{end}}
 // Endpoint docs: https://start.exactonline.nl/docs/{{.Docs}}
 type {{.Name}} struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 {{- range .Properties -}}
 	{{if .Name}}
 	// {{.Name}}:
@@ -27,6 +28,14 @@ type {{.Name}} struct {
 	{{.Name}} *{{.Type}} `json:"{{.OriginalName}},{{if .NeedsStringJSON}}string,{{end}}omitempty"`
 	{{end -}}
 {{end}}
+}
+
+func (e *{{.Name}}) GetPrimary() *{{.PrimaryProperty.Type}} {
+	return e.{{.PrimaryProperty.Name}}
+}
+
+func (s *{{.EndpointServiceName}}) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "{{.EndpointForPermission}}", method)
 }
 
 {{ if (.HasMethod "GET")}}
@@ -40,14 +49,104 @@ func (s *{{.EndpointServiceName}}) List(ctx context.Context,{{ if .NeedsDivision
 	u, _ := s.client.ResolveURL("{{.URL}}") // #nosec
 	{{end -}}
 
-  api.AddListOptionsToURL(u, o)
+    api.AddListOptionsToURL(u, o)
 	
 	if all {
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the {{.Name}} entitiy{{ if .NeedsDivision }} in the provided division{{end}}.
+func (s *{{.EndpointServiceName}}) Get(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} id *{{.PrimaryProperty.Type}}) (*{{.Name}}, error) {
+	{{- if .NeedsDivision}}
+	b, _ := s.client.ResolvePathWithDivision("{{.URL}}", division) // #nosec
+	{{else}}
+	b, _ := s.client.ResolveURL("{{.URL}}") // #nosec
+	{{end -}}
+
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+	
+	e := &{{.Name}}{{"{}"}}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }
 {{end}}
 
+
+{{ if (.HasMethod "POST")}}
+// New returns an empty {{.Name}} entity
+func (s *{{.EndpointServiceName}}) New() *{{.Name}} {
+	return &{{.Name}}{{"{}"}}
+}
+
+// Create the {{.Name}} entity{{ if .NeedsDivision }} in the provided division{{end}}.
+func (s *{{.EndpointServiceName}}) Create(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} entity *{{.Name}}) (*{{.Name}}, error) {
+	{{- if .NeedsDivision}}
+	u, _ := s.client.ResolvePathWithDivision("{{.URL}}", division) // #nosec
+	{{else}}
+	u, _ := s.client.ResolveURL("{{.URL}}") // #nosec
+	{{end -}}
+
+	e := &{{.Name}}{{"{}"}}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+{{end}}
+
+
+{{ if (.HasMethod "PUT")}}
+// Update the {{.Name}} entity{{ if .NeedsDivision }} in the provided division{{end}}.
+func (s *{{.EndpointServiceName}}) Update(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} entity *{{.Name}}) (*{{.Name}}, error) {
+	{{- if .NeedsDivision}}
+	b, _ := s.client.ResolvePathWithDivision("{{.URL}}", division) // #nosec
+	{{else}}
+	b, _ := s.client.ResolveURL("{{.URL}}") // #nosec
+	{{end -}}
+
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &{{.Name}}{{"{}"}}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+{{end}}
+
+{{ if (.HasMethod "DELETE")}}
+// Delete the {{.Name}} entity{{ if .NeedsDivision }} in the provided division{{end}}.
+func (s *{{.EndpointServiceName}}) Delete(ctx context.Context,{{ if .NeedsDivision}} division int,{{end}} id *{{.PrimaryProperty.Type}}) error {
+	{{- if .NeedsDivision}}
+	b, _ := s.client.ResolvePathWithDivision("{{.URL}}", division) // #nosec
+	{{else}}
+	b, _ := s.client.ResolveURL("{{.URL}}") // #nosec
+	{{end -}}
+
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
+}
+{{end}}

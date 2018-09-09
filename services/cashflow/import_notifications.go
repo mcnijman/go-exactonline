@@ -25,6 +25,7 @@ type ImportNotificationsEndpoint service
 // Methods: GET PUT
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowImportNotifications
 type ImportNotifications struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -56,6 +57,14 @@ type ImportNotifications struct {
 	RetriedOn *types.Date `json:"RetriedOn,omitempty"`
 }
 
+func (e *ImportNotifications) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ImportNotificationsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "cashflow/ImportNotifications", method)
+}
+
 // List the ImportNotifications entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ImportNotificationsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ImportNotifications, error) {
@@ -67,6 +76,32 @@ func (s *ImportNotificationsEndpoint) List(ctx context.Context, division int, al
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ImportNotifications entitiy in the provided division.
+func (s *ImportNotificationsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ImportNotifications, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotifications", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ImportNotifications{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// Update the ImportNotifications entity in the provided division.
+func (s *ImportNotificationsEndpoint) Update(ctx context.Context, division int, entity *ImportNotifications) (*ImportNotifications, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/ImportNotifications", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ImportNotifications{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
 }

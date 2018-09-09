@@ -7,8 +7,10 @@ package logistics
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func SalesItemPricesPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func SalesItemPricesEntityWithPopulatedPrimaryProperty() *SalesItemPrices {
+	return &SalesItemPrices{ID: SalesItemPricesPrimaryPropertySample()}
+}
+
+func SalesItemPricesStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func SalesItemPricesStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestSalesItemPricesEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &SalesItemPrices{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("SalesItemPricesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestSalesItemPricesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'logistics/SalesItemPrices'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.SalesItemPrices.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.SalesItemPrices.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.SalesItemPrices.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestSalesItemPricesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestSalesItemPricesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := SalesItemPricesPrimaryPropertySample()
+	gs := SalesItemPricesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestSalesItemPricesEndpoint_List_all(t *testing.T) {
 		t.Errorf("SalesItemPricesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*SalesItemPrices{{ID: &g}}
+	want := []*SalesItemPrices{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("SalesItemPricesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestSalesItemPricesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestSalesItemPricesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.List returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := SalesItemPricesPrimaryPropertySample()
+	gs := SalesItemPricesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.SalesItemPrices.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestSalesItemPricesEndpoint_List(t *testing.T) {
 		t.Errorf("SalesItemPricesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*SalesItemPrices{{ID: &g}}
+	want := []*SalesItemPrices{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("SalesItemPricesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestSalesItemPricesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := SalesItemPricesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *SalesItemPrices
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&SalesItemPrices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in SalesItemPricesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.SalesItemPrices.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SalesItemPricesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SalesItemPricesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSalesItemPricesEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.SalesItemPrices.New()
+	want := &SalesItemPrices{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("SalesItemPricesEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestSalesItemPricesEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *SalesItemPrices
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *SalesItemPrices
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &SalesItemPrices{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&SalesItemPrices{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.Create returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.SalesItemPrices.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SalesItemPricesEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SalesItemPricesEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSalesItemPricesEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *SalesItemPrices
+	}
+	s1 := SalesItemPricesPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *SalesItemPrices
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &SalesItemPrices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&SalesItemPrices{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.Update returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in SalesItemPricesEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.SalesItemPrices.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SalesItemPricesEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SalesItemPricesEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestSalesItemPricesEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, SalesItemPricesPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/SalesItemPrices", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in SalesItemPricesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/logistics/SalesItemPrices", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in SalesItemPricesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.SalesItemPrices.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SalesItemPricesEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

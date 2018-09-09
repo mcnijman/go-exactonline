@@ -25,6 +25,7 @@ type StageForDeliveryReversalsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingStageForDeliveryReversals
 type StageForDeliveryReversals struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Id: ID of this StageForDeliveryReversal
 	Id *types.GUID `json:"Id,omitempty"`
 
@@ -89,6 +90,14 @@ type StageForDeliveryReversals struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *StageForDeliveryReversals) GetPrimary() *types.GUID {
+	return e.Id
+}
+
+func (s *StageForDeliveryReversalsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/StageForDeliveryReversals", method)
+}
+
 // List the StageForDeliveryReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StageForDeliveryReversalsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StageForDeliveryReversals, error) {
@@ -100,6 +109,35 @@ func (s *StageForDeliveryReversalsEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the StageForDeliveryReversals entitiy in the provided division.
+func (s *StageForDeliveryReversalsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*StageForDeliveryReversals, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/StageForDeliveryReversals", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &StageForDeliveryReversals{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty StageForDeliveryReversals entity
+func (s *StageForDeliveryReversalsEndpoint) New() *StageForDeliveryReversals {
+	return &StageForDeliveryReversals{}
+}
+
+// Create the StageForDeliveryReversals entity in the provided division.
+func (s *StageForDeliveryReversalsEndpoint) Create(ctx context.Context, division int, entity *StageForDeliveryReversals) (*StageForDeliveryReversals, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/StageForDeliveryReversals", division) // #nosec
+	e := &StageForDeliveryReversals{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

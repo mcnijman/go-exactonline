@@ -25,6 +25,7 @@ type ItemGroupsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=LogisticsItemGroups
 type ItemGroups struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -116,6 +117,14 @@ type ItemGroups struct {
 	Notes *string `json:"Notes,omitempty"`
 }
 
+func (e *ItemGroups) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ItemGroupsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "logistics/ItemGroups", method)
+}
+
 // List the ItemGroups entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ItemGroupsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ItemGroups, error) {
@@ -127,6 +136,19 @@ func (s *ItemGroupsEndpoint) List(ctx context.Context, division int, all bool, o
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ItemGroups entitiy in the provided division.
+func (s *ItemGroupsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ItemGroups, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/logistics/ItemGroups", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ItemGroups{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

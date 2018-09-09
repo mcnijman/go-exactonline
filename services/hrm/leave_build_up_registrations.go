@@ -25,6 +25,7 @@ type LeaveBuildUpRegistrationsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMLeaveBuildUpRegistrations
 type LeaveBuildUpRegistrations struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -83,6 +84,14 @@ type LeaveBuildUpRegistrations struct {
 	Status *int `json:"Status,omitempty"`
 }
 
+func (e *LeaveBuildUpRegistrations) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *LeaveBuildUpRegistrationsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "hrm/LeaveBuildUpRegistrations", method)
+}
+
 // List the LeaveBuildUpRegistrations entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *LeaveBuildUpRegistrationsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*LeaveBuildUpRegistrations, error) {
@@ -94,6 +103,19 @@ func (s *LeaveBuildUpRegistrationsEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the LeaveBuildUpRegistrations entitiy in the provided division.
+func (s *LeaveBuildUpRegistrationsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*LeaveBuildUpRegistrations, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/LeaveBuildUpRegistrations", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &LeaveBuildUpRegistrations{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

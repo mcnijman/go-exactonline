@@ -7,6 +7,9 @@ package inventory
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type ItemWarehousesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehouses
 type ItemWarehouses struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -116,6 +120,14 @@ type ItemWarehouses struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ItemWarehouses) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ItemWarehousesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/ItemWarehouses", method)
+}
+
 // List the ItemWarehouses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ItemWarehousesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ItemWarehouses, error) {
@@ -127,6 +139,69 @@ func (s *ItemWarehousesEndpoint) List(ctx context.Context, division int, all boo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ItemWarehouses entitiy in the provided division.
+func (s *ItemWarehousesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ItemWarehouses, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ItemWarehouses{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ItemWarehouses entity
+func (s *ItemWarehousesEndpoint) New() *ItemWarehouses {
+	return &ItemWarehouses{}
+}
+
+// Create the ItemWarehouses entity in the provided division.
+func (s *ItemWarehousesEndpoint) Create(ctx context.Context, division int, entity *ItemWarehouses) (*ItemWarehouses, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouses", division) // #nosec
+	e := &ItemWarehouses{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the ItemWarehouses entity in the provided division.
+func (s *ItemWarehousesEndpoint) Update(ctx context.Context, division int, entity *ItemWarehouses) (*ItemWarehouses, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ItemWarehouses{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the ItemWarehouses entity in the provided division.
+func (s *ItemWarehousesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

@@ -7,8 +7,10 @@ package purchaseentry
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func PurchaseEntriesPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func PurchaseEntriesEntityWithPopulatedPrimaryProperty() *PurchaseEntries {
+	return &PurchaseEntries{EntryID: PurchaseEntriesPrimaryPropertySample()}
+}
+
+func PurchaseEntriesStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func PurchaseEntriesStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestPurchaseEntriesEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &PurchaseEntries{EntryID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("PurchaseEntriesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestPurchaseEntriesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'purchaseentry/PurchaseEntries'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.PurchaseEntries.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.PurchaseEntries.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.PurchaseEntries.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestPurchaseEntriesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestPurchaseEntriesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := PurchaseEntriesPrimaryPropertySample()
+	gs := PurchaseEntriesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "EntryID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "EntryID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestPurchaseEntriesEndpoint_List_all(t *testing.T) {
 		t.Errorf("PurchaseEntriesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*PurchaseEntries{{EntryID: &g}}
+	want := []*PurchaseEntries{{EntryID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("PurchaseEntriesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestPurchaseEntriesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestPurchaseEntriesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.List returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := PurchaseEntriesPrimaryPropertySample()
+	gs := PurchaseEntriesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "EntryID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "EntryID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.PurchaseEntries.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestPurchaseEntriesEndpoint_List(t *testing.T) {
 		t.Errorf("PurchaseEntriesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*PurchaseEntries{{EntryID: &g}}
+	want := []*PurchaseEntries{{EntryID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("PurchaseEntriesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestPurchaseEntriesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := PurchaseEntriesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *PurchaseEntries
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&PurchaseEntries{EntryID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in PurchaseEntriesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.PurchaseEntries.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PurchaseEntriesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PurchaseEntriesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestPurchaseEntriesEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.PurchaseEntries.New()
+	want := &PurchaseEntries{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("PurchaseEntriesEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestPurchaseEntriesEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *PurchaseEntries
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *PurchaseEntries
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &PurchaseEntries{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseEntries{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.Create returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.PurchaseEntries.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PurchaseEntriesEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PurchaseEntriesEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestPurchaseEntriesEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *PurchaseEntries
+	}
+	s1 := PurchaseEntriesPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *PurchaseEntries
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &PurchaseEntries{EntryID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&PurchaseEntries{EntryID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.Update returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in PurchaseEntriesEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.PurchaseEntries.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PurchaseEntriesEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PurchaseEntriesEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestPurchaseEntriesEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, PurchaseEntriesPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseentry/PurchaseEntries", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in PurchaseEntriesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/purchaseentry/PurchaseEntries", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in PurchaseEntriesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.PurchaseEntries.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PurchaseEntriesEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

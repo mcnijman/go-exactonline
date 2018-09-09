@@ -25,6 +25,7 @@ type SerialNumbersEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventorySerialNumbers
 type SerialNumbers struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -95,6 +96,14 @@ type SerialNumbers struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *SerialNumbers) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *SerialNumbersEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/SerialNumbers", method)
+}
+
 // List the SerialNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SerialNumbersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SerialNumbers, error) {
@@ -106,6 +115,19 @@ func (s *SerialNumbersEndpoint) List(ctx context.Context, division int, all bool
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SerialNumbers entitiy in the provided division.
+func (s *SerialNumbersEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SerialNumbers, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/SerialNumbers", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SerialNumbers{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

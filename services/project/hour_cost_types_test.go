@@ -7,8 +7,10 @@ package project
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func HourCostTypesPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func HourCostTypesEntityWithPopulatedPrimaryProperty() *HourCostTypes {
+	return &HourCostTypes{ItemId: HourCostTypesPrimaryPropertySample()}
+}
+
+func HourCostTypesStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func HourCostTypesStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestHourCostTypesEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &HourCostTypes{ItemId: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("HourCostTypesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestHourCostTypesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'project/HourCostTypes'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.HourCostTypes.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.HourCostTypes.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.HourCostTypes.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestHourCostTypesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestHourCostTypesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := HourCostTypesPrimaryPropertySample()
+	gs := HourCostTypesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ItemId": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ItemId": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestHourCostTypesEndpoint_List_all(t *testing.T) {
 		t.Errorf("HourCostTypesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*HourCostTypes{{ItemId: &g}}
+	want := []*HourCostTypes{{ItemId: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("HourCostTypesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestHourCostTypesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/HourCostTypes", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/HourCostTypes?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/HourCostTypes", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestHourCostTypesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/HourCostTypes", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/HourCostTypes?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.List returned error: %v, with url /api/v1/{division}/read/project/HourCostTypes", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := HourCostTypesPrimaryPropertySample()
+	gs := HourCostTypesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ItemId": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ItemId": `+gs+`}]}}`)
 	})
 
 	entities, err := s.HourCostTypes.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,63 @@ func TestHourCostTypesEndpoint_List(t *testing.T) {
 		t.Errorf("HourCostTypesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*HourCostTypes{{ItemId: &g}}
+	want := []*HourCostTypes{{ItemId: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("HourCostTypesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestHourCostTypesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := HourCostTypesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *HourCostTypes
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&HourCostTypes{ItemId: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/HourCostTypes", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in HourCostTypesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/read/project/HourCostTypes", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in HourCostTypesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.HourCostTypes.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("HourCostTypesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("HourCostTypesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

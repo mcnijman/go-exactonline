@@ -7,8 +7,10 @@ package financial
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func ProfitLossOverviewPrimaryPropertySample() *int {
+	v := 100
+	return &v
+}
+
+func ProfitLossOverviewEntityWithPopulatedPrimaryProperty() *ProfitLossOverview {
+	return &ProfitLossOverview{CurrentYear: ProfitLossOverviewPrimaryPropertySample()}
+}
+
+func ProfitLossOverviewStringOfPrimaryProperty(v *int) string {
+	return strconv.Itoa(*v)
+}
+
+func ProfitLossOverviewStringJSONOfPrimaryProperty(v *int) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestProfitLossOverviewEndpoint_GetPrimary(t *testing.T) {
+	var want int
+	n := &ProfitLossOverview{CurrentYear: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("ProfitLossOverviewEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestProfitLossOverviewEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financial/ProfitLossOverview'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.ProfitLossOverview.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.ProfitLossOverview.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.ProfitLossOverview.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestProfitLossOverviewEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestProfitLossOverviewEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := ProfitLossOverviewPrimaryPropertySample()
+	gs := ProfitLossOverviewStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestProfitLossOverviewEndpoint_List_all(t *testing.T) {
 		t.Errorf("ProfitLossOverviewEndpoint.List returned error: %v", err)
 	}
 
-	want := []*ProfitLossOverview{{CurrentYear: &g}}
+	want := []*ProfitLossOverview{{CurrentYear: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("ProfitLossOverviewEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestProfitLossOverviewEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ProfitLossOverview", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ProfitLossOverview?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ProfitLossOverview", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestProfitLossOverviewEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ProfitLossOverview", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ProfitLossOverview?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/ProfitLossOverview", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := ProfitLossOverviewPrimaryPropertySample()
+	gs := ProfitLossOverviewStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestProfitLossOverviewEndpoint_List(t *testing.T) {
 		t.Errorf("ProfitLossOverviewEndpoint.List returned error: %v", err)
 	}
 
-	want := []*ProfitLossOverview{{CurrentYear: &g}}
+	want := []*ProfitLossOverview{{CurrentYear: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("ProfitLossOverviewEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestProfitLossOverviewEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := ProfitLossOverviewPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *ProfitLossOverview
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&ProfitLossOverview{CurrentYear: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ProfitLossOverview", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in ProfitLossOverviewEndpoint.Delete() returned error: %v, with url /api/v1/{division}/read/financial/ProfitLossOverview", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in ProfitLossOverviewEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.ProfitLossOverview.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ProfitLossOverviewEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ProfitLossOverviewEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

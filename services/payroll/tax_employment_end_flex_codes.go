@@ -25,6 +25,7 @@ type TaxEmploymentEndFlexCodesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollTaxEmploymentEndFlexCodes
 type TaxEmploymentEndFlexCodes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -59,6 +60,14 @@ type TaxEmploymentEndFlexCodes struct {
 	StartDate *types.Date `json:"StartDate,omitempty"`
 }
 
+func (e *TaxEmploymentEndFlexCodes) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *TaxEmploymentEndFlexCodesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "payroll/TaxEmploymentEndFlexCodes", method)
+}
+
 // List the TaxEmploymentEndFlexCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TaxEmploymentEndFlexCodesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*TaxEmploymentEndFlexCodes, error) {
@@ -70,6 +79,19 @@ func (s *TaxEmploymentEndFlexCodesEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TaxEmploymentEndFlexCodes entitiy in the provided division.
+func (s *TaxEmploymentEndFlexCodesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TaxEmploymentEndFlexCodes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/TaxEmploymentEndFlexCodes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TaxEmploymentEndFlexCodes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

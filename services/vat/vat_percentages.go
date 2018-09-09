@@ -25,6 +25,7 @@ type VatPercentagesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=VATVatPercentages
 type VatPercentages struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -68,6 +69,14 @@ type VatPercentages struct {
 	VATCodeID *types.GUID `json:"VATCodeID,omitempty"`
 }
 
+func (e *VatPercentages) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *VatPercentagesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "vat/VatPercentages", method)
+}
+
 // List the VatPercentages entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *VatPercentagesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*VatPercentages, error) {
@@ -79,6 +88,19 @@ func (s *VatPercentagesEndpoint) List(ctx context.Context, division int, all boo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the VatPercentages entitiy in the provided division.
+func (s *VatPercentagesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*VatPercentages, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VatPercentages", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &VatPercentages{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

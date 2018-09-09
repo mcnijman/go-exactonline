@@ -25,6 +25,7 @@ type ByProductReceiptsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingByProductReceipts
 type ByProductReceipts struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// StockTransactionId: ID of stock transaction related to this by-product finish
 	StockTransactionId *types.GUID `json:"StockTransactionId,omitempty"`
 
@@ -107,6 +108,14 @@ type ByProductReceipts struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ByProductReceipts) GetPrimary() *types.GUID {
+	return e.StockTransactionId
+}
+
+func (s *ByProductReceiptsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/ByProductReceipts", method)
+}
+
 // List the ByProductReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ByProductReceiptsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ByProductReceipts, error) {
@@ -118,6 +127,35 @@ func (s *ByProductReceiptsEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ByProductReceipts entitiy in the provided division.
+func (s *ByProductReceiptsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ByProductReceipts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReceipts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ByProductReceipts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ByProductReceipts entity
+func (s *ByProductReceiptsEndpoint) New() *ByProductReceipts {
+	return &ByProductReceipts{}
+}
+
+// Create the ByProductReceipts entity in the provided division.
+func (s *ByProductReceiptsEndpoint) Create(ctx context.Context, division int, entity *ByProductReceipts) (*ByProductReceipts, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReceipts", division) // #nosec
+	e := &ByProductReceipts{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

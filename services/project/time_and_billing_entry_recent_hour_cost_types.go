@@ -25,6 +25,7 @@ type TimeAndBillingEntryRecentHourCostTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingEntryRecentHourCostTypes
 type TimeAndBillingEntryRecentHourCostTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ItemId: Primary key
 	ItemId *types.GUID `json:"ItemId,omitempty"`
 
@@ -33,6 +34,14 @@ type TimeAndBillingEntryRecentHourCostTypes struct {
 
 	// ItemDescription: Description of item
 	ItemDescription *string `json:"ItemDescription,omitempty"`
+}
+
+func (e *TimeAndBillingEntryRecentHourCostTypes) GetPrimary() *types.GUID {
+	return e.ItemId
+}
+
+func (s *TimeAndBillingEntryRecentHourCostTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/TimeAndBillingEntryRecentHourCostTypes", method)
 }
 
 // List the TimeAndBillingEntryRecentHourCostTypes entities in the provided division.
@@ -46,6 +55,19 @@ func (s *TimeAndBillingEntryRecentHourCostTypesEndpoint) List(ctx context.Contex
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TimeAndBillingEntryRecentHourCostTypes entitiy in the provided division.
+func (s *TimeAndBillingEntryRecentHourCostTypesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TimeAndBillingEntryRecentHourCostTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentHourCostTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TimeAndBillingEntryRecentHourCostTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -26,6 +26,7 @@ type ComplaintsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesComplaints
 type Complaints struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -99,6 +100,14 @@ type Complaints struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
+func (e *Complaints) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ComplaintsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "activities/Complaints", method)
+}
+
 // List the Complaints entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ComplaintsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Complaints, error) {
@@ -110,6 +119,35 @@ func (s *ComplaintsEndpoint) List(ctx context.Context, division int, all bool, o
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Complaints entitiy in the provided division.
+func (s *ComplaintsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Complaints, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Complaints", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Complaints{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty Complaints entity
+func (s *ComplaintsEndpoint) New() *Complaints {
+	return &Complaints{}
+}
+
+// Create the Complaints entity in the provided division.
+func (s *ComplaintsEndpoint) Create(ctx context.Context, division int, entity *Complaints) (*Complaints, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Complaints", division) // #nosec
+	e := &Complaints{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

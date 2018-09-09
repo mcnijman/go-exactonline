@@ -7,8 +7,10 @@ package system
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func GetMostRecentlyUsedDivisionsPrimaryPropertySample() *int {
+	v := 100
+	return &v
+}
+
+func GetMostRecentlyUsedDivisionsEntityWithPopulatedPrimaryProperty() *GetMostRecentlyUsedDivisions {
+	return &GetMostRecentlyUsedDivisions{Code: GetMostRecentlyUsedDivisionsPrimaryPropertySample()}
+}
+
+func GetMostRecentlyUsedDivisionsStringOfPrimaryProperty(v *int) string {
+	return strconv.Itoa(*v)
+}
+
+func GetMostRecentlyUsedDivisionsStringJSONOfPrimaryProperty(v *int) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestGetMostRecentlyUsedDivisionsEndpoint_GetPrimary(t *testing.T) {
+	var want int
+	n := &GetMostRecentlyUsedDivisions{Code: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestGetMostRecentlyUsedDivisionsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'system/GetMostRecentlyUsedDivisions'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.GetMostRecentlyUsedDivisions.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.GetMostRecentlyUsedDivisions.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.GetMostRecentlyUsedDivisions.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestGetMostRecentlyUsedDivisionsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestGetMostRecentlyUsedDivisionsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := GetMostRecentlyUsedDivisionsPrimaryPropertySample()
+	gs := GetMostRecentlyUsedDivisionsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestGetMostRecentlyUsedDivisionsEndpoint_List_all(t *testing.T) {
 		t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*GetMostRecentlyUsedDivisions{{Code: &g}}
+	want := []*GetMostRecentlyUsedDivisions{{Code: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestGetMostRecentlyUsedDivisionsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/system/GetMostRecentlyUsedDivisions", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v, with url /api/v1/{division}/system/GetMostRecentlyUsedDivisions?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v, with url /api/v1/{division}/system/GetMostRecentlyUsedDivisions", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestGetMostRecentlyUsedDivisionsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/system/GetMostRecentlyUsedDivisions", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v, with url /api/v1/{division}/system/GetMostRecentlyUsedDivisions?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v, with url /api/v1/{division}/system/GetMostRecentlyUsedDivisions", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := 100
-	gs := strconv.Itoa(g)
+	g := GetMostRecentlyUsedDivisionsPrimaryPropertySample()
+	gs := GetMostRecentlyUsedDivisionsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestGetMostRecentlyUsedDivisionsEndpoint_List(t *testing.T) {
 		t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*GetMostRecentlyUsedDivisions{{Code: &g}}
+	want := []*GetMostRecentlyUsedDivisions{{Code: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestGetMostRecentlyUsedDivisionsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := GetMostRecentlyUsedDivisionsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *GetMostRecentlyUsedDivisions
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&GetMostRecentlyUsedDivisions{Code: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/system/GetMostRecentlyUsedDivisions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in GetMostRecentlyUsedDivisionsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/system/GetMostRecentlyUsedDivisions", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in GetMostRecentlyUsedDivisionsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.GetMostRecentlyUsedDivisions.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetMostRecentlyUsedDivisionsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

@@ -7,6 +7,9 @@ package subscription
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type SubscriptionRestrictionItemsEndpoint service
 // Methods: GET POST DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionRestrictionItems
 type SubscriptionRestrictionItems struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -68,6 +72,14 @@ type SubscriptionRestrictionItems struct {
 	SubscriptionNumber *int `json:"SubscriptionNumber,omitempty"`
 }
 
+func (e *SubscriptionRestrictionItems) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *SubscriptionRestrictionItemsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "subscription/SubscriptionRestrictionItems", method)
+}
+
 // List the SubscriptionRestrictionItems entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubscriptionRestrictionItemsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubscriptionRestrictionItems, error) {
@@ -79,6 +91,56 @@ func (s *SubscriptionRestrictionItemsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SubscriptionRestrictionItems entitiy in the provided division.
+func (s *SubscriptionRestrictionItemsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SubscriptionRestrictionItems, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionRestrictionItems", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubscriptionRestrictionItems{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty SubscriptionRestrictionItems entity
+func (s *SubscriptionRestrictionItemsEndpoint) New() *SubscriptionRestrictionItems {
+	return &SubscriptionRestrictionItems{}
+}
+
+// Create the SubscriptionRestrictionItems entity in the provided division.
+func (s *SubscriptionRestrictionItemsEndpoint) Create(ctx context.Context, division int, entity *SubscriptionRestrictionItems) (*SubscriptionRestrictionItems, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionRestrictionItems", division) // #nosec
+	e := &SubscriptionRestrictionItems{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Delete the SubscriptionRestrictionItems entity in the provided division.
+func (s *SubscriptionRestrictionItemsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionRestrictionItems", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

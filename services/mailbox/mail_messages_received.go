@@ -25,6 +25,7 @@ type MailMessagesReceivedEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=MailboxMailMessagesReceived
 type MailMessagesReceived struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -122,6 +123,14 @@ type MailMessagesReceived struct {
 	Type *int `json:"Type,omitempty"`
 }
 
+func (e *MailMessagesReceived) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *MailMessagesReceivedEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "mailbox/MailMessagesReceived", method)
+}
+
 // List the MailMessagesReceived entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MailMessagesReceivedEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*MailMessagesReceived, error) {
@@ -133,6 +142,19 @@ func (s *MailMessagesReceivedEndpoint) List(ctx context.Context, division int, a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the MailMessagesReceived entitiy in the provided division.
+func (s *MailMessagesReceivedEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*MailMessagesReceived, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessagesReceived", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &MailMessagesReceived{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -7,8 +7,10 @@ package assets
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func DepreciationMethodsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func DepreciationMethodsEntityWithPopulatedPrimaryProperty() *DepreciationMethods {
+	return &DepreciationMethods{ID: DepreciationMethodsPrimaryPropertySample()}
+}
+
+func DepreciationMethodsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func DepreciationMethodsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestDepreciationMethodsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &DepreciationMethods{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("DepreciationMethodsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestDepreciationMethodsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'assets/DepreciationMethods'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.DepreciationMethods.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.DepreciationMethods.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.DepreciationMethods.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestDepreciationMethodsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestDepreciationMethodsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := DepreciationMethodsPrimaryPropertySample()
+	gs := DepreciationMethodsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestDepreciationMethodsEndpoint_List_all(t *testing.T) {
 		t.Errorf("DepreciationMethodsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*DepreciationMethods{{ID: &g}}
+	want := []*DepreciationMethods{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("DepreciationMethodsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestDepreciationMethodsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestDepreciationMethodsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.List returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := DepreciationMethodsPrimaryPropertySample()
+	gs := DepreciationMethodsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.DepreciationMethods.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestDepreciationMethodsEndpoint_List(t *testing.T) {
 		t.Errorf("DepreciationMethodsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*DepreciationMethods{{ID: &g}}
+	want := []*DepreciationMethods{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("DepreciationMethodsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestDepreciationMethodsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := DepreciationMethodsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *DepreciationMethods
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&DepreciationMethods{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DepreciationMethodsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.DepreciationMethods.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DepreciationMethodsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DepreciationMethodsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDepreciationMethodsEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.DepreciationMethods.New()
+	want := &DepreciationMethods{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("DepreciationMethodsEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestDepreciationMethodsEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *DepreciationMethods
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *DepreciationMethods
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &DepreciationMethods{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&DepreciationMethods{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.Create returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.DepreciationMethods.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DepreciationMethodsEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DepreciationMethodsEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDepreciationMethodsEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *DepreciationMethods
+	}
+	s1 := DepreciationMethodsPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *DepreciationMethods
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &DepreciationMethods{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&DepreciationMethods{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.Update returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DepreciationMethodsEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.DepreciationMethods.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DepreciationMethodsEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DepreciationMethodsEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestDepreciationMethodsEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, DepreciationMethodsPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/assets/DepreciationMethods", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DepreciationMethodsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/assets/DepreciationMethods", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DepreciationMethodsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.DepreciationMethods.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DepreciationMethodsEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

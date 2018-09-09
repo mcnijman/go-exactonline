@@ -7,8 +7,10 @@ package continuousmonitoring
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func IndicatorSignalsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func IndicatorSignalsEntityWithPopulatedPrimaryProperty() *IndicatorSignals {
+	return &IndicatorSignals{ID: IndicatorSignalsPrimaryPropertySample()}
+}
+
+func IndicatorSignalsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func IndicatorSignalsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestIndicatorSignalsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &IndicatorSignals{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("IndicatorSignalsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestIndicatorSignalsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'continuousmonitoring/IndicatorSignals'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.IndicatorSignals.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.IndicatorSignals.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.IndicatorSignals.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestIndicatorSignalsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestIndicatorSignalsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := IndicatorSignalsPrimaryPropertySample()
+	gs := IndicatorSignalsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestIndicatorSignalsEndpoint_List_all(t *testing.T) {
 		t.Errorf("IndicatorSignalsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*IndicatorSignals{{ID: &g}}
+	want := []*IndicatorSignals{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("IndicatorSignalsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestIndicatorSignalsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorSignals?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestIndicatorSignalsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorSignals?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.List returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := IndicatorSignalsPrimaryPropertySample()
+	gs := IndicatorSignalsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.IndicatorSignals.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,63 @@ func TestIndicatorSignalsEndpoint_List(t *testing.T) {
 		t.Errorf("IndicatorSignalsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*IndicatorSignals{{ID: &g}}
+	want := []*IndicatorSignals{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("IndicatorSignalsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestIndicatorSignalsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := IndicatorSignalsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *IndicatorSignals
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&IndicatorSignals{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in IndicatorSignalsEndpoint.Delete() returned error: %v, with url /api/v1/beta/{division}/continuousmonitoring/IndicatorSignals", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in IndicatorSignalsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.IndicatorSignals.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IndicatorSignalsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IndicatorSignalsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

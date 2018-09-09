@@ -7,8 +7,10 @@ package financial
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -17,6 +19,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func ReportingBalancePrimaryPropertySample() *int64 {
+	v := int64(100)
+	return &v
+}
+
+func ReportingBalanceEntityWithPopulatedPrimaryProperty() *ReportingBalance {
+	return &ReportingBalance{ID: ReportingBalancePrimaryPropertySample()}
+}
+
+func ReportingBalanceStringOfPrimaryProperty(v *int64) string {
+	return strconv.Itoa(int(*v))
+}
+
+func ReportingBalanceStringJSONOfPrimaryProperty(v *int64) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestReportingBalanceEndpoint_GetPrimary(t *testing.T) {
+	var want int64
+	n := &ReportingBalance{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("ReportingBalanceEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestReportingBalanceEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financial/ReportingBalance'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.ReportingBalance.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.ReportingBalance.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.ReportingBalance.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestReportingBalanceEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -41,8 +108,9 @@ func TestReportingBalanceEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := int64(100)
-	gs := strconv.Itoa(int(g))
+	g := ReportingBalancePrimaryPropertySample()
+	gs := ReportingBalanceStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -58,7 +126,7 @@ func TestReportingBalanceEndpoint_List_all(t *testing.T) {
 		t.Errorf("ReportingBalanceEndpoint.List returned error: %v", err)
 	}
 
-	want := []*ReportingBalance{{ID: &g}}
+	want := []*ReportingBalance{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("ReportingBalanceEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -74,7 +142,7 @@ func TestReportingBalanceEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ReportingBalance", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.List returned error: %v, with url /api/v1/{division}/financial/ReportingBalance?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.List returned error: %v, with url /api/v1/{division}/financial/ReportingBalance", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -83,12 +151,12 @@ func TestReportingBalanceEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ReportingBalance", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.List returned error: %v, with url /api/v1/{division}/financial/ReportingBalance?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.List returned error: %v, with url /api/v1/{division}/financial/ReportingBalance", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := int64(100)
-	gs := strconv.Itoa(int(g))
+	g := ReportingBalancePrimaryPropertySample()
+	gs := ReportingBalanceStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
@@ -100,8 +168,63 @@ func TestReportingBalanceEndpoint_List(t *testing.T) {
 		t.Errorf("ReportingBalanceEndpoint.List returned error: %v", err)
 	}
 
-	want := []*ReportingBalance{{ID: &g}}
+	want := []*ReportingBalance{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("ReportingBalanceEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestReportingBalanceEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := ReportingBalancePrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *int64
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *ReportingBalance
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&ReportingBalance{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ReportingBalance", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in ReportingBalanceEndpoint.Delete() returned error: %v, with url /api/v1/{division}/financial/ReportingBalance", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in ReportingBalanceEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.ReportingBalance.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ReportingBalanceEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ReportingBalanceEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

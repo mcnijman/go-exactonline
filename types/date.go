@@ -6,6 +6,7 @@
 package types
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"time"
@@ -33,7 +34,7 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 
 	i, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		return err
+		return fmt.Errorf("Date.UnmarshalJSON() error: %v", err)
 	}
 
 	d.Time = time.Unix(0, i*int64(time.Millisecond))

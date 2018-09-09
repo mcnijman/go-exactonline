@@ -25,6 +25,7 @@ type DocumentsDocumentAttachmentsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BulkDocumentsDocumentAttachments
 type DocumentsDocumentAttachments struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -44,6 +45,14 @@ type DocumentsDocumentAttachments struct {
 	Url *string `json:"Url,omitempty"`
 }
 
+func (e *DocumentsDocumentAttachments) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *DocumentsDocumentAttachmentsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "Documents/DocumentAttachments", method)
+}
+
 // List the DocumentsDocumentAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentsDocumentAttachmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*DocumentsDocumentAttachments, error) {
@@ -55,6 +64,19 @@ func (s *DocumentsDocumentAttachmentsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the DocumentsDocumentAttachments entitiy in the provided division.
+func (s *DocumentsDocumentAttachmentsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*DocumentsDocumentAttachments, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Documents/DocumentAttachments", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &DocumentsDocumentAttachments{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

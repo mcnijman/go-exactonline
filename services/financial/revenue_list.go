@@ -24,6 +24,7 @@ type RevenueListEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialRevenueList
 type RevenueList struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Period: Reporting period
 	Period *int `json:"Period,omitempty"`
 
@@ -32,6 +33,14 @@ type RevenueList struct {
 
 	// Amount: Total amount in the default currency of the company
 	Amount *float64 `json:"Amount,omitempty"`
+}
+
+func (e *RevenueList) GetPrimary() *int {
+	return e.Period
+}
+
+func (s *RevenueListEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/RevenueList", method)
 }
 
 // List the RevenueList entities in the provided division.
@@ -45,6 +54,19 @@ func (s *RevenueListEndpoint) List(ctx context.Context, division int, all bool, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the RevenueList entitiy in the provided division.
+func (s *RevenueListEndpoint) Get(ctx context.Context, division int, id *int) (*RevenueList, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/RevenueList", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &RevenueList{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

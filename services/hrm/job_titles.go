@@ -25,6 +25,7 @@ type JobTitlesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMJobTitles
 type JobTitles struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -77,6 +78,14 @@ type JobTitles struct {
 	Notes *string `json:"Notes,omitempty"`
 }
 
+func (e *JobTitles) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *JobTitlesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "hrm/JobTitles", method)
+}
+
 // List the JobTitles entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *JobTitlesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*JobTitles, error) {
@@ -88,6 +97,19 @@ func (s *JobTitlesEndpoint) List(ctx context.Context, division int, all bool, o 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the JobTitles entitiy in the provided division.
+func (s *JobTitlesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*JobTitles, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/JobTitles", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &JobTitles{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -8,6 +8,9 @@ package salesinvoice
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -26,6 +29,7 @@ type SalesInvoicesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesInvoiceSalesInvoices
 type SalesInvoices struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// InvoiceID:
 	InvoiceID *types.GUID `json:"InvoiceID,omitempty"`
 
@@ -222,6 +226,14 @@ type SalesInvoices struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
+func (e *SalesInvoices) GetPrimary() *types.GUID {
+	return e.InvoiceID
+}
+
+func (s *SalesInvoicesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "salesinvoice/SalesInvoices", method)
+}
+
 // List the SalesInvoices entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SalesInvoicesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SalesInvoices, error) {
@@ -233,6 +245,69 @@ func (s *SalesInvoicesEndpoint) List(ctx context.Context, division int, all bool
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SalesInvoices entitiy in the provided division.
+func (s *SalesInvoicesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SalesInvoices, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/SalesInvoices", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SalesInvoices{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty SalesInvoices entity
+func (s *SalesInvoicesEndpoint) New() *SalesInvoices {
+	return &SalesInvoices{}
+}
+
+// Create the SalesInvoices entity in the provided division.
+func (s *SalesInvoicesEndpoint) Create(ctx context.Context, division int, entity *SalesInvoices) (*SalesInvoices, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/SalesInvoices", division) // #nosec
+	e := &SalesInvoices{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the SalesInvoices entity in the provided division.
+func (s *SalesInvoicesEndpoint) Update(ctx context.Context, division int, entity *SalesInvoices) (*SalesInvoices, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/SalesInvoices", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SalesInvoices{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the SalesInvoices entity in the provided division.
+func (s *SalesInvoicesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/salesinvoice/SalesInvoices", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

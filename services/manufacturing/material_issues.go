@@ -25,6 +25,7 @@ type MaterialIssuesEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingMaterialIssues
 type MaterialIssues struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// StockTransactionId: ID of stock transaction related to this material issue
 	StockTransactionId *types.GUID `json:"StockTransactionId,omitempty"`
 
@@ -116,6 +117,14 @@ type MaterialIssues struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *MaterialIssues) GetPrimary() *types.GUID {
+	return e.StockTransactionId
+}
+
+func (s *MaterialIssuesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/MaterialIssues", method)
+}
+
 // List the MaterialIssues entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MaterialIssuesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*MaterialIssues, error) {
@@ -127,6 +136,35 @@ func (s *MaterialIssuesEndpoint) List(ctx context.Context, division int, all boo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the MaterialIssues entitiy in the provided division.
+func (s *MaterialIssuesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*MaterialIssues, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/MaterialIssues", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &MaterialIssues{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty MaterialIssues entity
+func (s *MaterialIssuesEndpoint) New() *MaterialIssues {
+	return &MaterialIssues{}
+}
+
+// Create the MaterialIssues entity in the provided division.
+func (s *MaterialIssuesEndpoint) Create(ctx context.Context, division int, entity *MaterialIssues) (*MaterialIssues, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/MaterialIssues", division) // #nosec
+	e := &MaterialIssues{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

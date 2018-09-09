@@ -7,6 +7,9 @@ package documents
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type DocumentAttachmentsEndpoint service
 // Methods: GET POST DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=DocumentsDocumentAttachments
 type DocumentAttachments struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -44,6 +48,14 @@ type DocumentAttachments struct {
 	Url *string `json:"Url,omitempty"`
 }
 
+func (e *DocumentAttachments) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *DocumentAttachmentsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "documents/DocumentAttachments", method)
+}
+
 // List the DocumentAttachments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentAttachmentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*DocumentAttachments, error) {
@@ -55,6 +67,56 @@ func (s *DocumentAttachmentsEndpoint) List(ctx context.Context, division int, al
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the DocumentAttachments entitiy in the provided division.
+func (s *DocumentAttachmentsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*DocumentAttachments, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &DocumentAttachments{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty DocumentAttachments entity
+func (s *DocumentAttachmentsEndpoint) New() *DocumentAttachments {
+	return &DocumentAttachments{}
+}
+
+// Create the DocumentAttachments entity in the provided division.
+func (s *DocumentAttachmentsEndpoint) Create(ctx context.Context, division int, entity *DocumentAttachments) (*DocumentAttachments, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments", division) // #nosec
+	e := &DocumentAttachments{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Delete the DocumentAttachments entity in the provided division.
+func (s *DocumentAttachmentsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentAttachments", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

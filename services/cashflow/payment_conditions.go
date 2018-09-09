@@ -25,6 +25,7 @@ type PaymentConditionsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowPaymentConditions
 type PaymentConditions struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -92,6 +93,14 @@ type PaymentConditions struct {
 	VATCalculation *string `json:"VATCalculation,omitempty"`
 }
 
+func (e *PaymentConditions) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PaymentConditionsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "cashflow/PaymentConditions", method)
+}
+
 // List the PaymentConditions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PaymentConditionsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PaymentConditions, error) {
@@ -103,6 +112,35 @@ func (s *PaymentConditionsEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PaymentConditions entitiy in the provided division.
+func (s *PaymentConditionsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*PaymentConditions, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/PaymentConditions", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PaymentConditions{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty PaymentConditions entity
+func (s *PaymentConditionsEndpoint) New() *PaymentConditions {
+	return &PaymentConditions{}
+}
+
+// Create the PaymentConditions entity in the provided division.
+func (s *PaymentConditionsEndpoint) Create(ctx context.Context, division int, entity *PaymentConditions) (*PaymentConditions, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/PaymentConditions", division) // #nosec
+	e := &PaymentConditions{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

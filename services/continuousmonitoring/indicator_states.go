@@ -25,6 +25,7 @@ type IndicatorStatesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ContinuousMonitoringIndicatorStates
 type IndicatorStates struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -74,6 +75,14 @@ type IndicatorStates struct {
 	Value *float64 `json:"Value,omitempty"`
 }
 
+func (e *IndicatorStates) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *IndicatorStatesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "continuousmonitoring/IndicatorStates", method)
+}
+
 // List the IndicatorStates entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *IndicatorStatesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*IndicatorStates, error) {
@@ -85,6 +94,19 @@ func (s *IndicatorStatesEndpoint) List(ctx context.Context, division int, all bo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the IndicatorStates entitiy in the provided division.
+func (s *IndicatorStatesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*IndicatorStates, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/continuousmonitoring/IndicatorStates", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &IndicatorStates{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

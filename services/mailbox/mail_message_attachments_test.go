@@ -7,8 +7,10 @@ package mailbox
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func MailMessageAttachmentsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func MailMessageAttachmentsEntityWithPopulatedPrimaryProperty() *MailMessageAttachments {
+	return &MailMessageAttachments{ID: MailMessageAttachmentsPrimaryPropertySample()}
+}
+
+func MailMessageAttachmentsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func MailMessageAttachmentsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestMailMessageAttachmentsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &MailMessageAttachments{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("MailMessageAttachmentsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestMailMessageAttachmentsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'mailbox/MailMessageAttachments'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.MailMessageAttachments.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.MailMessageAttachments.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.MailMessageAttachments.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestMailMessageAttachmentsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestMailMessageAttachmentsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := MailMessageAttachmentsPrimaryPropertySample()
+	gs := MailMessageAttachmentsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestMailMessageAttachmentsEndpoint_List_all(t *testing.T) {
 		t.Errorf("MailMessageAttachmentsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*MailMessageAttachments{{ID: &g}}
+	want := []*MailMessageAttachments{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("MailMessageAttachmentsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestMailMessageAttachmentsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.List returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.List returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestMailMessageAttachmentsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.List returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.List returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := MailMessageAttachmentsPrimaryPropertySample()
+	gs := MailMessageAttachmentsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.MailMessageAttachments.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,123 @@ func TestMailMessageAttachmentsEndpoint_List(t *testing.T) {
 		t.Errorf("MailMessageAttachmentsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*MailMessageAttachments{{ID: &g}}
+	want := []*MailMessageAttachments{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("MailMessageAttachmentsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestMailMessageAttachmentsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := MailMessageAttachmentsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *MailMessageAttachments
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&MailMessageAttachments{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in MailMessageAttachmentsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.MailMessageAttachments.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MailMessageAttachmentsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MailMessageAttachmentsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMailMessageAttachmentsEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.MailMessageAttachments.New()
+	want := &MailMessageAttachments{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("MailMessageAttachmentsEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestMailMessageAttachmentsEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *MailMessageAttachments
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *MailMessageAttachments
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&MailMessageAttachments{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessageAttachments", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in MailMessageAttachmentsEndpoint.Create returned error: %v, with url /api/v1/{division}/mailbox/MailMessageAttachments", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.MailMessageAttachments.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("MailMessageAttachmentsEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MailMessageAttachmentsEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

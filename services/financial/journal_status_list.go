@@ -24,6 +24,7 @@ type JournalStatusListEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialJournalStatusList
 type JournalStatusList struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Journal:
 	Journal *string `json:"Journal,omitempty"`
 
@@ -49,6 +50,14 @@ type JournalStatusList struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
+func (e *JournalStatusList) GetPrimary() *string {
+	return e.Journal
+}
+
+func (s *JournalStatusListEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/JournalStatusList", method)
+}
+
 // List the JournalStatusList entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *JournalStatusListEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*JournalStatusList, error) {
@@ -60,6 +69,19 @@ func (s *JournalStatusListEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the JournalStatusList entitiy in the provided division.
+func (s *JournalStatusListEndpoint) Get(ctx context.Context, division int, id *string) (*JournalStatusList, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/JournalStatusList", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &JournalStatusList{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

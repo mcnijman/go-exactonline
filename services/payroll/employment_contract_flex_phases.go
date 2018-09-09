@@ -24,11 +24,20 @@ type EmploymentContractFlexPhasesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmploymentContractFlexPhases
 type EmploymentContractFlexPhases struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *int `json:"ID,omitempty"`
 
 	// Description: Flexible employment contract phase description
 	Description *string `json:"Description,omitempty"`
+}
+
+func (e *EmploymentContractFlexPhases) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *EmploymentContractFlexPhasesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "payroll/EmploymentContractFlexPhases", method)
 }
 
 // List the EmploymentContractFlexPhases entities in the provided division.
@@ -42,6 +51,19 @@ func (s *EmploymentContractFlexPhasesEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the EmploymentContractFlexPhases entitiy in the provided division.
+func (s *EmploymentContractFlexPhasesEndpoint) Get(ctx context.Context, division int, id *int) (*EmploymentContractFlexPhases, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentContractFlexPhases", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &EmploymentContractFlexPhases{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

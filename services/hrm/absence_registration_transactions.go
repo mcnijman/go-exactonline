@@ -25,6 +25,7 @@ type AbsenceRegistrationTransactionsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMAbsenceRegistrationTransactions
 type AbsenceRegistrationTransactions struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -86,6 +87,14 @@ type AbsenceRegistrationTransactions struct {
 	Status *int `json:"Status,omitempty"`
 }
 
+func (e *AbsenceRegistrationTransactions) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *AbsenceRegistrationTransactionsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "hrm/AbsenceRegistrationTransactions", method)
+}
+
 // List the AbsenceRegistrationTransactions entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AbsenceRegistrationTransactionsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AbsenceRegistrationTransactions, error) {
@@ -97,6 +106,19 @@ func (s *AbsenceRegistrationTransactionsEndpoint) List(ctx context.Context, divi
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the AbsenceRegistrationTransactions entitiy in the provided division.
+func (s *AbsenceRegistrationTransactionsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*AbsenceRegistrationTransactions, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AbsenceRegistrationTransactions{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

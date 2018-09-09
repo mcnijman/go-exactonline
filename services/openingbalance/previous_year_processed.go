@@ -25,6 +25,7 @@ type PreviousYearProcessedEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=OpeningBalancePreviousYearProcessed
 type PreviousYearProcessed struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Division: Division code.
 	Division *int `json:"Division,omitempty"`
 
@@ -47,6 +48,14 @@ type PreviousYearProcessed struct {
 	GLAccountDescription *string `json:"GLAccountDescription,omitempty"`
 }
 
+func (e *PreviousYearProcessed) GetPrimary() *int {
+	return e.Division
+}
+
+func (s *PreviousYearProcessedEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "PreviousYear/Processed", method)
+}
+
 // List the PreviousYearProcessed entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PreviousYearProcessedEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PreviousYearProcessed, error) {
@@ -58,6 +67,19 @@ func (s *PreviousYearProcessedEndpoint) List(ctx context.Context, division int, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PreviousYearProcessed entitiy in the provided division.
+func (s *PreviousYearProcessedEndpoint) Get(ctx context.Context, division int, id *int) (*PreviousYearProcessed, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/openingbalance/PreviousYear/Processed", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PreviousYearProcessed{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

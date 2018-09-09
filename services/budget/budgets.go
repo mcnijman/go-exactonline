@@ -25,6 +25,7 @@ type BudgetsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BudgetBudgets
 type Budgets struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -101,6 +102,14 @@ type Budgets struct {
 	ReportingYear *int `json:"ReportingYear,omitempty"`
 }
 
+func (e *Budgets) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *BudgetsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "budget/Budgets", method)
+}
+
 // List the Budgets entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BudgetsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Budgets, error) {
@@ -112,6 +121,19 @@ func (s *BudgetsEndpoint) List(ctx context.Context, division int, all bool, o *a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Budgets entitiy in the provided division.
+func (s *BudgetsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Budgets, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/budget/Budgets", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Budgets{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

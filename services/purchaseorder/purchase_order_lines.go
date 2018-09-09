@@ -7,6 +7,9 @@ package purchaseorder
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type PurchaseOrderLinesEndpoint service
 // Methods: GET POST DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PurchaseOrderPurchaseOrderLines
 type PurchaseOrderLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -176,6 +180,14 @@ type PurchaseOrderLines struct {
 	VATPercentage *float64 `json:"VATPercentage,omitempty"`
 }
 
+func (e *PurchaseOrderLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PurchaseOrderLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "purchaseorder/PurchaseOrderLines", method)
+}
+
 // List the PurchaseOrderLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PurchaseOrderLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PurchaseOrderLines, error) {
@@ -187,6 +199,56 @@ func (s *PurchaseOrderLinesEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PurchaseOrderLines entitiy in the provided division.
+func (s *PurchaseOrderLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*PurchaseOrderLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PurchaseOrderLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty PurchaseOrderLines entity
+func (s *PurchaseOrderLinesEndpoint) New() *PurchaseOrderLines {
+	return &PurchaseOrderLines{}
+}
+
+// Create the PurchaseOrderLines entity in the provided division.
+func (s *PurchaseOrderLinesEndpoint) Create(ctx context.Context, division int, entity *PurchaseOrderLines) (*PurchaseOrderLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines", division) // #nosec
+	e := &PurchaseOrderLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Delete the PurchaseOrderLines entity in the provided division.
+func (s *PurchaseOrderLinesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/purchaseorder/PurchaseOrderLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

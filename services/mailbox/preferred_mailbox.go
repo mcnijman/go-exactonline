@@ -25,6 +25,7 @@ type PreferredMailboxEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadMailboxPreferredMailbox
 type PreferredMailbox struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -59,6 +60,14 @@ type PreferredMailbox struct {
 	ValidTo *types.Date `json:"ValidTo,omitempty"`
 }
 
+func (e *PreferredMailbox) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PreferredMailboxEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "mailbox/PreferredMailbox", method)
+}
+
 // List the PreferredMailbox entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PreferredMailboxEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PreferredMailbox, error) {
@@ -70,6 +79,19 @@ func (s *PreferredMailboxEndpoint) List(ctx context.Context, division int, all b
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PreferredMailbox entitiy in the provided division.
+func (s *PreferredMailboxEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*PreferredMailbox, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/mailbox/PreferredMailbox", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PreferredMailbox{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

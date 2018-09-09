@@ -26,6 +26,7 @@ type EventsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesEvents
 type Events struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -117,6 +118,14 @@ type Events struct {
 	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
+func (e *Events) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *EventsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "activities/Events", method)
+}
+
 // List the Events entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *EventsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Events, error) {
@@ -128,6 +137,35 @@ func (s *EventsEndpoint) List(ctx context.Context, division int, all bool, o *ap
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Events entitiy in the provided division.
+func (s *EventsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Events, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Events", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Events{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty Events entity
+func (s *EventsEndpoint) New() *Events {
+	return &Events{}
+}
+
+// Create the Events entity in the provided division.
+func (s *EventsEndpoint) Create(ctx context.Context, division int, entity *Events) (*Events, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Events", division) // #nosec
+	e := &Events{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

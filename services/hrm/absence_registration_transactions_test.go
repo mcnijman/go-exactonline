@@ -7,8 +7,10 @@ package hrm
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func AbsenceRegistrationTransactionsPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func AbsenceRegistrationTransactionsEntityWithPopulatedPrimaryProperty() *AbsenceRegistrationTransactions {
+	return &AbsenceRegistrationTransactions{ID: AbsenceRegistrationTransactionsPrimaryPropertySample()}
+}
+
+func AbsenceRegistrationTransactionsStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func AbsenceRegistrationTransactionsStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestAbsenceRegistrationTransactionsEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &AbsenceRegistrationTransactions{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("AbsenceRegistrationTransactionsEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestAbsenceRegistrationTransactionsEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'hrm/AbsenceRegistrationTransactions'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.AbsenceRegistrationTransactions.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.AbsenceRegistrationTransactions.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.AbsenceRegistrationTransactions.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestAbsenceRegistrationTransactionsEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestAbsenceRegistrationTransactionsEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := AbsenceRegistrationTransactionsPrimaryPropertySample()
+	gs := AbsenceRegistrationTransactionsStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestAbsenceRegistrationTransactionsEndpoint_List_all(t *testing.T) {
 		t.Errorf("AbsenceRegistrationTransactionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*AbsenceRegistrationTransactions{{ID: &g}}
+	want := []*AbsenceRegistrationTransactions{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("AbsenceRegistrationTransactionsEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestAbsenceRegistrationTransactionsEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/AbsenceRegistrationTransactions?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/AbsenceRegistrationTransactions", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestAbsenceRegistrationTransactionsEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/AbsenceRegistrationTransactions?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.List returned error: %v, with url /api/v1/{division}/hrm/AbsenceRegistrationTransactions", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := AbsenceRegistrationTransactionsPrimaryPropertySample()
+	gs := AbsenceRegistrationTransactionsStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.AbsenceRegistrationTransactions.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,63 @@ func TestAbsenceRegistrationTransactionsEndpoint_List(t *testing.T) {
 		t.Errorf("AbsenceRegistrationTransactionsEndpoint.List returned error: %v", err)
 	}
 
-	want := []*AbsenceRegistrationTransactions{{ID: &g}}
+	want := []*AbsenceRegistrationTransactions{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("AbsenceRegistrationTransactionsEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestAbsenceRegistrationTransactionsEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := AbsenceRegistrationTransactionsPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *AbsenceRegistrationTransactions
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&AbsenceRegistrationTransactions{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/AbsenceRegistrationTransactions", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in AbsenceRegistrationTransactionsEndpoint.Delete() returned error: %v, with url /api/v1/{division}/hrm/AbsenceRegistrationTransactions", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in AbsenceRegistrationTransactionsEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.AbsenceRegistrationTransactions.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AbsenceRegistrationTransactionsEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AbsenceRegistrationTransactionsEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

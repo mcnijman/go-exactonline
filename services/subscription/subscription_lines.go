@@ -7,6 +7,9 @@ package subscription
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type SubscriptionLinesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionLines
 type SubscriptionLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -101,6 +105,14 @@ type SubscriptionLines struct {
 	VATCodeDescription *string `json:"VATCodeDescription,omitempty"`
 }
 
+func (e *SubscriptionLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *SubscriptionLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "subscription/SubscriptionLines", method)
+}
+
 // List the SubscriptionLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubscriptionLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubscriptionLines, error) {
@@ -112,6 +124,69 @@ func (s *SubscriptionLinesEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SubscriptionLines entitiy in the provided division.
+func (s *SubscriptionLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SubscriptionLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubscriptionLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty SubscriptionLines entity
+func (s *SubscriptionLinesEndpoint) New() *SubscriptionLines {
+	return &SubscriptionLines{}
+}
+
+// Create the SubscriptionLines entity in the provided division.
+func (s *SubscriptionLinesEndpoint) Create(ctx context.Context, division int, entity *SubscriptionLines) (*SubscriptionLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines", division) // #nosec
+	e := &SubscriptionLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the SubscriptionLines entity in the provided division.
+func (s *SubscriptionLinesEndpoint) Update(ctx context.Context, division int, entity *SubscriptionLines) (*SubscriptionLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubscriptionLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the SubscriptionLines entity in the provided division.
+func (s *SubscriptionLinesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

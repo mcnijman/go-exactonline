@@ -8,6 +8,9 @@ package vat
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -26,6 +29,7 @@ type VATCodesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=VATVATCodes
 type VATCodes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -150,6 +154,14 @@ type VATCodes struct {
 	VATTransactionType *string `json:"VATTransactionType,omitempty"`
 }
 
+func (e *VATCodes) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *VATCodesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "vat/VATCodes", method)
+}
+
 // List the VATCodes entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *VATCodesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*VATCodes, error) {
@@ -161,6 +173,69 @@ func (s *VATCodesEndpoint) List(ctx context.Context, division int, all bool, o *
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the VATCodes entitiy in the provided division.
+func (s *VATCodesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*VATCodes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &VATCodes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty VATCodes entity
+func (s *VATCodesEndpoint) New() *VATCodes {
+	return &VATCodes{}
+}
+
+// Create the VATCodes entity in the provided division.
+func (s *VATCodesEndpoint) Create(ctx context.Context, division int, entity *VATCodes) (*VATCodes, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes", division) // #nosec
+	e := &VATCodes{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the VATCodes entity in the provided division.
+func (s *VATCodesEndpoint) Update(ctx context.Context, division int, entity *VATCodes) (*VATCodes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &VATCodes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the VATCodes entity in the provided division.
+func (s *VATCodesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/vat/VATCodes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

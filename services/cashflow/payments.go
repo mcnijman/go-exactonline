@@ -25,6 +25,7 @@ type PaymentsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowPayments
 type Payments struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Identifier of the payment.
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -230,6 +231,14 @@ type Payments struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
+func (e *Payments) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PaymentsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "cashflow/Payments", method)
+}
+
 // List the Payments entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PaymentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Payments, error) {
@@ -241,6 +250,19 @@ func (s *PaymentsEndpoint) List(ctx context.Context, division int, all bool, o *
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Payments entitiy in the provided division.
+func (s *PaymentsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Payments, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/cashflow/Payments", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Payments{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

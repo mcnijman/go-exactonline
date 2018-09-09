@@ -7,6 +7,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strings"
 )
@@ -21,10 +22,11 @@ type URL struct {
 func (u *URL) UnmarshalJSON(b []byte) error {
 	s := strings.Replace(string(b), `"`, "", -1)
 	j, err := url.Parse(s)
-	if err == nil {
-		u.URL = j
+	if err != nil {
+		return fmt.Errorf("URL.UnmarshalJSON() error: %v", err)
 	}
-	return err
+	u.URL = j
+	return nil
 }
 
 // MarshalJSON marshals the url to a format expected by the

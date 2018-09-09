@@ -7,8 +7,10 @@ package users
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func UserRolesPerDivisionPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func UserRolesPerDivisionEntityWithPopulatedPrimaryProperty() *UserRolesPerDivision {
+	return &UserRolesPerDivision{ID: UserRolesPerDivisionPrimaryPropertySample()}
+}
+
+func UserRolesPerDivisionStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func UserRolesPerDivisionStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestUserRolesPerDivisionEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &UserRolesPerDivision{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("UserRolesPerDivisionEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestUserRolesPerDivisionEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'users/UserRolesPerDivision'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.UserRolesPerDivision.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.UserRolesPerDivision.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.UserRolesPerDivision.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestUserRolesPerDivisionEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestUserRolesPerDivisionEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := UserRolesPerDivisionPrimaryPropertySample()
+	gs := UserRolesPerDivisionStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestUserRolesPerDivisionEndpoint_List_all(t *testing.T) {
 		t.Errorf("UserRolesPerDivisionEndpoint.List returned error: %v", err)
 	}
 
-	want := []*UserRolesPerDivision{{ID: &g}}
+	want := []*UserRolesPerDivision{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("UserRolesPerDivisionEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestUserRolesPerDivisionEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserRolesPerDivision", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.List returned error: %v, with url /api/v1/{division}/users/UserRolesPerDivision?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.List returned error: %v, with url /api/v1/{division}/users/UserRolesPerDivision", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestUserRolesPerDivisionEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserRolesPerDivision", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.List returned error: %v, with url /api/v1/{division}/users/UserRolesPerDivision?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.List returned error: %v, with url /api/v1/{division}/users/UserRolesPerDivision", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := UserRolesPerDivisionPrimaryPropertySample()
+	gs := UserRolesPerDivisionStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.UserRolesPerDivision.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,63 @@ func TestUserRolesPerDivisionEndpoint_List(t *testing.T) {
 		t.Errorf("UserRolesPerDivisionEndpoint.List returned error: %v", err)
 	}
 
-	want := []*UserRolesPerDivision{{ID: &g}}
+	want := []*UserRolesPerDivision{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("UserRolesPerDivisionEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestUserRolesPerDivisionEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := UserRolesPerDivisionPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *UserRolesPerDivision
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&UserRolesPerDivision{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserRolesPerDivision", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in UserRolesPerDivisionEndpoint.Delete() returned error: %v, with url /api/v1/{division}/users/UserRolesPerDivision", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in UserRolesPerDivisionEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.UserRolesPerDivision.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UserRolesPerDivisionEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("UserRolesPerDivisionEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

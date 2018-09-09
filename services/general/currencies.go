@@ -25,6 +25,7 @@ type CurrenciesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=GeneralCurrencies
 type Currencies struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Code: Primary key
 	Code *string `json:"Code,omitempty"`
 
@@ -44,6 +45,14 @@ type Currencies struct {
 	PricePrecision *float64 `json:"PricePrecision,omitempty"`
 }
 
+func (e *Currencies) GetPrimary() *string {
+	return e.Code
+}
+
+func (s *CurrenciesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "general/Currencies", method)
+}
+
 // List the Currencies entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CurrenciesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Currencies, error) {
@@ -55,6 +64,19 @@ func (s *CurrenciesEndpoint) List(ctx context.Context, division int, all bool, o
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Currencies entitiy in the provided division.
+func (s *CurrenciesEndpoint) Get(ctx context.Context, division int, id *string) (*Currencies, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/general/Currencies", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Currencies{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -25,6 +25,7 @@ type RecentHoursEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectRecentHours
 type RecentHours struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Id: Primary key
 	Id *int `json:"Id,omitempty"`
 
@@ -98,6 +99,14 @@ type RecentHours struct {
 	WeekNumber *int `json:"WeekNumber,omitempty"`
 }
 
+func (e *RecentHours) GetPrimary() *int {
+	return e.Id
+}
+
+func (s *RecentHoursEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/RecentHours", method)
+}
+
 // List the RecentHours entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *RecentHoursEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*RecentHours, error) {
@@ -109,6 +118,19 @@ func (s *RecentHoursEndpoint) List(ctx context.Context, division int, all bool, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the RecentHours entitiy in the provided division.
+func (s *RecentHoursEndpoint) Get(ctx context.Context, division int, id *int) (*RecentHours, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/RecentHours", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &RecentHours{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -25,6 +25,7 @@ type StageForDeliveryReceiptsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingStageForDeliveryReceipts
 type StageForDeliveryReceipts struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Id: ID of staged for delivery entry
 	Id *types.GUID `json:"Id,omitempty"`
 
@@ -92,6 +93,14 @@ type StageForDeliveryReceipts struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *StageForDeliveryReceipts) GetPrimary() *types.GUID {
+	return e.Id
+}
+
+func (s *StageForDeliveryReceiptsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/StageForDeliveryReceipts", method)
+}
+
 // List the StageForDeliveryReceipts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StageForDeliveryReceiptsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StageForDeliveryReceipts, error) {
@@ -103,6 +112,35 @@ func (s *StageForDeliveryReceiptsEndpoint) List(ctx context.Context, division in
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the StageForDeliveryReceipts entitiy in the provided division.
+func (s *StageForDeliveryReceiptsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*StageForDeliveryReceipts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/StageForDeliveryReceipts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &StageForDeliveryReceipts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty StageForDeliveryReceipts entity
+func (s *StageForDeliveryReceiptsEndpoint) New() *StageForDeliveryReceipts {
+	return &StageForDeliveryReceipts{}
+}
+
+// Create the StageForDeliveryReceipts entity in the provided division.
+func (s *StageForDeliveryReceiptsEndpoint) Create(ctx context.Context, division int, entity *StageForDeliveryReceipts) (*StageForDeliveryReceipts, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/StageForDeliveryReceipts", division) // #nosec
+	e := &StageForDeliveryReceipts{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

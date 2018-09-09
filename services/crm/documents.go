@@ -26,6 +26,7 @@ type DocumentsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadCRMDocuments
 type Documents struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -96,6 +97,14 @@ type Documents struct {
 	TypeDescription *string `json:"TypeDescription,omitempty"`
 }
 
+func (e *Documents) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *DocumentsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "crm/Documents", method)
+}
+
 // List the Documents entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *DocumentsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Documents, error) {
@@ -107,6 +116,19 @@ func (s *DocumentsEndpoint) List(ctx context.Context, division int, all bool, o 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Documents entitiy in the provided division.
+func (s *DocumentsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Documents, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/crm/Documents", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Documents{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

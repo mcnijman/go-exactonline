@@ -7,8 +7,10 @@ package documents
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func DocumentFoldersPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func DocumentFoldersEntityWithPopulatedPrimaryProperty() *DocumentFolders {
+	return &DocumentFolders{ID: DocumentFoldersPrimaryPropertySample()}
+}
+
+func DocumentFoldersStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func DocumentFoldersStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestDocumentFoldersEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &DocumentFolders{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("DocumentFoldersEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestDocumentFoldersEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'documents/DocumentFolders'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.DocumentFolders.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.DocumentFolders.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.DocumentFolders.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestDocumentFoldersEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestDocumentFoldersEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := DocumentFoldersPrimaryPropertySample()
+	gs := DocumentFoldersStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestDocumentFoldersEndpoint_List_all(t *testing.T) {
 		t.Errorf("DocumentFoldersEndpoint.List returned error: %v", err)
 	}
 
-	want := []*DocumentFolders{{ID: &g}}
+	want := []*DocumentFolders{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("DocumentFoldersEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestDocumentFoldersEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentFolders?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestDocumentFoldersEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentFolders?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.List returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := DocumentFoldersPrimaryPropertySample()
+	gs := DocumentFoldersStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.DocumentFolders.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,229 @@ func TestDocumentFoldersEndpoint_List(t *testing.T) {
 		t.Errorf("DocumentFoldersEndpoint.List returned error: %v", err)
 	}
 
-	want := []*DocumentFolders{{ID: &g}}
+	want := []*DocumentFolders{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("DocumentFoldersEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestDocumentFoldersEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := DocumentFoldersPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *DocumentFolders
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&DocumentFolders{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.Delete() returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DocumentFoldersEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.DocumentFolders.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DocumentFoldersEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DocumentFoldersEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDocumentFoldersEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.DocumentFolders.New()
+	want := &DocumentFolders{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("DocumentFoldersEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestDocumentFoldersEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *DocumentFolders
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *DocumentFolders
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &DocumentFolders{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&DocumentFolders{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.Create returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.DocumentFolders.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DocumentFoldersEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DocumentFoldersEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDocumentFoldersEndpoint_Update(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *DocumentFolders
+	}
+	s1 := DocumentFoldersPrimaryPropertySample()
+	tests := []struct {
+		name    string
+		args    args
+		want    *DocumentFolders
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &DocumentFolders{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&DocumentFolders{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.Update returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.entity.GetPrimary())
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DocumentFoldersEndpoint.Update returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "PUT")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.args.entity)
+				testBody(t, r, string(b)+"\n")
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.DocumentFolders.Update(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DocumentFoldersEndpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DocumentFoldersEndpoint.Update() = %v, want %v", *got, *tt.want)
+			}
+		})
+	}
+}
+
+func TestDocumentFoldersEndpoint_Delete(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, DocumentFoldersPrimaryPropertySample()},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/documents/DocumentFolders", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in DocumentFoldersEndpoint.Delete() returned error: %v, with url /api/v1/{division}/documents/DocumentFolders", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in DocumentFoldersEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "DELETE")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, "")
+				w.WriteHeader(http.StatusNoContent)
+			})
+
+			err := s.DocumentFolders.Delete(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DocumentFoldersEndpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
 	}
 }

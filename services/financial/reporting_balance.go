@@ -25,6 +25,7 @@ type ReportingBalanceEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialReportingBalance
 type ReportingBalance struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Record ID
 	ID *int64 `json:"ID,omitempty"`
 
@@ -80,6 +81,14 @@ type ReportingBalance struct {
 	Type *int `json:"Type,omitempty"`
 }
 
+func (e *ReportingBalance) GetPrimary() *int64 {
+	return e.ID
+}
+
+func (s *ReportingBalanceEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/ReportingBalance", method)
+}
+
 // List the ReportingBalance entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReportingBalanceEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ReportingBalance, error) {
@@ -91,6 +100,19 @@ func (s *ReportingBalanceEndpoint) List(ctx context.Context, division int, all b
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ReportingBalance entitiy in the provided division.
+func (s *ReportingBalanceEndpoint) Get(ctx context.Context, division int, id *int64) (*ReportingBalance, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/ReportingBalance", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ReportingBalance{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

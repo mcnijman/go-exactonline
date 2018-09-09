@@ -26,6 +26,7 @@ type ServiceRequestsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesServiceRequests
 type ServiceRequests struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -99,6 +100,14 @@ type ServiceRequests struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
+func (e *ServiceRequests) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ServiceRequestsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "activities/ServiceRequests", method)
+}
+
 // List the ServiceRequests entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ServiceRequestsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ServiceRequests, error) {
@@ -110,6 +119,35 @@ func (s *ServiceRequestsEndpoint) List(ctx context.Context, division int, all bo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ServiceRequests entitiy in the provided division.
+func (s *ServiceRequestsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ServiceRequests, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/ServiceRequests", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ServiceRequests{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ServiceRequests entity
+func (s *ServiceRequestsEndpoint) New() *ServiceRequests {
+	return &ServiceRequests{}
+}
+
+// Create the ServiceRequests entity in the provided division.
+func (s *ServiceRequestsEndpoint) Create(ctx context.Context, division int, entity *ServiceRequests) (*ServiceRequests, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/ServiceRequests", division) // #nosec
+	e := &ServiceRequests{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

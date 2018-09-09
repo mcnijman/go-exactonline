@@ -25,6 +25,7 @@ type RecentCostsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectRecentCosts
 type RecentCosts struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Id: Primary key
 	Id *int `json:"Id,omitempty"`
 
@@ -101,6 +102,14 @@ type RecentCosts struct {
 	WeekNumber *int `json:"WeekNumber,omitempty"`
 }
 
+func (e *RecentCosts) GetPrimary() *int {
+	return e.Id
+}
+
+func (s *RecentCostsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/RecentCosts", method)
+}
+
 // List the RecentCosts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *RecentCostsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*RecentCosts, error) {
@@ -112,6 +121,19 @@ func (s *RecentCostsEndpoint) List(ctx context.Context, division int, all bool, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the RecentCosts entitiy in the provided division.
+func (s *RecentCostsEndpoint) Get(ctx context.Context, division int, id *int) (*RecentCosts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/RecentCosts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &RecentCosts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

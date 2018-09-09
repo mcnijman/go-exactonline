@@ -7,8 +7,10 @@ package financialtransaction
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func CashEntryLinesPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func CashEntryLinesEntityWithPopulatedPrimaryProperty() *CashEntryLines {
+	return &CashEntryLines{ID: CashEntryLinesPrimaryPropertySample()}
+}
+
+func CashEntryLinesStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func CashEntryLinesStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestCashEntryLinesEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &CashEntryLines{ID: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("CashEntryLinesEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestCashEntryLinesEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financialtransaction/CashEntryLines'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.CashEntryLines.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.CashEntryLines.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.CashEntryLines.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestCashEntryLinesEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestCashEntryLinesEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := CashEntryLinesPrimaryPropertySample()
+	gs := CashEntryLinesStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestCashEntryLinesEndpoint_List_all(t *testing.T) {
 		t.Errorf("CashEntryLinesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*CashEntryLines{{ID: &g}}
+	want := []*CashEntryLines{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CashEntryLinesEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestCashEntryLinesEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntryLines", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.List returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.List returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestCashEntryLinesEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntryLines", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.List returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.List returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := CashEntryLinesPrimaryPropertySample()
+	gs := CashEntryLinesStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "ID": `+gs+`}]}}`)
 	})
 
 	entities, err := s.CashEntryLines.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,123 @@ func TestCashEntryLinesEndpoint_List(t *testing.T) {
 		t.Errorf("CashEntryLinesEndpoint.List returned error: %v", err)
 	}
 
-	want := []*CashEntryLines{{ID: &g}}
+	want := []*CashEntryLines{{ID: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("CashEntryLinesEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestCashEntryLinesEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := CashEntryLinesPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *CashEntryLines
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&CashEntryLines{ID: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntryLines", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.Delete() returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in CashEntryLinesEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.CashEntryLines.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CashEntryLinesEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CashEntryLinesEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCashEntryLinesEndpoint_New(t *testing.T) {
+	s, _, _, teardown := setup()
+	defer teardown()
+	got := s.CashEntryLines.New()
+	want := &CashEntryLines{}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("CashEntryLinesEndpoint.New() expected to return %v, got %v", want, got)
+	}
+}
+
+func TestCashEntryLinesEndpoint_Create(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	type args struct {
+		ctx      context.Context
+		division int
+		entity   *CashEntryLines
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *CashEntryLines
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, &CashEntryLines{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}}},
+			&CashEntryLines{MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntryLines", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in CashEntryLinesEndpoint.Create returned error: %v, with url /api/v1/{division}/financialtransaction/CashEntryLines", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "POST")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				testHeader(t, r, "Content-Type", strings.Join(acceptHeaders, ", "))
+				testBody(t, r, `{"__metadata":{"uri":"https://start.exactonline.nl"}}`+"\n")
+				fmt.Fprint(w, `{ "d": { "__metadata": { "uri": "https://start.exactonline.nl"}}}`)
+			})
+
+			got, err := s.CashEntryLines.Create(tt.args.ctx, tt.args.division, tt.args.entity)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CashEntryLinesEndpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CashEntryLinesEndpoint.Create() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

@@ -25,6 +25,7 @@ type FinancialTransactionLinesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=BulkFinancialTransactionLines
 type FinancialTransactionLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -230,6 +231,14 @@ type FinancialTransactionLines struct {
 	YourRef *string `json:"YourRef,omitempty"`
 }
 
+func (e *FinancialTransactionLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *FinancialTransactionLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "Financial/TransactionLines", method)
+}
+
 // List the FinancialTransactionLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *FinancialTransactionLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*FinancialTransactionLines, error) {
@@ -241,6 +250,19 @@ func (s *FinancialTransactionLinesEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the FinancialTransactionLines entitiy in the provided division.
+func (s *FinancialTransactionLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*FinancialTransactionLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/bulk/Financial/TransactionLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &FinancialTransactionLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

@@ -8,6 +8,9 @@ package project
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -26,6 +29,7 @@ type ProjectsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjects
 type Projects struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -186,6 +190,14 @@ type Projects struct {
 	UseBillingMilestones *bool `json:"UseBillingMilestones,omitempty"`
 }
 
+func (e *Projects) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ProjectsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/Projects", method)
+}
+
 // List the Projects entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Projects, error) {
@@ -197,6 +209,69 @@ func (s *ProjectsEndpoint) List(ctx context.Context, division int, all bool, o *
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Projects entitiy in the provided division.
+func (s *ProjectsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Projects, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/Projects", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Projects{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty Projects entity
+func (s *ProjectsEndpoint) New() *Projects {
+	return &Projects{}
+}
+
+// Create the Projects entity in the provided division.
+func (s *ProjectsEndpoint) Create(ctx context.Context, division int, entity *Projects) (*Projects, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/Projects", division) // #nosec
+	e := &Projects{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the Projects entity in the provided division.
+func (s *ProjectsEndpoint) Update(ctx context.Context, division int, entity *Projects) (*Projects, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/Projects", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Projects{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the Projects entity in the provided division.
+func (s *ProjectsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/Projects", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

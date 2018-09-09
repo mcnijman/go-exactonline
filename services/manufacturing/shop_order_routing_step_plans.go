@@ -8,6 +8,9 @@ package manufacturing
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -26,6 +29,7 @@ type ShopOrderRoutingStepPlansEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingShopOrderRoutingStepPlans
 type ShopOrderRoutingStepPlans struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -168,6 +172,14 @@ type ShopOrderRoutingStepPlans struct {
 	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
+func (e *ShopOrderRoutingStepPlans) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ShopOrderRoutingStepPlansEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/ShopOrderRoutingStepPlans", method)
+}
+
 // List the ShopOrderRoutingStepPlans entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ShopOrderRoutingStepPlansEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ShopOrderRoutingStepPlans, error) {
@@ -179,6 +191,69 @@ func (s *ShopOrderRoutingStepPlansEndpoint) List(ctx context.Context, division i
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ShopOrderRoutingStepPlans entitiy in the provided division.
+func (s *ShopOrderRoutingStepPlansEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ShopOrderRoutingStepPlans, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderRoutingStepPlans", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ShopOrderRoutingStepPlans{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ShopOrderRoutingStepPlans entity
+func (s *ShopOrderRoutingStepPlansEndpoint) New() *ShopOrderRoutingStepPlans {
+	return &ShopOrderRoutingStepPlans{}
+}
+
+// Create the ShopOrderRoutingStepPlans entity in the provided division.
+func (s *ShopOrderRoutingStepPlansEndpoint) Create(ctx context.Context, division int, entity *ShopOrderRoutingStepPlans) (*ShopOrderRoutingStepPlans, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderRoutingStepPlans", division) // #nosec
+	e := &ShopOrderRoutingStepPlans{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the ShopOrderRoutingStepPlans entity in the provided division.
+func (s *ShopOrderRoutingStepPlansEndpoint) Update(ctx context.Context, division int, entity *ShopOrderRoutingStepPlans) (*ShopOrderRoutingStepPlans, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderRoutingStepPlans", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ShopOrderRoutingStepPlans{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the ShopOrderRoutingStepPlans entity in the provided division.
+func (s *ShopOrderRoutingStepPlansEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ShopOrderRoutingStepPlans", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

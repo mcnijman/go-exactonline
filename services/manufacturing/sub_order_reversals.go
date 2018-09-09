@@ -25,6 +25,7 @@ type SubOrderReversalsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingSubOrderReversals
 type SubOrderReversals struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// MaterialReversalStockTransactionId: MaterialReversal.StockTransactionId related to this SubOrderReversal&#39;s MaterialReversal
 	MaterialReversalStockTransactionId *types.GUID `json:"MaterialReversalStockTransactionId,omitempty"`
 
@@ -104,6 +105,14 @@ type SubOrderReversals struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *SubOrderReversals) GetPrimary() *types.GUID {
+	return e.MaterialReversalStockTransactionId
+}
+
+func (s *SubOrderReversalsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/SubOrderReversals", method)
+}
+
 // List the SubOrderReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SubOrderReversalsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*SubOrderReversals, error) {
@@ -115,6 +124,35 @@ func (s *SubOrderReversalsEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SubOrderReversals entitiy in the provided division.
+func (s *SubOrderReversalsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*SubOrderReversals, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReversals", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubOrderReversals{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty SubOrderReversals entity
+func (s *SubOrderReversalsEndpoint) New() *SubOrderReversals {
+	return &SubOrderReversals{}
+}
+
+// Create the SubOrderReversals entity in the provided division.
+func (s *SubOrderReversalsEndpoint) Create(ctx context.Context, division int, entity *SubOrderReversals) (*SubOrderReversals, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/SubOrderReversals", division) // #nosec
+	e := &SubOrderReversals{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

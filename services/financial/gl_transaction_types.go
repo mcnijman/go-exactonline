@@ -24,6 +24,7 @@ type GLTransactionTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLTransactionTypes
 type GLTransactionTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *int `json:"ID,omitempty"`
 
@@ -32,6 +33,14 @@ type GLTransactionTypes struct {
 
 	// DescriptionSuffix:
 	DescriptionSuffix *string `json:"DescriptionSuffix,omitempty"`
+}
+
+func (e *GLTransactionTypes) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *GLTransactionTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/GLTransactionTypes", method)
 }
 
 // List the GLTransactionTypes entities in the provided division.
@@ -45,6 +54,19 @@ func (s *GLTransactionTypesEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the GLTransactionTypes entitiy in the provided division.
+func (s *GLTransactionTypesEndpoint) Get(ctx context.Context, division int, id *int) (*GLTransactionTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLTransactionTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GLTransactionTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

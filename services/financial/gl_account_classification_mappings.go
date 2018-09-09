@@ -7,6 +7,9 @@ package financial
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type GLAccountClassificationMappingsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLAccountClassificationMappings
 type GLAccountClassificationMappings struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -59,6 +63,14 @@ type GLAccountClassificationMappings struct {
 	GLSchemeID *types.GUID `json:"GLSchemeID,omitempty"`
 }
 
+func (e *GLAccountClassificationMappings) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *GLAccountClassificationMappingsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/GLAccountClassificationMappings", method)
+}
+
 // List the GLAccountClassificationMappings entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GLAccountClassificationMappingsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GLAccountClassificationMappings, error) {
@@ -70,6 +82,69 @@ func (s *GLAccountClassificationMappingsEndpoint) List(ctx context.Context, divi
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the GLAccountClassificationMappings entitiy in the provided division.
+func (s *GLAccountClassificationMappingsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*GLAccountClassificationMappings, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GLAccountClassificationMappings{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty GLAccountClassificationMappings entity
+func (s *GLAccountClassificationMappingsEndpoint) New() *GLAccountClassificationMappings {
+	return &GLAccountClassificationMappings{}
+}
+
+// Create the GLAccountClassificationMappings entity in the provided division.
+func (s *GLAccountClassificationMappingsEndpoint) Create(ctx context.Context, division int, entity *GLAccountClassificationMappings) (*GLAccountClassificationMappings, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings", division) // #nosec
+	e := &GLAccountClassificationMappings{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the GLAccountClassificationMappings entity in the provided division.
+func (s *GLAccountClassificationMappingsEndpoint) Update(ctx context.Context, division int, entity *GLAccountClassificationMappings) (*GLAccountClassificationMappings, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GLAccountClassificationMappings{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the GLAccountClassificationMappings entity in the provided division.
+func (s *GLAccountClassificationMappingsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/financial/GLAccountClassificationMappings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

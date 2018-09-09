@@ -7,6 +7,9 @@ package crm
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type QuotationLinesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMQuotationLines
 type QuotationLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -92,6 +96,14 @@ type QuotationLines struct {
 	VersionNumber *int `json:"VersionNumber,omitempty"`
 }
 
+func (e *QuotationLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *QuotationLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "crm/QuotationLines", method)
+}
+
 // List the QuotationLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *QuotationLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*QuotationLines, error) {
@@ -103,6 +115,69 @@ func (s *QuotationLinesEndpoint) List(ctx context.Context, division int, all boo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the QuotationLines entitiy in the provided division.
+func (s *QuotationLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*QuotationLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/QuotationLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &QuotationLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty QuotationLines entity
+func (s *QuotationLinesEndpoint) New() *QuotationLines {
+	return &QuotationLines{}
+}
+
+// Create the QuotationLines entity in the provided division.
+func (s *QuotationLinesEndpoint) Create(ctx context.Context, division int, entity *QuotationLines) (*QuotationLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/QuotationLines", division) // #nosec
+	e := &QuotationLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the QuotationLines entity in the provided division.
+func (s *QuotationLinesEndpoint) Update(ctx context.Context, division int, entity *QuotationLines) (*QuotationLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/QuotationLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &QuotationLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the QuotationLines entity in the provided division.
+func (s *QuotationLinesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/QuotationLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

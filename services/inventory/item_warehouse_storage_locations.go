@@ -25,6 +25,7 @@ type ItemWarehouseStorageLocationsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehouseStorageLocations
 type ItemWarehouseStorageLocations struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Uniquely identifies the item, warehouse, storage location combination
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -68,6 +69,14 @@ type ItemWarehouseStorageLocations struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ItemWarehouseStorageLocations) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ItemWarehouseStorageLocationsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/ItemWarehouseStorageLocations", method)
+}
+
 // List the ItemWarehouseStorageLocations entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ItemWarehouseStorageLocationsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ItemWarehouseStorageLocations, error) {
@@ -79,6 +88,19 @@ func (s *ItemWarehouseStorageLocationsEndpoint) List(ctx context.Context, divisi
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ItemWarehouseStorageLocations entitiy in the provided division.
+func (s *ItemWarehouseStorageLocationsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ItemWarehouseStorageLocations, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehouseStorageLocations", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ItemWarehouseStorageLocations{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

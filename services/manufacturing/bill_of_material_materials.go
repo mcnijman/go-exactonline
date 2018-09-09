@@ -7,6 +7,9 @@ package manufacturing
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type BillOfMaterialMaterialsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingBillOfMaterialMaterials
 type BillOfMaterialMaterials struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -113,6 +117,14 @@ type BillOfMaterialMaterials struct {
 	Type *int `json:"Type,omitempty"`
 }
 
+func (e *BillOfMaterialMaterials) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *BillOfMaterialMaterialsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/BillOfMaterialMaterials", method)
+}
+
 // List the BillOfMaterialMaterials entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *BillOfMaterialMaterialsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*BillOfMaterialMaterials, error) {
@@ -124,6 +136,69 @@ func (s *BillOfMaterialMaterialsEndpoint) List(ctx context.Context, division int
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the BillOfMaterialMaterials entitiy in the provided division.
+func (s *BillOfMaterialMaterialsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*BillOfMaterialMaterials, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialMaterials", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &BillOfMaterialMaterials{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty BillOfMaterialMaterials entity
+func (s *BillOfMaterialMaterialsEndpoint) New() *BillOfMaterialMaterials {
+	return &BillOfMaterialMaterials{}
+}
+
+// Create the BillOfMaterialMaterials entity in the provided division.
+func (s *BillOfMaterialMaterialsEndpoint) Create(ctx context.Context, division int, entity *BillOfMaterialMaterials) (*BillOfMaterialMaterials, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialMaterials", division) // #nosec
+	e := &BillOfMaterialMaterials{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the BillOfMaterialMaterials entity in the provided division.
+func (s *BillOfMaterialMaterialsEndpoint) Update(ctx context.Context, division int, entity *BillOfMaterialMaterials) (*BillOfMaterialMaterials, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialMaterials", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &BillOfMaterialMaterials{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the BillOfMaterialMaterials entity in the provided division.
+func (s *BillOfMaterialMaterialsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/BillOfMaterialMaterials", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

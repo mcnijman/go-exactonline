@@ -25,6 +25,7 @@ type ItemWarehousePlanningDetailsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryItemWarehousePlanningDetails
 type ItemWarehousePlanningDetails struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// Item: ID of item
 	Item *types.GUID `json:"Item,omitempty"`
 
@@ -71,6 +72,14 @@ type ItemWarehousePlanningDetails struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ItemWarehousePlanningDetails) GetPrimary() *types.GUID {
+	return e.Item
+}
+
+func (s *ItemWarehousePlanningDetailsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/ItemWarehousePlanningDetails", method)
+}
+
 // List the ItemWarehousePlanningDetails entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ItemWarehousePlanningDetailsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ItemWarehousePlanningDetails, error) {
@@ -82,6 +91,19 @@ func (s *ItemWarehousePlanningDetailsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ItemWarehousePlanningDetails entitiy in the provided division.
+func (s *ItemWarehousePlanningDetailsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ItemWarehousePlanningDetails, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/ItemWarehousePlanningDetails", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ItemWarehousePlanningDetails{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

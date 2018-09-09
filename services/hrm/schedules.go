@@ -25,6 +25,7 @@ type SchedulesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=HRMSchedules
 type Schedules struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -98,6 +99,14 @@ type Schedules struct {
 	StartWeek *int `json:"StartWeek,omitempty"`
 }
 
+func (e *Schedules) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *SchedulesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "hrm/Schedules", method)
+}
+
 // List the Schedules entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *SchedulesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Schedules, error) {
@@ -109,6 +118,19 @@ func (s *SchedulesEndpoint) List(ctx context.Context, division int, all bool, o 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Schedules entitiy in the provided division.
+func (s *SchedulesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Schedules, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/hrm/Schedules", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Schedules{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

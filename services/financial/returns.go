@@ -25,6 +25,7 @@ type ReturnsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialReturns
 type Returns struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// DocumentID: Primary key, document ID
 	DocumentID *types.GUID `json:"DocumentID,omitempty"`
 
@@ -71,6 +72,14 @@ type Returns struct {
 	Year *int `json:"Year,omitempty"`
 }
 
+func (e *Returns) GetPrimary() *types.GUID {
+	return e.DocumentID
+}
+
+func (s *ReturnsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/Returns", method)
+}
+
 // List the Returns entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ReturnsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Returns, error) {
@@ -82,6 +91,19 @@ func (s *ReturnsEndpoint) List(ctx context.Context, division int, all bool, o *a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Returns entitiy in the provided division.
+func (s *ReturnsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Returns, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/Returns", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Returns{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

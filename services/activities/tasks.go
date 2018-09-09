@@ -26,6 +26,7 @@ type TasksEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ActivitiesTasks
 type Tasks struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -117,6 +118,14 @@ type Tasks struct {
 	UserFullName *string `json:"UserFullName,omitempty"`
 }
 
+func (e *Tasks) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *TasksEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "activities/Tasks", method)
+}
+
 // List the Tasks entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TasksEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Tasks, error) {
@@ -128,6 +137,35 @@ func (s *TasksEndpoint) List(ctx context.Context, division int, all bool, o *api
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Tasks entitiy in the provided division.
+func (s *TasksEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Tasks, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Tasks", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Tasks{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty Tasks entity
+func (s *TasksEndpoint) New() *Tasks {
+	return &Tasks{}
+}
+
+// Create the Tasks entity in the provided division.
+func (s *TasksEndpoint) Create(ctx context.Context, division int, entity *Tasks) (*Tasks, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/activities/Tasks", division) // #nosec
+	e := &Tasks{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

@@ -25,6 +25,7 @@ type AgingReceivablesListEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialAgingReceivablesList
 type AgingReceivablesList struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// AccountId: Primary key
 	AccountId *types.GUID `json:"AccountId,omitempty"`
 
@@ -77,6 +78,14 @@ type AgingReceivablesList struct {
 	TotalAmount *float64 `json:"TotalAmount,omitempty"`
 }
 
+func (e *AgingReceivablesList) GetPrimary() *types.GUID {
+	return e.AccountId
+}
+
+func (s *AgingReceivablesListEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/AgingReceivablesList", method)
+}
+
 // List the AgingReceivablesList entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AgingReceivablesListEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AgingReceivablesList, error) {
@@ -88,6 +97,19 @@ func (s *AgingReceivablesListEndpoint) List(ctx context.Context, division int, a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the AgingReceivablesList entitiy in the provided division.
+func (s *AgingReceivablesListEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*AgingReceivablesList, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingReceivablesList", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AgingReceivablesList{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

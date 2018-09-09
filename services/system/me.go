@@ -25,6 +25,7 @@ type MeEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SystemSystemMe
 type Me struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// UserID: Primary key
 	UserID *types.GUID `json:"UserID,omitempty"`
 
@@ -113,6 +114,14 @@ type Me struct {
 	UserName *string `json:"UserName,omitempty"`
 }
 
+func (e *Me) GetPrimary() *types.GUID {
+	return e.UserID
+}
+
+func (s *MeEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "current/Me", method)
+}
+
 // List the Me entities.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MeEndpoint) List(ctx context.Context, all bool, o *api.ListOptions) ([]*Me, error) {
@@ -124,6 +133,19 @@ func (s *MeEndpoint) List(ctx context.Context, all bool, o *api.ListOptions) ([]
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Me entitiy.
+func (s *MeEndpoint) Get(ctx context.Context, id *types.GUID) (*Me, error) {
+	b, _ := s.client.ResolveURL("/api/v1/current/Me") // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Me{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

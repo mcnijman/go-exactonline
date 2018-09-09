@@ -25,6 +25,7 @@ type PriceListsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesPriceLists
 type PriceLists struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -68,6 +69,14 @@ type PriceLists struct {
 	Notes *string `json:"Notes,omitempty"`
 }
 
+func (e *PriceLists) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *PriceListsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "sales/PriceLists", method)
+}
+
 // List the PriceLists entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *PriceListsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*PriceLists, error) {
@@ -79,6 +88,19 @@ func (s *PriceListsEndpoint) List(ctx context.Context, division int, all bool, o
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the PriceLists entitiy in the provided division.
+func (s *PriceListsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*PriceLists, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/sales/PriceLists", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &PriceLists{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

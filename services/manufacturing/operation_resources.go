@@ -7,6 +7,9 @@ package manufacturing
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type OperationResourcesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingOperationResources
 type OperationResources struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -101,6 +105,14 @@ type OperationResources struct {
 	WorkcenterDescription *string `json:"WorkcenterDescription,omitempty"`
 }
 
+func (e *OperationResources) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *OperationResourcesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/OperationResources", method)
+}
+
 // List the OperationResources entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *OperationResourcesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*OperationResources, error) {
@@ -112,6 +124,69 @@ func (s *OperationResourcesEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the OperationResources entitiy in the provided division.
+func (s *OperationResourcesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*OperationResources, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/OperationResources", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &OperationResources{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty OperationResources entity
+func (s *OperationResourcesEndpoint) New() *OperationResources {
+	return &OperationResources{}
+}
+
+// Create the OperationResources entity in the provided division.
+func (s *OperationResourcesEndpoint) Create(ctx context.Context, division int, entity *OperationResources) (*OperationResources, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/OperationResources", division) // #nosec
+	e := &OperationResources{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the OperationResources entity in the provided division.
+func (s *OperationResourcesEndpoint) Update(ctx context.Context, division int, entity *OperationResources) (*OperationResources, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/OperationResources", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &OperationResources{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the OperationResources entity in the provided division.
+func (s *OperationResourcesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/OperationResources", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

@@ -25,6 +25,7 @@ type MailMessagesSentEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=MailboxMailMessagesSent
 type MailMessagesSent struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -122,6 +123,14 @@ type MailMessagesSent struct {
 	Type *int `json:"Type,omitempty"`
 }
 
+func (e *MailMessagesSent) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *MailMessagesSentEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "mailbox/MailMessagesSent", method)
+}
+
 // List the MailMessagesSent entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *MailMessagesSentEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*MailMessagesSent, error) {
@@ -133,6 +142,35 @@ func (s *MailMessagesSentEndpoint) List(ctx context.Context, division int, all b
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the MailMessagesSent entitiy in the provided division.
+func (s *MailMessagesSentEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*MailMessagesSent, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessagesSent", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &MailMessagesSent{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty MailMessagesSent entity
+func (s *MailMessagesSentEndpoint) New() *MailMessagesSent {
+	return &MailMessagesSent{}
+}
+
+// Create the MailMessagesSent entity in the provided division.
+func (s *MailMessagesSentEndpoint) Create(ctx context.Context, division int, entity *MailMessagesSent) (*MailMessagesSent, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/mailbox/MailMessagesSent", division) // #nosec
+	e := &MailMessagesSent{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

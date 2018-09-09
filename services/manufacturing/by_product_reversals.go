@@ -25,6 +25,7 @@ type ByProductReversalsEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ManufacturingByProductReversals
 type ByProductReversals struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ReversalStockTransactionId: ID of stock transaction related to this ByProductReversal
 	ReversalStockTransactionId *types.GUID `json:"ReversalStockTransactionId,omitempty"`
 
@@ -107,6 +108,14 @@ type ByProductReversals struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *ByProductReversals) GetPrimary() *types.GUID {
+	return e.ReversalStockTransactionId
+}
+
+func (s *ByProductReversalsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "manufacturing/ByProductReversals", method)
+}
+
 // List the ByProductReversals entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ByProductReversalsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ByProductReversals, error) {
@@ -118,6 +127,35 @@ func (s *ByProductReversalsEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ByProductReversals entitiy in the provided division.
+func (s *ByProductReversalsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ByProductReversals, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReversals", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ByProductReversals{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ByProductReversals entity
+func (s *ByProductReversalsEndpoint) New() *ByProductReversals {
+	return &ByProductReversals{}
+}
+
+// Create the ByProductReversals entity in the provided division.
+func (s *ByProductReversalsEndpoint) Create(ctx context.Context, division int, entity *ByProductReversals) (*ByProductReversals, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/manufacturing/ByProductReversals", division) // #nosec
+	e := &ByProductReversals{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

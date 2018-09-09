@@ -24,11 +24,20 @@ type EmploymentEndReasonsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=PayrollEmploymentEndReasons
 type EmploymentEndReasons struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *int `json:"ID,omitempty"`
 
 	// Description: Employment end reason description
 	Description *string `json:"Description,omitempty"`
+}
+
+func (e *EmploymentEndReasons) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *EmploymentEndReasonsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "payroll/EmploymentEndReasons", method)
 }
 
 // List the EmploymentEndReasons entities in the provided division.
@@ -42,6 +51,19 @@ func (s *EmploymentEndReasonsEndpoint) List(ctx context.Context, division int, a
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the EmploymentEndReasons entitiy in the provided division.
+func (s *EmploymentEndReasonsEndpoint) Get(ctx context.Context, division int, id *int) (*EmploymentEndReasons, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/payroll/EmploymentEndReasons", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &EmploymentEndReasons{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

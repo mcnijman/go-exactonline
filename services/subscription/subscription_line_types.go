@@ -24,11 +24,20 @@ type SubscriptionLineTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SubscriptionSubscriptionLineTypes
 type SubscriptionLineTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *int `json:"ID,omitempty"`
 
 	// Description: Description
 	Description *string `json:"Description,omitempty"`
+}
+
+func (e *SubscriptionLineTypes) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *SubscriptionLineTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "subscription/SubscriptionLineTypes", method)
 }
 
 // List the SubscriptionLineTypes entities in the provided division.
@@ -42,6 +51,19 @@ func (s *SubscriptionLineTypesEndpoint) List(ctx context.Context, division int, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the SubscriptionLineTypes entitiy in the provided division.
+func (s *SubscriptionLineTypesEndpoint) Get(ctx context.Context, division int, id *int) (*SubscriptionLineTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/subscription/SubscriptionLineTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &SubscriptionLineTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

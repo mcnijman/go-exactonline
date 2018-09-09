@@ -7,6 +7,9 @@ package project
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type ProjectRestrictionItemsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectRestrictionItems
 type ProjectRestrictionItems struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -71,6 +75,14 @@ type ProjectRestrictionItems struct {
 	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
+func (e *ProjectRestrictionItems) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ProjectRestrictionItemsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/ProjectRestrictionItems", method)
+}
+
 // List the ProjectRestrictionItems entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectRestrictionItemsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ProjectRestrictionItems, error) {
@@ -82,6 +94,69 @@ func (s *ProjectRestrictionItemsEndpoint) List(ctx context.Context, division int
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ProjectRestrictionItems entitiy in the provided division.
+func (s *ProjectRestrictionItemsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ProjectRestrictionItems, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionItems", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProjectRestrictionItems{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ProjectRestrictionItems entity
+func (s *ProjectRestrictionItemsEndpoint) New() *ProjectRestrictionItems {
+	return &ProjectRestrictionItems{}
+}
+
+// Create the ProjectRestrictionItems entity in the provided division.
+func (s *ProjectRestrictionItemsEndpoint) Create(ctx context.Context, division int, entity *ProjectRestrictionItems) (*ProjectRestrictionItems, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionItems", division) // #nosec
+	e := &ProjectRestrictionItems{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the ProjectRestrictionItems entity in the provided division.
+func (s *ProjectRestrictionItemsEndpoint) Update(ctx context.Context, division int, entity *ProjectRestrictionItems) (*ProjectRestrictionItems, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionItems", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProjectRestrictionItems{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the ProjectRestrictionItems entity in the provided division.
+func (s *ProjectRestrictionItemsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionItems", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

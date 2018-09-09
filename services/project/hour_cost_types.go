@@ -25,11 +25,20 @@ type HourCostTypesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectHourCostTypes
 type HourCostTypes struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ItemId: Primary key
 	ItemId *types.GUID `json:"ItemId,omitempty"`
 
 	// ItemDescription: Description of Item
 	ItemDescription *string `json:"ItemDescription,omitempty"`
+}
+
+func (e *HourCostTypes) GetPrimary() *types.GUID {
+	return e.ItemId
+}
+
+func (s *HourCostTypesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/HourCostTypes", method)
 }
 
 // List the HourCostTypes entities in the provided division.
@@ -43,6 +52,19 @@ func (s *HourCostTypesEndpoint) List(ctx context.Context, division int, all bool
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the HourCostTypes entitiy in the provided division.
+func (s *HourCostTypesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*HourCostTypes, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/HourCostTypes", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &HourCostTypes{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

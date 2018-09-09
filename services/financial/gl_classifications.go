@@ -25,6 +25,7 @@ type GLClassificationsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialGLClassifications
 type GLClassifications struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -89,6 +90,14 @@ type GLClassifications struct {
 	Type *types.GUID `json:"Type,omitempty"`
 }
 
+func (e *GLClassifications) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *GLClassificationsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/GLClassifications", method)
+}
+
 // List the GLClassifications entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GLClassificationsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GLClassifications, error) {
@@ -100,6 +109,19 @@ func (s *GLClassificationsEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the GLClassifications entitiy in the provided division.
+func (s *GLClassificationsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*GLClassifications, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financial/GLClassifications", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GLClassifications{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

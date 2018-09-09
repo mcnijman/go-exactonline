@@ -26,6 +26,7 @@ type CashEntriesEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=FinancialTransactionCashEntries
 type CashEntries struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// EntryID:
 	EntryID *types.GUID `json:"EntryID,omitempty"`
 
@@ -72,6 +73,14 @@ type CashEntries struct {
 	StatusDescription *string `json:"StatusDescription,omitempty"`
 }
 
+func (e *CashEntries) GetPrimary() *types.GUID {
+	return e.EntryID
+}
+
+func (s *CashEntriesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financialtransaction/CashEntries", method)
+}
+
 // List the CashEntries entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *CashEntriesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*CashEntries, error) {
@@ -83,6 +92,35 @@ func (s *CashEntriesEndpoint) List(ctx context.Context, division int, all bool, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the CashEntries entitiy in the provided division.
+func (s *CashEntriesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*CashEntries, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntries", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &CashEntries{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty CashEntries entity
+func (s *CashEntriesEndpoint) New() *CashEntries {
+	return &CashEntries{}
+}
+
+// Create the CashEntries entity in the provided division.
+func (s *CashEntriesEndpoint) Create(ctx context.Context, division int, entity *CashEntries) (*CashEntries, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/financialtransaction/CashEntries", division) // #nosec
+	e := &CashEntries{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

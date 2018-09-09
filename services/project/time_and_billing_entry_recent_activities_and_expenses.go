@@ -25,6 +25,7 @@ type TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingEntryRecentActivitiesAndExpenses
 type TimeAndBillingEntryRecentActivitiesAndExpenses struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -38,6 +39,14 @@ type TimeAndBillingEntryRecentActivitiesAndExpenses struct {
 	ParentDescription *string `json:"ParentDescription,omitempty"`
 }
 
+func (e *TimeAndBillingEntryRecentActivitiesAndExpenses) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/TimeAndBillingEntryRecentActivitiesAndExpenses", method)
+}
+
 // List the TimeAndBillingEntryRecentActivitiesAndExpenses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*TimeAndBillingEntryRecentActivitiesAndExpenses, error) {
@@ -49,6 +58,19 @@ func (s *TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint) List(ctx contex
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TimeAndBillingEntryRecentActivitiesAndExpenses entitiy in the provided division.
+func (s *TimeAndBillingEntryRecentActivitiesAndExpensesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TimeAndBillingEntryRecentActivitiesAndExpenses, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentActivitiesAndExpenses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TimeAndBillingEntryRecentActivitiesAndExpenses{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

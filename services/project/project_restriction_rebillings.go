@@ -7,6 +7,9 @@ package project
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type ProjectRestrictionRebillingsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ProjectProjectRestrictionRebillings
 type ProjectRestrictionRebillings struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -68,6 +72,14 @@ type ProjectRestrictionRebillings struct {
 	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
+func (e *ProjectRestrictionRebillings) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *ProjectRestrictionRebillingsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/ProjectRestrictionRebillings", method)
+}
+
 // List the ProjectRestrictionRebillings entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProjectRestrictionRebillingsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ProjectRestrictionRebillings, error) {
@@ -79,6 +91,69 @@ func (s *ProjectRestrictionRebillingsEndpoint) List(ctx context.Context, divisio
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ProjectRestrictionRebillings entitiy in the provided division.
+func (s *ProjectRestrictionRebillingsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*ProjectRestrictionRebillings, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionRebillings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProjectRestrictionRebillings{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty ProjectRestrictionRebillings entity
+func (s *ProjectRestrictionRebillingsEndpoint) New() *ProjectRestrictionRebillings {
+	return &ProjectRestrictionRebillings{}
+}
+
+// Create the ProjectRestrictionRebillings entity in the provided division.
+func (s *ProjectRestrictionRebillingsEndpoint) Create(ctx context.Context, division int, entity *ProjectRestrictionRebillings) (*ProjectRestrictionRebillings, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionRebillings", division) // #nosec
+	e := &ProjectRestrictionRebillings{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the ProjectRestrictionRebillings entity in the provided division.
+func (s *ProjectRestrictionRebillingsEndpoint) Update(ctx context.Context, division int, entity *ProjectRestrictionRebillings) (*ProjectRestrictionRebillings, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionRebillings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProjectRestrictionRebillings{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the ProjectRestrictionRebillings entity in the provided division.
+func (s *ProjectRestrictionRebillingsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/project/ProjectRestrictionRebillings", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

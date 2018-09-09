@@ -25,6 +25,7 @@ type TimeAndBillingEntryRecentProjectsEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadProjectTimeAndBillingEntryRecentProjects
 type TimeAndBillingEntryRecentProjects struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ProjectId: Primary key
 	ProjectId *types.GUID `json:"ProjectId,omitempty"`
 
@@ -38,6 +39,14 @@ type TimeAndBillingEntryRecentProjects struct {
 	ProjectDescription *string `json:"ProjectDescription,omitempty"`
 }
 
+func (e *TimeAndBillingEntryRecentProjects) GetPrimary() *types.GUID {
+	return e.ProjectId
+}
+
+func (s *TimeAndBillingEntryRecentProjectsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "project/TimeAndBillingEntryRecentProjects", method)
+}
+
 // List the TimeAndBillingEntryRecentProjects entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *TimeAndBillingEntryRecentProjectsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*TimeAndBillingEntryRecentProjects, error) {
@@ -49,6 +58,19 @@ func (s *TimeAndBillingEntryRecentProjectsEndpoint) List(ctx context.Context, di
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the TimeAndBillingEntryRecentProjects entitiy in the provided division.
+func (s *TimeAndBillingEntryRecentProjectsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*TimeAndBillingEntryRecentProjects, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/project/TimeAndBillingEntryRecentProjects", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &TimeAndBillingEntryRecentProjects{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

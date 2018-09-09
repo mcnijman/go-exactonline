@@ -7,8 +7,10 @@ package financial
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -16,6 +18,71 @@ import (
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
 )
+
+func AgingPayablesListPrimaryPropertySample() *types.GUID {
+	v := types.NewGUID()
+	return &v
+}
+
+func AgingPayablesListEntityWithPopulatedPrimaryProperty() *AgingPayablesList {
+	return &AgingPayablesList{AccountId: AgingPayablesListPrimaryPropertySample()}
+}
+
+func AgingPayablesListStringOfPrimaryProperty(v *types.GUID) string {
+	return v.String()
+}
+
+func AgingPayablesListStringJSONOfPrimaryProperty(v *types.GUID) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}
+
+func TestAgingPayablesListEndpoint_GetPrimary(t *testing.T) {
+	var want types.GUID
+	n := &AgingPayablesList{AccountId: &want}
+
+	if got := n.GetPrimary(); !reflect.DeepEqual(*got, want) {
+		t.Errorf("AgingPayablesListEndpoint.GetPrimary() failed, got: %v, want: %v", *got, want)
+	}
+}
+
+func TestAgingPayablesListEndpoint_UserHasRights(t *testing.T) {
+	s, mux, _, teardown := setup()
+	defer teardown()
+
+	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+	if e != nil {
+		t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.List returned error: %v", e)
+	}
+
+	acceptHeaders := []string{"application/json"}
+
+	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+
+		q := r.URL.Query()
+
+		if got, want := q.Get("endpoint"), "'financial/AgingPayablesList'"; got != want {
+			t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		if got, want := q.Get("method"), "GET"; got != want {
+			t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+		}
+
+		fmt.Fprint(w, `{ "d": { "UserHasRights": true } }`)
+	})
+
+	got, err := s.AgingPayablesList.UserHasRights(context.Background(), 0, "GET")
+	if err != nil {
+		t.Errorf("s.AgingPayablesList.UserHasRights should not return an error = %v", err)
+	}
+
+	if got != true {
+		t.Errorf("s.AgingPayablesList.UserHasRights should return true, got: %v", got)
+	}
+}
 
 func TestAgingPayablesListEndpoint_List_all(t *testing.T) {
 	s, mux, _, teardown := setup()
@@ -40,15 +107,16 @@ func TestAgingPayablesListEndpoint_List_all(t *testing.T) {
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := AgingPayablesListPrimaryPropertySample()
+	gs := AgingPayablesListStringJSONOfPrimaryProperty(g)
+
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
 		if r.URL.Query().Get("$skiptoken") != "" {
 			fmt.Fprint(w, `{ "d": { "__next": "", "results": []}}`)
 		} else {
-			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "AccountId": "`+gs+`"}]}}`)
+			fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "AccountId": `+gs+`}]}}`)
 		}
 	})
 
@@ -57,7 +125,7 @@ func TestAgingPayablesListEndpoint_List_all(t *testing.T) {
 		t.Errorf("AgingPayablesListEndpoint.List returned error: %v", err)
 	}
 
-	want := []*AgingPayablesList{{AccountId: &g}}
+	want := []*AgingPayablesList{{AccountId: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("AgingPayablesListEndpoint.List returned %+v, want %+v", entities, want)
 	}
@@ -73,7 +141,7 @@ func TestAgingPayablesListEndpoint_List(t *testing.T) {
 	opts1.Select.Add("*")
 	u, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingPayablesList", 0)
 	if e != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/AgingPayablesList?$select=*", e)
+		t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/AgingPayablesList", e)
 	}
 	api.AddListOptionsToURL(u, opts1)
 
@@ -82,16 +150,16 @@ func TestAgingPayablesListEndpoint_List(t *testing.T) {
 	opts2.SkipToken.Set(types.NewGUID())
 	u2, e2 := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingPayablesList", 0)
 	if e2 != nil {
-		t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/AgingPayablesList?$skiptoken=foo", e2)
+		t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.List returned error: %v, with url /api/v1/{division}/read/financial/AgingPayablesList", e2)
 	}
 	api.AddListOptionsToURL(u2, opts2)
 
-	g := types.NewGUID()
-	gs := g.String()
+	g := AgingPayablesListPrimaryPropertySample()
+	gs := AgingPayablesListStringJSONOfPrimaryProperty(g)
 	mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
-		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "AccountId": "`+gs+`"}]}}`)
+		fmt.Fprint(w, `{ "d": { "__next": "`+u2.String()+`", "results": [{ "AccountId": `+gs+`}]}}`)
 	})
 
 	entities, err := s.AgingPayablesList.List(context.Background(), 0, false, opts1)
@@ -99,8 +167,63 @@ func TestAgingPayablesListEndpoint_List(t *testing.T) {
 		t.Errorf("AgingPayablesListEndpoint.List returned error: %v", err)
 	}
 
-	want := []*AgingPayablesList{{AccountId: &g}}
+	want := []*AgingPayablesList{{AccountId: g}}
 	if !reflect.DeepEqual(entities, want) {
 		t.Errorf("AgingPayablesListEndpoint.List returned %+v, want %+v", entities, want)
+	}
+}
+
+func TestAgingPayablesListEndpoint_Get(t *testing.T) {
+	acceptHeaders := []string{"application/json"}
+	s1 := AgingPayablesListPrimaryPropertySample()
+	type args struct {
+		ctx      context.Context
+		division int
+		id       *types.GUID
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *AgingPayablesList
+		wantErr bool
+	}{
+		{
+			"1",
+			args{context.Background(), 0, s1},
+			&AgingPayablesList{AccountId: s1, MetaData: &api.MetaData{URI: &types.URL{&url.URL{Scheme: "https", Host: "start.exactonline.nl"}}}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s, mux, _, teardown := setup()
+			defer teardown()
+
+			b, e := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingPayablesList", 0)
+			if e != nil {
+				t.Errorf("s.client.ResolvePathWithDivision in AgingPayablesListEndpoint.Delete() returned error: %v, with url /api/v1/{division}/read/financial/AgingPayablesList", e)
+			}
+
+			u, e2 := api.AddOdataKeyToURL(b, tt.args.id)
+			if e2 != nil {
+				t.Errorf("api.AddOdataKeyToURL in AgingPayablesListEndpoint.Delete() returned error: %v", e2)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", strings.Join(acceptHeaders, ", "))
+				b, _ := json.Marshal(tt.want)
+				fmt.Fprint(w, `{"d":`+string(b)+`}`)
+			})
+
+			got, err := s.AgingPayablesList.Get(tt.args.ctx, tt.args.division, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AgingPayablesListEndpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AgingPayablesListEndpoint.Get() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

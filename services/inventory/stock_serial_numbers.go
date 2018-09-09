@@ -7,6 +7,9 @@ package inventory
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type StockSerialNumbersEndpoint service
 // Methods: GET POST DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStockSerialNumbers
 type StockSerialNumbers struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -110,6 +114,14 @@ type StockSerialNumbers struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *StockSerialNumbers) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *StockSerialNumbersEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/StockSerialNumbers", method)
+}
+
 // List the StockSerialNumbers entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StockSerialNumbersEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StockSerialNumbers, error) {
@@ -121,6 +133,56 @@ func (s *StockSerialNumbersEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the StockSerialNumbers entitiy in the provided division.
+func (s *StockSerialNumbersEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*StockSerialNumbers, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &StockSerialNumbers{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty StockSerialNumbers entity
+func (s *StockSerialNumbersEndpoint) New() *StockSerialNumbers {
+	return &StockSerialNumbers{}
+}
+
+// Create the StockSerialNumbers entity in the provided division.
+func (s *StockSerialNumbersEndpoint) Create(ctx context.Context, division int, entity *StockSerialNumbers) (*StockSerialNumbers, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers", division) // #nosec
+	e := &StockSerialNumbers{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Delete the StockSerialNumbers entity in the provided division.
+func (s *StockSerialNumbersEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockSerialNumbers", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

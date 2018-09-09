@@ -25,6 +25,7 @@ type GeneralJournalEntryLinesEndpoint service
 // Methods: GET POST
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=GeneralJournalEntryGeneralJournalEntryLines
 type GeneralJournalEntryLines struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID:
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -164,6 +165,14 @@ type GeneralJournalEntryLines struct {
 	VATType *string `json:"VATType,omitempty"`
 }
 
+func (e *GeneralJournalEntryLines) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *GeneralJournalEntryLinesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "generaljournalentry/GeneralJournalEntryLines", method)
+}
+
 // List the GeneralJournalEntryLines entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *GeneralJournalEntryLinesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*GeneralJournalEntryLines, error) {
@@ -175,6 +184,35 @@ func (s *GeneralJournalEntryLinesEndpoint) List(ctx context.Context, division in
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the GeneralJournalEntryLines entitiy in the provided division.
+func (s *GeneralJournalEntryLinesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*GeneralJournalEntryLines, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntryLines", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &GeneralJournalEntryLines{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty GeneralJournalEntryLines entity
+func (s *GeneralJournalEntryLinesEndpoint) New() *GeneralJournalEntryLines {
+	return &GeneralJournalEntryLines{}
+}
+
+// Create the GeneralJournalEntryLines entity in the provided division.
+func (s *GeneralJournalEntryLinesEndpoint) Create(ctx context.Context, division int, entity *GeneralJournalEntryLines) (*GeneralJournalEntryLines, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/generaljournalentry/GeneralJournalEntryLines", division) // #nosec
+	e := &GeneralJournalEntryLines{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
 }

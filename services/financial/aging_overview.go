@@ -24,6 +24,7 @@ type AgingOverviewEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialAgingOverview
 type AgingOverview struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// AgeGroup: Primary key
 	AgeGroup *int `json:"AgeGroup,omitempty"`
 
@@ -40,6 +41,14 @@ type AgingOverview struct {
 	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 }
 
+func (e *AgingOverview) GetPrimary() *int {
+	return e.AgeGroup
+}
+
+func (s *AgingOverviewEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/AgingOverview", method)
+}
+
 // List the AgingOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AgingOverviewEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AgingOverview, error) {
@@ -51,6 +60,19 @@ func (s *AgingOverviewEndpoint) List(ctx context.Context, division int, all bool
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the AgingOverview entitiy in the provided division.
+func (s *AgingOverviewEndpoint) Get(ctx context.Context, division int, id *int) (*AgingOverview, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/AgingOverview", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AgingOverview{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

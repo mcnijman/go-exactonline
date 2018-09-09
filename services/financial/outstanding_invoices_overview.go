@@ -24,6 +24,7 @@ type OutstandingInvoicesOverviewEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialOutstandingInvoicesOverview
 type OutstandingInvoicesOverview struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// CurrencyCode: Primary key
 	CurrencyCode *string `json:"CurrencyCode,omitempty"`
 
@@ -52,6 +53,14 @@ type OutstandingInvoicesOverview struct {
 	OverdueReceivableInvoiceCount *float64 `json:"OverdueReceivableInvoiceCount,omitempty"`
 }
 
+func (e *OutstandingInvoicesOverview) GetPrimary() *string {
+	return e.CurrencyCode
+}
+
+func (s *OutstandingInvoicesOverviewEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/OutstandingInvoicesOverview", method)
+}
+
 // List the OutstandingInvoicesOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *OutstandingInvoicesOverviewEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*OutstandingInvoicesOverview, error) {
@@ -63,6 +72,19 @@ func (s *OutstandingInvoicesOverviewEndpoint) List(ctx context.Context, division
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the OutstandingInvoicesOverview entitiy in the provided division.
+func (s *OutstandingInvoicesOverviewEndpoint) Get(ctx context.Context, division int, id *string) (*OutstandingInvoicesOverview, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/OutstandingInvoicesOverview", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &OutstandingInvoicesOverview{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

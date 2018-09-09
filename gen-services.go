@@ -10,6 +10,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"flag"
 	"fmt"
@@ -18,6 +19,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"os/exec"
 	"path"
@@ -64,6 +66,10 @@ var (
 	endpointTmpl     = template.Must(template.New("endpoint.tpl").ParseFiles("./templates/endpoint.tpl"))
 	endpointTestTmpl = template.Must(template.New("endpoint_test.tpl").ParseFiles("./templates/endpoint_test.tpl"))
 )
+
+func init() {
+	_ = os.Mkdir("./generator-cache", os.ModePerm)
+}
 
 type property struct {
 	Name            string
@@ -126,6 +132,11 @@ func (e endpoint) PackageName() string {
 	return strings.Replace(toSnake(e.Service), "_", "", -1)
 }
 
+func (e endpoint) EndpointForPermission() string {
+	s := strings.Split(e.URL, "/")
+	return strings.Join(s[len(s)-2:], "/")
+}
+
 type service struct {
 	Endpoints []endpoint
 	Package   string
@@ -141,9 +152,33 @@ type templateData struct {
 	Endpoint endpoint
 }
 
+func requestPageCached(name, uri string) (*http.Response, error) {
+	n := strings.ToLower(name)
+	n = path.Clean(path.Base(n))
+	p := path.Join("./generator-cache", n)
+
+	if f, err := os.Open(p); err == nil {
+		r := bufio.NewReader(f)
+		return http.ReadResponse(r, nil)
+	}
+
+	r, err := http.Get(uri)
+	if err != nil {
+		return r, err
+	}
+
+	b, e := httputil.DumpResponse(r, true)
+	if err != nil {
+		return r, e
+	}
+
+	err = ioutil.WriteFile(p, b, 0644)
+	return r, err
+}
+
 func getEndpointsList() []endpoint {
 	logf("Fetching endpoints list %v...", endpointsURL)
-	res, err := http.Get(endpointsURL)
+	res, err := requestPageCached("index", endpointsURL)
 	dontPanic(err)
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
@@ -213,7 +248,7 @@ func servicesFromEndpoints(endpoints []endpoint) []service {
 
 func getEndpointProperties(endpoint *endpoint) {
 	uri := "https://start.exactonline.nl/docs/" + endpoint.Docs
-	res, err := http.Get(uri)
+	res, err := requestPageCached(endpoint.Service+"_"+endpoint.Name, uri)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -267,7 +302,7 @@ func main() {
 	services := servicesFromEndpoints(endpoints)
 
 	for _, s := range services {
-		logf("------------------------")
+		// logf("------------------------")
 		logf("Processing service %v...", s.Name)
 
 		p := path.Join("./services/", s.Package)
@@ -277,7 +312,7 @@ func main() {
 		writeFile(serviceTestTmpl, s, path.Join(p, "service_test.go"))
 
 		for _, e := range s.Endpoints {
-			logf("  Processing endpoint %v...", e.Name)
+			// logf("  Processing endpoint %v...", e.Name)
 
 			getEndpointProperties(&e)
 			e.ServiceEntity = s
@@ -292,29 +327,33 @@ func main() {
 }
 
 func writeFile(tpl *template.Template, data interface{}, filePath string) {
+	// logf("  Writing file %v...", filePath)
 	cmd := exec.Command("goimports")
 	cmd.Stderr = os.Stdout
 
 	r, w := io.Pipe()
 	cmd.Stdin = r
 
+	var db bytes.Buffer // the template for debugging
+	mw := io.MultiWriter(w, &db)
+
 	var b bytes.Buffer
 	cmd.Stdout = &b
 
 	err := cmd.Start()
-	dontPanic(err)
+	handleErr(err, db, filePath)
 
-	err = tpl.Execute(w, data)
-	dontPanic(err)
+	err = tpl.Execute(mw, data)
+	handleErr(err, db, filePath)
 
 	err = w.Close()
-	dontPanic(err)
+	handleErr(err, db, filePath)
 
 	err = cmd.Wait()
-	dontPanic(err)
+	handleErr(err, db, filePath)
 
 	err = ioutil.WriteFile(filePath, b.Bytes(), 0644)
-	dontPanic(err)
+	handleErr(err, db, filePath)
 }
 
 func printCopyPasteDeclarations(services []service) {
@@ -354,5 +393,13 @@ func logf(fmt string, args ...interface{}) {
 func dontPanic(e error) {
 	if e != nil {
 		panic(e)
+	}
+}
+
+func handleErr(err error, b bytes.Buffer, f string) {
+	if err != nil {
+		fmt.Println(f)
+		fmt.Println(b.String())
+		panic(err)
 	}
 }

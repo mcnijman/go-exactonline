@@ -24,11 +24,20 @@ type AvailableFeaturesEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SystemSystemAvailableFeatures
 type AvailableFeatures struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: The ID of the feature.
 	ID *int `json:"ID,omitempty"`
 
 	// Description: The description of the feature.
 	Description *string `json:"Description,omitempty"`
+}
+
+func (e *AvailableFeatures) GetPrimary() *int {
+	return e.ID
+}
+
+func (s *AvailableFeaturesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "system/AvailableFeatures", method)
 }
 
 // List the AvailableFeatures entities in the provided division.
@@ -42,6 +51,19 @@ func (s *AvailableFeaturesEndpoint) List(ctx context.Context, division int, all 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the AvailableFeatures entitiy in the provided division.
+func (s *AvailableFeaturesEndpoint) Get(ctx context.Context, division int, id *int) (*AvailableFeatures, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/system/AvailableFeatures", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AvailableFeatures{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

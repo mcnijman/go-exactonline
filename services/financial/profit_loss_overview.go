@@ -24,6 +24,7 @@ type ProfitLossOverviewEndpoint service
 // Methods: GET
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialProfitLossOverview
 type ProfitLossOverview struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// CurrentYear: Primary key, Current year
 	CurrentYear *int `json:"CurrentYear,omitempty"`
 
@@ -76,6 +77,14 @@ type ProfitLossOverview struct {
 	RevenuePreviousYearPeriod *float64 `json:"RevenuePreviousYearPeriod,omitempty"`
 }
 
+func (e *ProfitLossOverview) GetPrimary() *int {
+	return e.CurrentYear
+}
+
+func (s *ProfitLossOverviewEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "financial/ProfitLossOverview", method)
+}
+
 // List the ProfitLossOverview entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *ProfitLossOverviewEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*ProfitLossOverview, error) {
@@ -87,6 +96,19 @@ func (s *ProfitLossOverviewEndpoint) List(ctx context.Context, division int, all
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the ProfitLossOverview entitiy in the provided division.
+func (s *ProfitLossOverviewEndpoint) Get(ctx context.Context, division int, id *int) (*ProfitLossOverview, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/read/financial/ProfitLossOverview", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &ProfitLossOverview{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
 }

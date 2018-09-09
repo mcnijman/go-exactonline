@@ -168,12 +168,15 @@ func TestDo(t *testing.T) {
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{"A":"a"}`)
+		fmt.Fprint(w, `{ "d": {"A":"a"} }`)
 	})
 
 	req, _ := client.NewRequest("GET", ".", nil)
 	body := new(foo)
-	client.Do(context.Background(), req, body)
+	_, err := client.Do(context.Background(), req, body)
+	if err != nil {
+		t.Errorf("Response body received an error = %v", err)
+	}
 
 	want := &foo{"a"}
 	if !reflect.DeepEqual(body, want) {
@@ -195,8 +198,9 @@ func TestDo_httpError(t *testing.T) {
 	if err == nil {
 		t.Fatal("Expected HTTP 400 error, got no error.")
 	}
-	if resp.StatusCode != 400 {
-		t.Errorf("Expected HTTP 400 error, got %d status code.", resp.StatusCode)
+
+	if resp.Response.StatusCode != 400 {
+		t.Errorf("Expected HTTP 400 error, got %d status code.", resp.Response.StatusCode)
 	}
 }
 
@@ -402,6 +406,95 @@ func TestClient_ResolvePathWithDivision(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Client.ResolvePathWithDivision() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestAddOdataKeyToURL(t *testing.T) {
+	type args struct {
+		u *url.URL
+		k interface{}
+	}
+
+	g := types.NewGUID()
+	in, _ := url.Parse("https://start.exactonline.nl/foo/bar")
+	out, _ := url.Parse(fmt.Sprintf("https://start.exactonline.nl/foo/bar(guid'%s')", g.String()))
+	in2, _ := url.Parse("https://start.exactonline.nl/foo/bar")
+	out2, _ := url.Parse(fmt.Sprintf("https://start.exactonline.nl/foo/bar(guid'%s')", g.String()))
+
+	i := 100
+	in3, _ := url.Parse("https://start.exactonline.nl/foo/bar")
+	out3, _ := url.Parse("https://start.exactonline.nl/foo/bar(100)")
+	in4, _ := url.Parse("https://start.exactonline.nl/foo/bar")
+	out4, _ := url.Parse("https://start.exactonline.nl/foo/bar(100)")
+
+	tests := []struct {
+		name    string
+		args    args
+		want    *url.URL
+		wantErr bool
+	}{
+		{"1", args{in, g}, out, false},
+		{"2", args{in2, &g}, out2, false},
+		{"3", args{in3, i}, out3, false},
+		{"4", args{in4, &i}, out4, false},
+		{"5", args{nil, nil}, nil, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := AddOdataKeyToURL(tt.args.u, tt.args.k)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AddOdataKeyToURL() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AddOdataKeyToURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestClient_UserHasRights(t *testing.T) {
+	tests := []struct {
+		name      string
+		hasRights bool
+		endpoint  string
+		method    string
+		wantErr   bool
+	}{
+		{"1", true, "subscription/SubscriptionLineTypes", "GET", false},
+		{"2", false, "subscription/SubscriptionLineTypes", "POST", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c, mux, _, teardown := setup()
+			defer teardown()
+			u, e := c.ResolvePathWithDivision("/api/v1/{division}/users/UserHasRights", 0)
+			if e != nil {
+				t.Errorf("c.ResolvePathWithDivision in c.UserHasRights returned error: %v, with url /api/v1/{division}/users/UserHasRights", e)
+			}
+
+			mux.HandleFunc(u.Path, func(w http.ResponseWriter, r *http.Request) {
+				testMethod(t, r, "GET")
+				testHeader(t, r, "Accept", acceptHeader)
+				q := r.URL.Query()
+				if got, want := q.Get("endpoint"), fmt.Sprintf("'%s'", tt.endpoint); got != want {
+					t.Errorf("endpoint query param doesn't match, got: %v, want: %v", got, want)
+				}
+				if got, want := q.Get("method"), tt.method; got != want {
+					t.Errorf("method query param doesn't match, got: %v, want: %v", got, want)
+				}
+				fmt.Fprint(w, `{ "d": { "UserHasRights": `+strconv.FormatBool(tt.hasRights)+` } }`)
+			})
+
+			got, err := c.UserHasRights(context.Background(), 0, tt.endpoint, tt.method)
+			if err != nil && !tt.wantErr {
+				t.Errorf("s.SubscriptionLineTypes.UserHasRights should not return an error = %v", err)
+			}
+
+			if got != tt.hasRights {
+				t.Errorf("s.SubscriptionLineTypes.UserHasRights should return true, got: %v", got)
 			}
 		})
 	}

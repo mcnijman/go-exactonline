@@ -7,6 +7,9 @@ package cashflow
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type AllocationRuleEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CashflowAllocationRule
 type AllocationRule struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -65,6 +69,14 @@ type AllocationRule struct {
 	Words *string `json:"Words,omitempty"`
 }
 
+func (e *AllocationRule) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *AllocationRuleEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "cashflow/AllocationRule", method)
+}
+
 // List the AllocationRule entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AllocationRuleEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*AllocationRule, error) {
@@ -76,6 +88,69 @@ func (s *AllocationRuleEndpoint) List(ctx context.Context, division int, all boo
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the AllocationRule entitiy in the provided division.
+func (s *AllocationRuleEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*AllocationRule, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/cashflow/AllocationRule", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AllocationRule{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty AllocationRule entity
+func (s *AllocationRuleEndpoint) New() *AllocationRule {
+	return &AllocationRule{}
+}
+
+// Create the AllocationRule entity in the provided division.
+func (s *AllocationRuleEndpoint) Create(ctx context.Context, division int, entity *AllocationRule) (*AllocationRule, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/cashflow/AllocationRule", division) // #nosec
+	e := &AllocationRule{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the AllocationRule entity in the provided division.
+func (s *AllocationRuleEndpoint) Update(ctx context.Context, division int, entity *AllocationRule) (*AllocationRule, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/cashflow/AllocationRule", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &AllocationRule{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the AllocationRule entity in the provided division.
+func (s *AllocationRuleEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/beta/{division}/cashflow/AllocationRule", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

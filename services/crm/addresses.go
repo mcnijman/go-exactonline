@@ -7,6 +7,9 @@ package crm
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -25,6 +28,7 @@ type AddressesEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=CRMAddresses
 type Addresses struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// ID: Primary key
 	ID *types.GUID `json:"ID,omitempty"`
 
@@ -185,6 +189,14 @@ type Addresses struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *Addresses) GetPrimary() *types.GUID {
+	return e.ID
+}
+
+func (s *AddressesEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "crm/Addresses", method)
+}
+
 // List the Addresses entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *AddressesEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*Addresses, error) {
@@ -196,6 +208,69 @@ func (s *AddressesEndpoint) List(ctx context.Context, division int, all bool, o 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the Addresses entitiy in the provided division.
+func (s *AddressesEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*Addresses, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Addresses{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty Addresses entity
+func (s *AddressesEndpoint) New() *Addresses {
+	return &Addresses{}
+}
+
+// Create the Addresses entity in the provided division.
+func (s *AddressesEndpoint) Create(ctx context.Context, division int, entity *Addresses) (*Addresses, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", division) // #nosec
+	e := &Addresses{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the Addresses entity in the provided division.
+func (s *AddressesEndpoint) Update(ctx context.Context, division int, entity *Addresses) (*Addresses, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &Addresses{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the Addresses entity in the provided division.
+func (s *AddressesEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/crm/Addresses", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }

@@ -8,6 +8,9 @@ package inventory
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/mcnijman/go-exactonline/api"
 	"github.com/mcnijman/go-exactonline/types"
@@ -26,6 +29,7 @@ type StockCountsEndpoint service
 // Methods: GET POST PUT DELETE
 // Endpoint docs: https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=InventoryStockCounts
 type StockCounts struct {
+	MetaData *api.MetaData `json:"__metadata,omitempty"`
 	// StockCountID: Primary key
 	StockCountID *types.GUID `json:"StockCountID,omitempty"`
 
@@ -93,6 +97,14 @@ type StockCounts struct {
 	WarehouseDescription *string `json:"WarehouseDescription,omitempty"`
 }
 
+func (e *StockCounts) GetPrimary() *types.GUID {
+	return e.StockCountID
+}
+
+func (s *StockCountsEndpoint) UserHasRights(ctx context.Context, division int, method string) (bool, error) {
+	return s.client.UserHasRights(ctx, division, "inventory/StockCounts", method)
+}
+
 // List the StockCounts entities in the provided division.
 // If all is true, all the paginated results are fetched; if false, list the first page.
 func (s *StockCountsEndpoint) List(ctx context.Context, division int, all bool, o *api.ListOptions) ([]*StockCounts, error) {
@@ -104,6 +116,69 @@ func (s *StockCountsEndpoint) List(ctx context.Context, division int, all bool, 
 		err := s.client.ListRequestAndDoAll(ctx, u.String(), &entities)
 		return entities, err
 	}
-	_, _, _, err := s.client.ListRequestAndDo(ctx, u.String(), &entities)
+	_, _, err := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, &entities)
 	return entities, err
+}
+
+// Get the StockCounts entitiy in the provided division.
+func (s *StockCountsEndpoint) Get(ctx context.Context, division int, id *types.GUID) (*StockCounts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCounts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return nil, err
+	}
+
+	e := &StockCounts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "GET", u.String(), nil, e)
+	return e, requestError
+}
+
+// New returns an empty StockCounts entity
+func (s *StockCountsEndpoint) New() *StockCounts {
+	return &StockCounts{}
+}
+
+// Create the StockCounts entity in the provided division.
+func (s *StockCountsEndpoint) Create(ctx context.Context, division int, entity *StockCounts) (*StockCounts, error) {
+	u, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCounts", division) // #nosec
+	e := &StockCounts{}
+	_, _, err := s.client.NewRequestAndDo(ctx, "POST", u.String(), entity, e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// Update the StockCounts entity in the provided division.
+func (s *StockCountsEndpoint) Update(ctx context.Context, division int, entity *StockCounts) (*StockCounts, error) {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCounts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, entity.GetPrimary())
+	if err != nil {
+		return nil, err
+	}
+
+	e := &StockCounts{}
+	_, _, requestError := s.client.NewRequestAndDo(ctx, "PUT", u.String(), entity, e)
+	return e, requestError
+}
+
+// Delete the StockCounts entity in the provided division.
+func (s *StockCountsEndpoint) Delete(ctx context.Context, division int, id *types.GUID) error {
+	b, _ := s.client.ResolvePathWithDivision("/api/v1/{division}/inventory/StockCounts", division) // #nosec
+	u, err := api.AddOdataKeyToURL(b, id)
+	if err != nil {
+		return err
+	}
+
+	_, r, requestError := s.client.NewRequestAndDo(ctx, "DELETE", u.String(), nil, nil)
+	if requestError != nil {
+		return requestError
+	}
+
+	if r.StatusCode != http.StatusNoContent {
+		body, _ := ioutil.ReadAll(r.Body) // #nosec
+		return fmt.Errorf("Failed with status %v and body %v", r.StatusCode, body)
+	}
+
+	return nil
 }
