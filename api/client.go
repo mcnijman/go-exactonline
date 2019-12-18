@@ -19,14 +19,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mcnijman/go-exactonline/types"
+	"github.com/sebas7dk/go-exactonline/types"
 )
 
 const (
-	contentType    = "application/json"
-	acceptHeader   = "application/json"
-	defaultBaseURL = "https://start.exactonline.nl/"
-	userAgent      = "github.com/mcnijman/go-exactonline"
+	contentType  = "application/json"
+	acceptHeader = "application/json"
+	userAgent    = "github.com/sebas7dk/go-exactonline"
 )
 
 // A Client manages communication with the Exact Online API.
@@ -43,15 +42,18 @@ type Client struct {
 // NewClient returns a new Exact Online API client. Provide a http.Client that
 // will perform the authentication for you (such as that provided by the
 // golang.org/x/oauth2 library).
-func NewClient(httpClient *http.Client) *Client {
+func NewClient(httpClient *http.Client, url string) (*Client, error) {
 	if httpClient == nil {
-		httpClient = http.DefaultClient
+		return fmt.Errorf("A valid http client is required")
 	}
 
-	baseURL, _ := url.Parse(defaultBaseURL) // #nosec
+	baseURL, err := url.Parse(url) // #nosec
+	if err != nil {
+		return nil, err
+	}
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
-	return c
+	return c, nill
 }
 
 // ResolveURL will either return either a resolved path or a valid absolute URI
